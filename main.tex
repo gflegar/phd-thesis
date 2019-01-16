@@ -1,0 +1,119 @@
+% basic document setup
+\documentclass[final,a4paper,11pt,twoside]{book}
+\usepackage[left=1cm,right=1cm,top=2cm,bottom=2cm,head=26pt]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage[colorlinks=false]{hyperref}
+
+% Paper inclusion
+\usepackage{import}
+\usepackage{color}
+\usepackage{chapterbib}
+
+% frontmatter dependencies
+\usepackage{titling}
+\usepackage{graphicx}
+\newcommand{\advisor}[1]{\def \theadvisor {#1}}
+\newcommand{\coadvisor}[1]{\def \thecoadvisor {#1}}
+
+% TOC setup
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4} 
+
+% Header and footer setup
+\usepackage{fancyhdr}
+\fancyhf{}
+\renewcommand\chaptermark[1]{\markboth{Chapter \thechapter. #1}{}}
+\renewcommand\sectionmark[1]{\markright{\thesection. #1}{}}
+\renewcommand\headrulewidth{0.2pt}
+\renewcommand\footrulewidth{0.1pt}
+\fancyfoot[LE,RO]{\thepage} 
+\fancyhead[LO]{{\sffamily \rightmark}}
+\fancyhead[RE]{{\sffamily \leftmark}}
+
+% Chapter setup
+\usepackage[Bjornstrup]{fncychap}
+% solve a bug in Bjornstrup, see: https://tex.stackexchange.com/a/89786/160826
+\makeatletter
+  \renewcommand{\DOCH}{%
+    \settowidth{\py}{\CNoV\thechapter}%
+    \addtolength{\py}{-10pt}%
+    \fboxsep=0pt%
+    \colorbox[gray]{.85}{\rule{0pt}{40pt}\parbox[b]{\textwidth}{\hfill}}%
+    \kern-\py\raise20pt%
+    \hbox{\color[gray]{.5}\CNoV\thechapter}%
+    \kern-\myhi%
+    \\%
+  }
+\makeatother
+% The original font used for chapter numbers by Bjornstrup is not available,
+% use the ptm font from mathptmx
+\ChNumVar{\fontsize{76}{80}\usefont{T1}{ptm}{m}{it}\selectfont}
+
+% If you need to debug the layout, uncomment the following two lines:
+% \usepackage{showframe}
+% \usepackage{layout}
+\providecommand{\layout}{}
+
+% Optional: additional packages and configurations
+% AMS mathematics
+% \usepackage{amsmath}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+% \usepackage{amsthm}
+% \newtheorem{defi}{\textit{\textbf{Definition}}}[chapter]
+% \newtheorem{prop}{\textit{\textbf{Proposition}}}[chapter]
+% \newtheorem{coro}{\textit{\textbf{Corollary}}}[chapter]
+% \newtheorem{lema}{\textit{\textbf{Lema}}}[chapter]
+% \newtheorem{theo}{\textit{\textbf{Theorem}}}[chapter]
+
+%
+\input{macros}
+
+\begin{document}
+
+\layout{}
+
+\frontmatter
+\pagestyle{plain}
+
+% Change the information about your thesis here:
+\title{Accelerating the Solution of Sparse Linear Systems on Graphics
+       Processing Units}
+\author{Goran Flegar}
+\advisor{Enrique S. Quintana-Ort\'{i}}
+\coadvisor{Hartwig Anzt}
+\date{March 2019}
+%%%%
+
+\input{cover}
+
+\tableofcontents
+\cleardoublepage
+
+\import*{abstract/}{thesis-wrapper}
+\import*{acknowledgements/}{thesis-wrapper}
+
+\mainmatter
+\pagestyle{fancy}
+
+\import*{introduction/}{thesis-wrapper}
+\import*{2016-block-jacobi-gje/}{thesis-wrapper}
+\import*{conclusion/}{thesis-wrapper}
+
+\appendix
+
+\backmatter
+\pagestyle{plain}
+
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+\cleardoublepage
+
+\listoftables
+\addcontentsline{toc}{chapter}{List of Tables}
+\cleardoublepage
+
+\end{document}

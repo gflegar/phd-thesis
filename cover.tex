@@ -1,0 +1,67 @@
+% Using the setup from Joaquin's thesis as the ground truth here
+\newgeometry{includehead,left=1.5in,right=1.5in,top=1in,head=12pt,textheight=8.75in}
+
+% Outer cover
+\thispagestyle{empty}
+\pagestyle{empty}
+\begin{center}
+{\fontfamily{ptm}\selectfont \sffamily \bf
+
+{\Large UNIVERSIDAD JAUME I DE CASTELL\'{O}N}\\
+
+\vspace*{1ex}
+{\normalsize E. S. DE TECNOLOG\'{I}A Y CIENCIAS EXPERIMENTALES}\\
+
+\vspace*{15ex}
+
+\centerline{\includegraphics[width=2.5cm]{logo}}
+
+\vspace{\fill}
+
+{\Huge \sc \thetitle \\}
+
+\vspace{\fill}
+
+{\normalsize \sc Castell\'{o}n de la Plana, \thedate}\\
+
+\vspace*{20ex}
+% Not sure why we're using eqnarray here, since this is certainly not an
+% equation, and even if it is, we should never use eqnarray:
+%     http://www.tug.org/pracjourn/2006-4/madsen/
+% Since this is the setup from the ground truth document, we do not dare change
+% it.
+\begin{eqnarray*}
+    \mbox{ {\sc Tesis Doctoral Presentada por:}}  &&
+        \mbox{ {\sc \theauthor}} \\
+    \mbox{ {\sc Dirigida por:}} &&
+        \mbox{ {\sc \theadvisor}} \\
+    &&
+        \mbox{ {\sc \thecoadvisor}}
+\end{eqnarray*}
+}
+\end{center}
+\newpage{\pagestyle{empty}\cleardoublepage}
+
+% Inner cover
+\thispagestyle{empty}
+\begin{center}
+{\sffamily \bf
+{\Large UNIVERSIDAD JAUME I DE CASTELL\'{O}N}\\
+
+\vspace*{1ex}
+{\normalsize E. S. DE TECNOLOG\'{I}A Y CIENCIAS EXPERIMENTALES}\\
+
+\vspace*{15ex}
+
+\centerline{\includegraphics[width=2.5cm]{logo}}
+
+\vspace{\fill}
+{\Huge \sc \thetitle \\}
+
+\vspace{\fill}
+{\normalsize \sc \theauthor}
+\vspace*{34ex}
+}
+\end{center}
+
+\restoregeometry
