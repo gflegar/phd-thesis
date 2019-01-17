@@ -10,7 +10,43 @@
 % Paper inclusion
 \usepackage{import}
 \usepackage{color}
-\usepackage{chapterbib}
+\usepackage{bibunits}
+\usepackage{suffix}
+
+% Includes a chapter from a subfolder
+\newcommand\includechapter[2]{
+    \chapter{#2}
+    \begin{bibunit}[plain]
+    \import*{#1/}{body}
+    \putbib[#1/references]
+    \end{bibunit}
+}
+
+% Includes an unnamed chapter from a subfolder, and without a reference section
+\WithSuffix\newcommand\includechapter*[2]{
+    \chapter*{#2}
+    \import*{#1/}{body}
+}
+
+% includes a paper from a subfolder
+\newcommand\includepaper[4]{
+    \chapter{#2}
+    \begin{bibunit}[plain]
+    \begin{quote}
+        \textcolor{blue}{\em \footnotesize
+            #3.\\
+            ``#2''.\\
+            #4.\\
+        }
+    \end{quote}
+
+    \section*{Abstract}
+    \import*{#1/}{abstract}
+
+    \import*{#1/}{body}
+    \putbib[#1/references]
+    \end{bibunit}
+}
 
 % frontmatter dependencies
 \usepackage{titling}
@@ -93,15 +129,24 @@
 \tableofcontents
 \cleardoublepage
 
-\import*{abstract/}{thesis-wrapper}
-\import*{acknowledgements/}{thesis-wrapper}
+\includechapter*{abstract}{Abstract}
+
+\includechapter*{acknowledgements}{Acknowledgements}
 
 \mainmatter
 \pagestyle{fancy}
 
-\import*{introduction/}{thesis-wrapper}
-\import*{2016-block-jacobi-gje/}{thesis-wrapper}
-\import*{conclusion/}{thesis-wrapper}
+\includechapter{introduction}{Introduction}
+
+
+% \includepaper{2016-block-jacobi-gje}
+%     {Variable-Size Batched Gauss-Jordan Elimination for Block-Jacobi
+%     Preconditioning on Graphics Processors}
+%     {H.~Anzt, J.~Dongarra, \textbf{G.~Flegar}, E.~S.~Quintana-Ort\'{i}}
+%     {Parallel Computing, Vol 81, pp. 131-146, 2019.
+%     DOI: 10.1016/j.parco.2017.12.006.}
+
+\includechapter{conclusion}{Conclusions and Open Research Directions}
 
 \appendix
 
