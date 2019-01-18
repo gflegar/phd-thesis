@@ -1,5 +1,5 @@
 \section{Design of the \coo \spmv GPU kernel}
-\label{s3-kernel}
+\label{2017-coo-spmv:s3-kernel}
 
 
 The specific \spmv operation we target in this paper is $y := A\cdot x + y$, 
@@ -12,7 +12,7 @@ It comprises $2\cdot nnz$ arithmetic operations (with $nnz$ being the number of 
 
 In the rest of this section we describe the design of the \coo \spmv kernel we 
 propose for manycore architectures.
-Subsection~\ref{ss:coo-spmv} presents the general algorithmic idea, without
+Subsection~\ref{2017-coo-spmv:ss:coo-spmv} presents the general algorithmic idea, without
 introducing hardware-specific optimizations.
 There, we only assume the target device to be a shared memory 
 architecture, with a relatively large number of
@@ -24,12 +24,12 @@ contribute
 to the computation of the same entry in the output vector.
 Furthermore, we assume that the memory design favours data locality over
 random data access, which is true for virtually all modern hardware.
-Subsection~\ref{ss:cuda-coo-spmv} describes the hardware-specific optimizations 
+Subsection~\ref{2017-coo-spmv:ss:cuda-coo-spmv} describes the hardware-specific optimizations 
 we employ when realizing the \coo \spmv algorithm on NVIDIA GPUs using 
 the CUDA programming model.
 
 \subsection{\coo \spmv}
-\label{ss:coo-spmv}
+\label{2017-coo-spmv:ss:coo-spmv}
 
 The most natural approach to exploit hardware concurrency in an \spmv routine based
 on the COO format is to
@@ -102,7 +102,7 @@ where structured access to
 the vector $x$ is ensured at the price of complicated access to the vector $y$.)
 
 \subsection{CUDA realization of \coo \spmv}
-\label{ss:cuda-coo-spmv}
+\label{2017-coo-spmv:ss:cuda-coo-spmv}
 
 We realize the specific implementation of the general approach described in 
 the previous subsection using the CUDA programming model.
@@ -185,5 +185,5 @@ allocated per each physical core
 than the number of physical cores, while $\omega = 4$ 
 means that there are four threads assigned to each physical core).
 The oversubscribing parameter is subject to hardware- and problem-specific optimization,
-and we experimentally identify reasonable choices in Section~\ref{s4-experiments}.
+and we experimentally identify reasonable choices in Section~\ref{2017-coo-spmv:s4-experiments}.
 

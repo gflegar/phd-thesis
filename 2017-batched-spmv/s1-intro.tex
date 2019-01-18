@@ -1,0 +1,36 @@
+\section{Introduction}
+\label{2017-batched-spmv:sec:s1-intro}
+
+Applying an operator discretized as a sparse matrix
+in terms of a sparse matrix-vector product (\spmv)
+is a heavily utilized kernel in many scientific applications.
+A practical example are Krylov subspace methods, which rely on \spmv
+to generate the Krylov subspaces used to approximate the solution
+of linear systems and eigenvalue problems.
+At the same time, \spmv frequently poses a performance bottleneck
+of sparse linear algebra algorithms,
+as this memory-bounded operation is notorious for delivering low fractions of peak performance on current computer architectures.
+Given the importance of \spmv,
+significant effort has been spent on finding the best strategy to store
+sparse matrices and optimizing this kernel for
+distinct nonzero distributions and hardware architectures,
+including multicore processors and graphics processing units (GPUs).
+ 
+In general, scientific applications require the multiplication of a single, large and sparse matrix with an input vector.
+In this paper, we address a different scenario composed of
+the multiplication of a large set of ``small'' sparse matrices with their corresponding vectors.
+Although this use case is less prominent, it occurs for example in the context
+of astrophysics simulations.
+Our goal is to make the community aware that, under these circumstances,
+replacing a standard routine with a ``batched'' \spmv kernel often results in significant
+performance improvements. 
+Following a brief discussion of related work in Section~\ref{2017-batched-spmv:sec:related},
+Section~\ref{2017-batched-spmv:sec:s3-kerneldesign} 
+presents different strategies for processing a batch of \spmv calls/sparse matrices on GPUs
+via a number of flexible routines that are designed to handle the most commonly-used sparse matrix storage formats.
+In Section~\ref{2017-batched-spmv:sec:s4-experiments} we then assess the performance of the new kernels, by comparing them against the standard 
+implementations of \spmv in cuSPARSE~\cite{cuda8.0} 
+and MAGMA-sparse~\cite{sellpreport}.  While all kernels are tested on a production line GPU, it can be expected
+that the kernel design as well as the benefits carry over to other architectures.
+We conclude in Section~\ref{2017-batched-spmv:sec:s5-conclusion} with some remarks and an outlook on future research directions. 
+

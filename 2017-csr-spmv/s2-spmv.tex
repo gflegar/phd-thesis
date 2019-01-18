@@ -1,5 +1,5 @@
 \section{CSR-Based Formats and Algorithms for \spmv}
-\label{sec:spmv}
+\label{2017-csr-spmv:sec:spmv}
 
 
 CSR represents a sparse matrix $A \in \R^{m \times n}$ in compact form
@@ -58,7 +58,7 @@ results in an almost perfectly balanced distribution
 of the workload for both BG CSR kernels,
 but yields a significant waste of resources for CSR-v.
 
-Figure~\ref{fig:motivation} provides a motivating example for our work.
+Figure~\ref{2017-csr-spmv:fig:motivation} provides a motivating example for our work.
 The left-hand side plot there shows the sparsity pattern for matrix
 {\sc Freescale/transient} from the SuiteSparse Matrix Collection.%
 \footnote{Formerly known as the University of Florida Matrix Collection:
@@ -72,7 +72,7 @@ only 5 rows contain more than $10^3$ nonzeros; and only 2 more than $10^4$,
 with the densest row comprising
 60,423 nonzero entries.
 
-The right-hand side plot in Figure~\ref{fig:motivation}
+The right-hand side plot in Figure~\ref{2017-csr-spmv:fig:motivation}
 reports the execution time on an NVIDIA GTX1080 GPU
 for double-precision \spmv kernels based on CSR and HYB
 (implemented in cuSPARSE~\cite{cusparse}),
@@ -102,6 +102,6 @@ while maintaining the storage efficiency of CSR.
     \caption{Left: sparsity pattern for {\sc Freescale/transient}.
     Right: execution time (blue) and memory consumption (red) on a GTX1080
     using different \spmv kernels.}
-\label{fig:motivation}
+\label{2017-csr-spmv:fig:motivation}
 \end{figure}
 

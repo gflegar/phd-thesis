@@ -8,8 +8,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
+\usepackage[scaled]{helvet}  % fix size of helvetica fonts
 \usepackage[square,sort,comma,numbers]{natbib}
-\usepackage[colorlinks=false]{hyperref}
+% \usepackage[colorlinks=false]{hyperref}
 
 % Paper inclusion
 \usepackage[sectionbib]{bibunits}
@@ -166,6 +167,7 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
 \usepackage{lscape}     % landscape pages
 \usepackage{multirow}   % table cells spanning multiple rows
 \usepackage{xspace}     % \xspace command - prevents eating spaces
+\usepackage{url}        % \url command
 
 \input{macros}
 
@@ -215,6 +217,14 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
     {In Proceedings of the Seventh Workshop on Irregular Applications:
     Architectures and Algorithms (IA3'17), pp. 2:1--2:8, 2017.
     DOI: 10.1145/3149704.3149767}
+
+\includepaper{2017-batched-spmv}
+    {Flexible Batched Sparse Matrix-Vector Product on GPUs}
+    {H.~Anzt, G.~Colins, J.~Dongarra, \textbf{G.~Flegar},
+    E.~S.~Qunitana-Ort\'{i}}
+    {In Proceedings of the 8th Workshop on Latest Advances in Scalable
+    Algorithms for Large-Scale Systems (ScalA'17), pp. 3:1--3:8, 2017.
+    DOI: 10.1145/3148226.3148230}
 
 \part{Preconditioning}
 

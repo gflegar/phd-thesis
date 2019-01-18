@@ -1,5 +1,5 @@
 \section{Experimental Evaluation}
-\label{sec:results}
+\label{2017-csr-spmv:sec:results}
 
 \subsection{Setup and metrics}
 
@@ -65,7 +65,7 @@ and this setting is used for all experiments in this section.
     and overhead compared to CSR for these formats (right).
     The data is shown for 100 selected matrices from SMC,
     assuming $s_v$=8 (double precision) and $s_i$=4.}
-\label{fig:storage}
+\label{2017-csr-spmv:fig:storage}
 \end{figure}
 
 We determine the storage requirements for the CSR, ELLPACK and ELLR-T formats
@@ -119,14 +119,14 @@ not being biassed to any particular format.
 \vspace*{-2ex}
 \caption{GFLOPS distribution of \spmv implementations on K40 (top)
     and GTX1080 (bottom), using SP and DP arithmetic (left and right, respectively).}
-\label{fig:distribution}
+\label{2017-csr-spmv:fig:distribution}
 \end{figure}
 
 \subsection{Memory consumption}
 
 We commence our evaluation with an analysis of storage consumption
 of different matrix formats for the 100 selected matrices from SMC.
-Figure~\ref{fig:storage} shows that,
+Figure~\ref{2017-csr-spmv:fig:storage} shows that,
 for most cases, CSR is the format that requires the lowest amount of memory,
 and the additional storage required to save the \srow array in \bcsr
 is negligible.
@@ -156,12 +156,12 @@ we omit ELLPACK and ELLR-T from the following experiments.
 \vspace*{-2ex}
 \caption{Comparison of \spmv implementations on K40 (top)
     and GTX1080 (bottom), using SP and DP arithmetic (left and right, respectively).}
-\label{fig:performance}
+\label{2017-csr-spmv:fig:performance}
 \end{figure}
 
 \subsection{Global comparison}
 
-The results in Figure~\ref{fig:distribution}
+The results in Figure~\ref{2017-csr-spmv:fig:distribution}
 show the distribution of the GFLOPS rates
 by means of ``box-and-whisker'' plots.
 This experiment reveals that
@@ -172,14 +172,14 @@ and all four present considerably higher
 GFLOPS medians than those observed for CSR-s and CSR-v.
 For this reason, we omit CSR-s and CSR-v from further discussion.
 Furthermore, the lower ``whisker'' attached to the boxes in
-Figure~\ref{fig:distribution},
+Figure~\ref{2017-csr-spmv:fig:distribution},
 which comprises the first quartile (i.e. 25\%) of the cases,
 show that both CSR and SELL-P encounter a
 considerable number of ``ill-conditioned'' cases
 from the point of view of performance,
 delivering notably lower GFLOPS rates for those.
 In contrast, \bcsr and HYB feature a more consistent performance rate.
-This behaviour can also be observed in Figure~\ref{fig:performance}.
+This behaviour can also be observed in Figure~\ref{2017-csr-spmv:fig:performance}.
 (The problem instances in this figure are ordered
 by speed-up/slow-down of \bcsr over cuSPARSE CSR.)
 For regular cases, appearing in the left-hand side of the plots, \bcsr is outperformed
@@ -204,7 +204,7 @@ with the first transfer of the matrix data to the GPU memory.
 \end{tabular}
 \vspace*{-2ex}
 \caption{Comparison between CSR and \bcsr implementations of \spmv on K40 (top) and GTX1080 (bottom), using SP and DP arithmetic (left and right, respectively).}
-\label{fig:bcsr}
+\label{2017-csr-spmv:fig:bcsr}
 \end{figure}
 
 \subsection{Detailed comparison of CSR and \bcsr.}
@@ -215,7 +215,7 @@ when the matrix exhibits an irregular row distribution of its nonzero entries,
 while maintaining the data layout of the regular version of CSR
 (and roughly its memory requirements).
 To close the experiments, we evaluate the performance of these two formats in more detail.
-Figure~\ref{fig:bcsr} illustrates the throughput of
+Figure~\ref{2017-csr-spmv:fig:bcsr} illustrates the throughput of
 the \bcsr variant with respect to that of CSR from cuSPARSE
 for each problem instance.
 In these plots, we employ a logarithmic scale for the $y$-axis,
@@ -243,7 +243,7 @@ This is explained by the lack of hardware support for DP atomic updates in this 
     and speed-up/slow-down of \bcsr over CSR ($y$-axis)
     on K40 (top) and GTX1080 (bottom)
     using SP and DP arithmetic (left and right, respectively).}
-\label{fig:deviation}
+\label{2017-csr-spmv:fig:deviation}
 \end{figure}
 
 Even though \bcsr shows notable acceleration over CSR
@@ -259,7 +259,7 @@ would incur a considerable increase in the amount
 of stored information (even a complete duplication).
 Still, a relevant question is whether we can choose {\em a priori}
 to rely on either CSR or \bcsr for a particular \spmv.
-Figure~\ref{fig:deviation} shows that this is indeed the case
+Figure~\ref{2017-csr-spmv:fig:deviation} shows that this is indeed the case
 if we have a rough statistical estimation
 of the distribution of the number of nonzero entries per row $n_{zr}$.
 Concretely, the figure depicts the relationship

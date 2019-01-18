@@ -1,11 +1,11 @@
 \section{Related Work}
-\label{s2-related}
+\label{2017-coo-spmv:s2-related}
 
 \begin{figure*}
 \centering
 \includegraphics[width=\textwidth]{plots/formats}
 \caption{Different storage formats for a sparse matrix of dimension $m\times n$ containing $nnz$ nonzeros along with the memory consumption.}
-\label{fig:formatoverview}
+\label{2017-coo-spmv:fig:formatoverview}
 \end{figure*}
 
 \subsection{Sparse Matrix Formats}
@@ -63,7 +63,7 @@ the number of nonzero elements.
 This ``sliced ELL'' (SELL-p~\cite{sellcs}) format can be viewed as splitting the matrix into row-blocks
 and storing each block in ELL format.
 The formats discussed in this section are visualized
-in Figure~\ref{fig:formatoverview}.
+in Figure~\ref{2017-coo-spmv:fig:formatoverview}.
 
 Aside from these basic formats, there exist variants
 which arise as combinations of these basic formats:

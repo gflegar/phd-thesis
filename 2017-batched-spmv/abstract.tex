@@ -1,0 +1,8 @@
+We propose a variety of {\em batched} routines for 
+concurrently processing a large collection of small-size, independent sparse matrix-vector products (\spmv)
+on graphics processing units (GPUs).
+These batched \spmv kernels are designed to be flexible in order to handle
+a batch of matrices which differ in size, nonzero count, and nonzero distribution. Furthermore,
+they support three most commonly used sparse storage formats: CSR, COO and ELL.
+Our experimental results on a state-of-the-art GPU reveal performance improvements
+of up to 25$\times$ compared to non-batched \spmv routines.

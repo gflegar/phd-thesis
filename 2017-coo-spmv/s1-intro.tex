@@ -1,5 +1,5 @@
 \section{Introduction}
-\label{s1-intro}
+\label{2017-coo-spmv:s1-intro}
 Applying a discretized operator
 in terms of a sparse matrix-vector product (\spmv)
 is a heavily-used operation in many scientific applications.
@@ -43,15 +43,15 @@ parallel,private}]{codes/coo.c}
 
 In this paper we present
 a GPU implementation 
-of the sparse matrix-vector product (Section~\ref{s3-kernel})
+of the sparse matrix-vector product (Section~\ref{2017-coo-spmv:s3-kernel})
 that addresses the challenge of overcoming the load imbalance in unstructured
 matrices. The kernel is based on the coordinate (COO) format~\cite{garlandspmv}, 
 leverages the latest features of the CUDA programming model,
 and succeeds in achieving high performance for unstructured matrices.
-In a comprehensive evaluation in Section~\ref{s4-experiments} 
+In a comprehensive evaluation in Section~\ref{2017-coo-spmv:s4-experiments} 
 we identify the developed kernel as competitive or superior
 to the existing routines.
-Prior to presenting the new implementation, in Section~\ref{s2-related} we
+Prior to presenting the new implementation, in Section~\ref{2017-coo-spmv:s2-related} we
 review
 existing efforts for optimizing the sparse matrix vector product
 on manycore architectures.

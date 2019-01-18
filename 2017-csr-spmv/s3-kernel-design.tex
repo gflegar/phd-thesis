@@ -1,8 +1,8 @@
 \section{Balanced \spmv kernel}
-\label{sec:kernel}
+\label{2017-csr-spmv:sec:kernel}
 
 The culprit for the unbalance in the \spmv implementations
-discussed in Section~\ref{sec:spmv}
+discussed in Section~\ref{2017-csr-spmv:sec:spmv}
 is the irregular distribution of arrays \val and \colidx
 (and therefore workload) among the threads.
 This irregularity can result in significant performance loss,
@@ -22,9 +22,9 @@ parallel,private}]{codes/spmv_i.c}
     \caption{A (sequential) C implementation of the \bcsr algorithm.
         In a parallel implementation each thread needs to
         efficiently determine its starting value of the \texttt{row} variable.
-        This is discussed in Section~\ref{sec:kernel}, ``Determining the first
+        This is discussed in Section~\ref{2017-csr-spmv:sec:kernel}, ``Determining the first
         row of each segment''.}
-\label{fig:spmvi}
+\label{2017-csr-spmv:fig:spmvi}
 \end{figure}
 
 \subsection{General idea}
@@ -43,7 +43,7 @@ of the output vector $y$.
 Thus, the thread has to keep track of the current row it is operating on,
 as well as the last entry of the row,
 in order to detect a change to the next row once this entry is reached.
-The sequential C~routine in Figure~\ref{fig:spmvi} illustrates this idea.
+The sequential C~routine in Figure~\ref{2017-csr-spmv:fig:spmvi} illustrates this idea.
 Since there can be multiple threads operating on the same row,
 the updates on the solution vector $y$ have to be implemented
 as atomic transactions,

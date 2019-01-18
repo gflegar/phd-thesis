@@ -1,0 +1,17 @@
+\section{Summary and Outlook}
+\label{2017-batched-spmv:sec:s5-conclusion}
+We have developed and implemented a set of flexible batched \spmv kernels that accommodate the CSR, 
+COO and ELL sparse matrix storage formats. 
+The routines can efficiently process matrix
+batches where each problem is different in terms of size, nonzero count and nonzero pattern.
+Although the performance of the distinct kernels is very problem-dependent, 
+our experimental results on an NVIDIA P100 GPU, using batches comprising very different matrices,
+reveled that the developed kernels based on COO and CSR are able to sustain a performance of about 50 GFLOPs.
+This corresponds to a 25$\times$ speed-up compared to the use of a sequence of invocations to standard implementations
+of \spmv.
+
+In the future we plan to further optimize the formats by determining the resources allocated to the distinct problems
+based on the matrix characteristics.
+Furthermore, we want to extend the performance assessment to also account for the energy usage,
+and compare resource efficiency with other manycore architectures that feature a more sophisticated
+cache hierarchy.

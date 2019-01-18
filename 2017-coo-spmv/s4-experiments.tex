@@ -1,5 +1,5 @@
 \section{Performance Assessment}
-\label{s4-experiments}
+\label{2017-coo-spmv:s4-experiments}
 
 \begin{figure}
 \begin{center}
@@ -8,7 +8,7 @@
 \caption{Nonzero count vs. size for the considered test matrices. 
 For convenience we added density baselines for 3 nnz/row, 10 nnz/row, and 50 nnz/row.
 }
-\label{fig:matrixnnz}
+\label{2017-coo-spmv:fig:matrixnnz}
 \end{figure}
 
 
@@ -17,7 +17,7 @@ For convenience we added density baselines for 3 nnz/row, 10 nnz/row, and 50 nnz
 \includegraphics[width=\columnwidth]{plots/matrixchar_std_avg_logy}
 \end{center}
 \caption{Histogram for the ( standard deviation / avg ) of the nonzero-per-row metric. Few problems have a higher standard deviation than $10^2$.}
-\label{fig:matrixstd}
+\label{2017-coo-spmv:fig:matrixstd}
 \end{figure}
 
 \begin{figure*}
@@ -25,7 +25,7 @@ For convenience we added density baselines for 3 nnz/row, 10 nnz/row, and 50 nnz
 \includegraphics[width=\columnwidth]{plots/COO_GFLOPS_nnz}
 \end{center}
 \caption{Evaluating the effect of the parameter $\omega$ on the performance of the \coo kernel. The matrices are ordered according to increasing nonzero count.}
-\label{fig:COOanalysis}
+\label{2017-coo-spmv:fig:COOanalysis}
 \end{figure*}
 
 \begin{figure*}
@@ -33,7 +33,7 @@ For convenience we added density baselines for 3 nnz/row, 10 nnz/row, and 50 nnz
 \includegraphics[width=\columnwidth]{plots/GFLOPS_all_nnz_nnz}
 \end{center}
 \caption{Performance of the distinct \spmv kernels for all problems included in the test suite. The matrices are ordered according to increasing nonzero count.}
-\label{fig:GFLOPsnnz}
+\label{2017-coo-spmv:fig:GFLOPsnnz}
 \end{figure*}
 
 
@@ -44,9 +44,9 @@ comprises a large number of matrices that differ in the algebraic field (real, c
 the shape (square, rectangular), and matrix-specific characteristics such as
 size and nonzero pattern.
 For the performance assessment we focus on real, square matrices that have a pairwise different nonzero pattern.
-In Figure~\ref{fig:matrixnnz} we visualize the size and nonzero count of the chosen test matrices. 
+In Figure~\ref{2017-coo-spmv:fig:matrixnnz} we visualize the size and nonzero count of the chosen test matrices. 
 In order to quantify the imbalance of the nonzero distribution of a matrix,
-we use the standard deviation of the nonzero-per-row metric, see Figure~\ref{fig:matrixstd}.
+we use the standard deviation of the nonzero-per-row metric, see Figure~\ref{2017-coo-spmv:fig:matrixstd}.
 
 \subsection{Experiment setup}
 All experiments were conducted on the GPU-accelerated compute nodes of the 
@@ -86,7 +86,7 @@ and has proven to be very efficient for balanced problems~\cite{sellc}.
 \subsection{Experimental results}
 In a first experiment, we analyze the effect of the oversubscribing-parameter $\omega$ 
 on the performance of the \coo kernel.
-In Figure~\ref{fig:COOanalysis} we order the matrices for increasing nonzero count, 
+In Figure~\ref{2017-coo-spmv:fig:COOanalysis} we order the matrices for increasing nonzero count, 
 and report the performance for the $\omega$-values 2, 4, 8, 16, 32, 64, and 128.
 We notice that the performance differences increase with the
 nonzero count. For small nonzero counts, the differences are negligible. 
@@ -98,7 +98,7 @@ and $\omega=128$ seems to be the best parameter choice beyond that.
 The nonzero count of a matrix is one of the characteristics known prior
 to the \spmv invocation. 
 Hence, a straight-forward optimization step for the \coo kernel is given 
-by choosing $\omega$ on a heuristic derived from Figure~\ref{fig:COOanalysis}.
+by choosing $\omega$ on a heuristic derived from Figure~\ref{2017-coo-spmv:fig:COOanalysis}.
 In the rest of the paper we define the \coo as the kernel that chooses 
 \[
 \omega =
@@ -112,7 +112,7 @@ In the rest of the paper we define the \coo as the kernel that chooses
 \]
 
 Next, we compare the \coo kernel with the reference kernels previously listed. 
-In Figure~\ref{fig:GFLOPsnnz} we order the test matrices according to increasing nonzero count,
+In Figure~\ref{2017-coo-spmv:fig:GFLOPsnnz} we order the test matrices according to increasing nonzero count,
 and visualize the performance of all \spmv kernels we consider in this analysis. 
 
 Independent of the \spmv kernel, the performance linearly increases with the nonzero count of the problems until it stagnates around 90 GFLOPs. 
@@ -124,7 +124,7 @@ is difficult to identify an overall winner. This is partly because multiple
 performance indicators are covering each other, and distinct problems, although different in
 sparsity pattern, may have the same nonzero count, and are therefore arranged in the same place on the x-axis. 
 Overall, it is difficult to extract from this figure for how many problems a specific kernel is the fastest. 
-We answer this question in Figure~\ref{fig:stats} where we report for how many problems a certain kernel was the performance winner (blue bar) and for how many problems a certain kernel gave the worst performance (red bar). If the kernel was neither the fastest nor the slowest for a certain problem, it is counted as ``ballpark.'' In the end, for each kernel we get a bar of the same length split into three colors; the sum of all blue parts and the sum of all red parts equals the number of test cases, respectively.
+We answer this question in Figure~\ref{2017-coo-spmv:fig:stats} where we report for how many problems a certain kernel was the performance winner (blue bar) and for how many problems a certain kernel gave the worst performance (red bar). If the kernel was neither the fastest nor the slowest for a certain problem, it is counted as ``ballpark.'' In the end, for each kernel we get a bar of the same length split into three colors; the sum of all blue parts and the sum of all red parts equals the number of test cases, respectively.
 
 \begin{figure}
 \begin{center}
@@ -134,7 +134,7 @@ We answer this question in Figure~\ref{fig:stats} where we report for how many p
 \caption{Fastest kernel comparison: blue bars represent the number of problems
     for which the kernel was the fastest, red bars count the problems for which
     the kernel was the slowest in the comparison.}
-\label{fig:stats}
+\label{2017-coo-spmv:fig:stats}
 \end{figure}
 
 \begin{figure}
@@ -143,7 +143,7 @@ We answer this question in Figure~\ref{fig:stats} where we report for how many p
 \includegraphics[width=\columnwidth]{plots/boxplot_log_csri_2e5}
 \end{center}
 \caption{Performance statistics for the distinct kernels over the test cases containing more than $2\cdot 10^5$ nonzero elements.}
-\label{fig:boxplot}
+\label{2017-coo-spmv:fig:boxplot}
 \end{figure}
 
 \begin{table}
@@ -165,7 +165,7 @@ Kernel & min & max & average & median & standard-dev.\\
 \end{center}
 \caption{Statistical information on the GFLOPs metric of the \spmv kernel
 for the 248 matrices containing more than $2\cdot 10^5$ nonzero elements.}
-\label{tab:stats}
+\label{2017-coo-spmv:tab:stats}
 \end{table}
 
 \begin{figure*}
@@ -174,7 +174,7 @@ for the 248 matrices containing more than $2\cdot 10^5$ nonzero elements.}
 \includegraphics[width=\columnwidth]{plots/overhead_log_2e5}
 \end{center}
 \caption{Runtime overhead of the distinct \spmv kernels. For each kernel, the matrices are ordered with respect to increasing overhead. Only test matrices with more than $2\cdot 10^5$ nonzero elements are considered.}
-\label{fig:overhead}
+\label{2017-coo-spmv:fig:overhead}
 \end{figure*}
 
 Overall, the \coo kernel wins most cases, and it is followed by the \sellp
@@ -184,7 +184,7 @@ the other hand, \csrfive and \csr are rarely the slowest kernels, while
 
 Looking at the complete test suite containing all 400 matrices, 
 we include problems that are ``small'' with respect to the computational workload of the \spmv.
-For those, even the winning kernel in Figure~\ref{fig:stats} achieves 
+For those, even the winning kernel in Figure~\ref{2017-coo-spmv:fig:stats} achieves 
 only low execution performance. 
 In scientific applications, these ``easy'' problems are typically rather handled via a direct solver
 than an iteration method based on the \spmv kernel.
@@ -192,10 +192,10 @@ As we are in particular interested in the performance for problems
 that are the characteristic target we limit the further analysis to the 248 
 problems containing more than $2\cdot 10^5$ nonzero elements.
 
-In Figure~\ref{fig:boxplot} we compare the distinct \spmv kernels in the GFLOPs 
+In Figure~\ref{2017-coo-spmv:fig:boxplot} we compare the distinct \spmv kernels in the GFLOPs 
 metric for the problems containing more than $2\cdot 10^5$ nonzero elements.
 We accompany this graph with some numeric information in 
-Table~\ref{tab:stats} where we additionally 
+Table~\ref{2017-coo-spmv:tab:stats} where we additionally 
 list the average performance. 
 For this metric, the \coo format turns out to be the
 overall winner with an average 38.86 GFLOPs.
@@ -204,11 +204,11 @@ achieve the highest execution rate (38.64 GFLOPs and 37.24 GFLOPs, respectively)
 They outperform the closest competitor \csr by about 25\%.
 The lowest median performance of 18.74 GFLOPs is achieved by the \hyb kernel.
 At the same time, the \hyb kernel achieves significantly higher performance 
-(up to 82.43 GFLOPs) for specific test cases, see Table~\ref{tab:stats}.
+(up to 82.43 GFLOPs) for specific test cases, see Table~\ref{2017-coo-spmv:tab:stats}.
 Only the \sellp and the \csr kernel achieve higher performance for balanced and regular 
 problems (82.62 GFLOPs and 87.43 GFLOPs, respectively).
 
-Most noticeable in Figure~\ref{fig:boxplot} 
+Most noticeable in Figure~\ref{2017-coo-spmv:fig:boxplot} 
 is the variation of the \coo performance being radically smaller than
 for any of the other formats: 
 50\% of the performance numbers are within a 6 GFLOP/s range from the median,
@@ -217,7 +217,7 @@ The lowest performance number for the \coo kernel is 24 GFLOPs.
 Only the \csri kernel is competitive in handling unbalanced problems,
 with 50\% of the performance numbers between 20 GFLOPs and 60 GFLOPs,
 a standard deviation of 14.44, and the lowest performance being 13.47 GFLOPs 
-(see Table~\ref{tab:stats}).
+(see Table~\ref{2017-coo-spmv:tab:stats}).
 For \sellp and \csr, the performance values spread across a large range.
 In particular, 
 the lowest performance numbers (0.06 GFLOPs for \sellp and 0.07 GFLOPs for \csr) 
@@ -246,7 +246,7 @@ In the analysis we identify the optimal format for each test matrix,
 and scale the performance of all kernels to this baseline.
 We then sort the matrices with increasing overhead for every kernel
 individually, and visualize this characteristic curve in
-Figure~\ref{fig:overhead}. 
+Figure~\ref{2017-coo-spmv:fig:overhead}. 
 Hence, the order of the matrices is different for each kernel,
 but the overheads are increasing in all datasets.
 The objective of minimizing the slowdown corresponds to minimizing the area
