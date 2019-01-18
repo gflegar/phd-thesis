@@ -1,0 +1,23 @@
+\section{Summary and Outlook}
+\label{s5-conclusion}
+We addressed the challenge of overcoming the load-imbalance in the
+sparse matrix vector product for irregular matrices.
+We developed and implemented an SpMV kernel for GPUs that is based on the COO format.
+Using a large collection of test matrices we compared the performance of the new kernel
+to the (up to our knowledge) best SpMV kernels available: 
+the CSR and hybrid kernels which are part of NVIDIA's cuSPARSE library, the SELL-P and CSR5 kernels
+part of the MAGMA-sparse software library, and the CSRI kernel, which balances 
+the workload via atomic operations.
+We used different metrics to quantify the performance: 
+median absolute performance in GFLOPs and its variation,
+kernel winning most test cases, and
+smallest overhead compared to the best kernel included in the test suite.
+For the chosen test suite containing 400 matrices,
+the proposed COO-based SpMV performs radically better on irregular matrix
+structures, and ultimately wins all considered performance metrics.
+
+In the future we want to focus on multi-GPU architectures
+and optimize the developed kernel for hybrid (Multicore+Manycore) execution. 
+Furthermore, we are convinced that the strategies reducing the impact of global
+write conflicts via warp-vote functions and introducing additional operations
+are also applicable to other computational problems of irregular nature.

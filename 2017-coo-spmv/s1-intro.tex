@@ -1,0 +1,57 @@
+\section{Introduction}
+\label{s1-intro}
+Applying a discretized operator
+in terms of a sparse matrix-vector product (\spmv)
+is a heavily-used operation in many scientific applications.
+An example are the Krylov subspace methods relying on the \spmv kernel
+to generate the Krylov subspaces in which the solutions
+to linear and eigenvalue problems are approximated.
+At the same time, the \spmv is a frequent bottleneck in complex applications,
+as it is notorious for sustaining low fractions of peak processor performance.
+This is partly due to the low arithmetic intensity making the 
+\spmv kernel memory bound on literally all modern architectures,
+the access overhead induced by storing only the nonzero elements in the matrix,
+the (in many cases random) access to the input vector.
+Given the importance of this building block,
+significant effort is spent on finding the best way to store
+sparse matrices and optimizing the \spmv kernel for
+different nonzero patterns and hardware architectures~\cite{garlandspmv,sellpreport,Liu:2015:CES:2751205.2751209}.
+For sparse matrices where the nonzeros are distributed in a very 
+structured fashion, it is often possible to derive problem-tailored 
+storage formats, like, e.g., the DIA format for matrices with a tridiagonal structure~\cite{garlandspmv}.
+A similar situation is given if the pattern is not very structured, but the nonzero elements 
+are distributed equally across the rows (each row contains 
+a similar number of nonzero elements). 
+Most challenging are the 
+sparsity patterns that are irregular (no recurring sub-pattern can be identified),
+and unbalanced (the distinct rows have a very different number of nonzero elements).
+Problems with these characteristics are typical for, e.g., social network representations.
+For these irregular problems, standard parallelization strategies, 
+like assigning rows to the parallel resources,
+inevitably result in heavy load imbalance.
+Furthermore, unstructured sparsity patterns often promote 
+random memory access to the vector values.
+
+\begin{figure}
+\begin{minipage}{\columnwidth}
+\lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
+parallel,private}]{codes/coo.c}
+\end{minipage}
+\caption{\coo \spmv kernel design.}
+\label{fig:spmv}
+\end{figure}
+
+In this paper we present
+a GPU implementation 
+of the sparse matrix-vector product (Section~\ref{s3-kernel})
+that addresses the challenge of overcoming the load imbalance in unstructured
+matrices. The kernel is based on the coordinate (COO) format~\cite{garlandspmv}, 
+leverages the latest features of the CUDA programming model,
+and succeeds in achieving high performance for unstructured matrices.
+In a comprehensive evaluation in Section~\ref{s4-experiments} 
+we identify the developed kernel as competitive or superior
+to the existing routines.
+Prior to presenting the new implementation, in Section~\ref{s2-related} we
+review
+existing efforts for optimizing the sparse matrix vector product
+on manycore architectures.

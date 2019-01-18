@@ -128,7 +128,6 @@
 % Listings
 \usepackage{listings}
 
-
 \definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
 \definecolor{mylilas}{RGB}{170,55,241}
 \lstset{language=matlab,%
@@ -148,9 +147,25 @@
     %emph=[2]{word1,word2}, emphstyle=[2]{style},    
 }
 
+\usepackage{listings}
+\lstset{language=C,
+basicstyle=\scriptsize\tt,
+numbers=left,                   % where to put the line-numbers
+numberstyle=\scriptsize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it's 1, each line  numbered
+numbersep=5pt,
+stringstyle=\scriptsize\tt,
+identifierstyle=\scriptsize\tt,
+commentstyle=\scriptsize\em,
+keywordstyle=\scriptsize\bf,
+breaklines,frameround=ffff,frame=trbl,captionpos=b}
+
 % Other utilities
-\usepackage{lscape}
-\usepackage{multirow}
+\usepackage{booktabs}   % improved tables
+\usepackage{float}      % improved float behavior
+\usepackage{lscape}     % landscape pages
+\usepackage{multirow}   % table cells spanning multiple rows
+\usepackage{xspace}     % \xspace command - prevents eating spaces
 
 \input{macros}
 
@@ -188,14 +203,21 @@
 
 \part{Sparse Matrix Formats and Matrix-Vector Product}
 
+\includepaper{2017-coo-spmv}
+    {Overcoming Load Imbalance for Irregular Sparse Matrices}
+    {\textbf{G.~Flegar}, H.~Anzt}
+    {In Proceedings of the Seventh Workshop on Irregular Applications:
+    Architectures and Algorithms (IA3'17), pp. 2:1--2:8, 2017.
+    DOI: 10.1145/3149704.3149767}
+
 \part{Preconditioning}
 
 % \includepaper{2016-gje-block-jacobi}
 %     {Variable-Size Batched Gauss-Jordan Elimination for Block-Jacobi
 %     Preconditioning on Graphics Processors}
 %     {H.~Anzt, J.~Dongarra, \textbf{G.~Flegar}, E.~S.~Quintana-Ort\'{i}}
-%     {Parallel Computing, Vol 81, pp. 131-146, 2019.
-%     DOI: 10.1016/j.parco.2017.12.006.}
+%     {Parallel Computing, Vol 81, pp. 131--146, 2019.
+%     DOI: 10.1016/j.parco.2017.12.006}
 
 \part{Towards Low Precision Methods}
 

@@ -1,0 +1,188 @@
+\section{Design of the \coo \spmv GPU kernel}
+\label{s3-kernel}
+
+
+The specific \spmv operation we target in this paper is $y := A\cdot x + y$, 
+for $A\in\mathbb{R}^{m\times n}$, $x\in\mathbb{R}^n$, $y\in\mathbb{R}^m$.
+This routine updates the vector $y$
+by adding the product of the sparse matrix $A$ and the vector $x$,
+and allows for flexibility in terms of scaling $y$ prior to the
+operation (i.e. scaling $y$ with 0 to compute $y=A\cdot x$).
+It comprises $2\cdot nnz$ arithmetic operations (with $nnz$ being the number of nonzero elements in $A$).
+
+In the rest of this section we describe the design of the \coo \spmv kernel we 
+propose for manycore architectures.
+Subsection~\ref{ss:coo-spmv} presents the general algorithmic idea, without
+introducing hardware-specific optimizations.
+There, we only assume the target device to be a shared memory 
+architecture, with a relatively large number of
+computational elements (cores) and support for atomic addition of floating
+point values.
+The last assumption is required to resolve race conditions which can occur if 
+multiple computational elements are assigned to the same matrix row, i.e. 
+contribute 
+to the computation of the same entry in the output vector.
+Furthermore, we assume that the memory design favours data locality over
+random data access, which is true for virtually all modern hardware.
+Subsection~\ref{ss:cuda-coo-spmv} describes the hardware-specific optimizations 
+we employ when realizing the \coo \spmv algorithm on NVIDIA GPUs using 
+the CUDA programming model.
+
+\subsection{\coo \spmv}
+\label{ss:coo-spmv}
+
+The most natural approach to exploit hardware concurrency in an \spmv routine based
+on the COO format is to
+parallelize the loop traversing the nonzero elements in the matrix
+(line~7 in Figure~\ref{fig:spmv}) by splitting the workload into similar-sized subsets,
+and distributing those among the parallel resources.
+This corresponds to assigning a contiguous ``chunk'' of the
+array containing the matrix values 
+(along with the corresponding chunks of column and row index arrays), 
+to each computational element.
+While it is possible to use non-contiguous chunks (e.g., distribute the data in
+round-robin fashion) this could break data locality, resulting in performance loss.
+To ensure load balancing among different computational elements, all chunks
+should be of similar size.
+In addition, to reduce the number of memory transactions from main memory, it
+is important to aim for aligned memory access and to use every data element
+brought into cache.
+This is crucial when implementing the memory-bound \spmv kernel as its 
+performance is largely dependent
+on the data access efficiency.
+Therefore, assuming that all three arrays describing the matrix in COO format are aligned in memory, each chunk should start at a cache line boundary,
+and ideally comprise an integer number of cache lines.
+
+In summary, 
+efficient data access and optimal load balancing imposes two restrictions on 
+chunk sizes: 
+1) each chunk should be an integer multiple of the cache line
+size, and 
+2) the sizes of any two chunks should differ by at most one cache line.
+
+While the above strategy yields a perfect distribution of the input matrix $A$,
+which typically comprises the majority of the data, it has several implications we discuss next.
+
+The core operation (line~8 in Figure~\ref{fig:spmv}) of \coo \spmv is composed of
+a (fused) multiply-add between an element of $A$, and elements of $x$ and $y$,
+indexed by the values in arrays \texttt{rowidx} and \texttt{colidx}.
+The element of $y$ is then updated with the result of this operation.
+Since multiple computational elements can operate on matrix elements which have
+the same \texttt{rowidx} values 
+(which corresponds to matrix elements located in the same row),
+this update is prone to race conditions.
+To resolve write conflicts, the (fused) multiply-add can be replaced by multiplication,
+followed by an atomic addition of the result into the correct position of
+vector $y$.
+This, however, requires more arithmetic instructions than the original approach,
+and uses a large number of expensive atomic operations, which may
+cause significant overhead in case of atomic collisions (i.e. multiple atomic
+operations requesting the same data entity at the same time).
+To alleviate the problem, we accumulate the results of several iterations of the for loop
+with the same update destination in registers private to the computational element.
+If the \texttt{rowidx} value of the next data element is different to what was processed previously, 
+the accumulated results are written back to main memory using an atomic addition.
+
+In this strategy, to decrease the number of atomic operations, (and increase the amount of
+computation handled in registers,) the three arrays comprising the matrix data
+should be sorted with respect to the increasing \texttt{rowidx} values.
+This will ensure that each computational element performs only one atomic
+operation per \texttt{rowidx} value, while also ensuring data locality
+for vector $y$ (which can be beneficial on hardware that implements
+atomic operations in a shared cache file, like used in NVIDIA and AMD
+GPUs).
+Finally, a good heuristic to improve the access pattern to the input vector $x$
+is to additionally sort each set of matrix elements with the same
+\texttt{rowidx} value with respect to increasing \texttt{colidx} value.
+The effectiveness of this approach is highly sensitive to the sparsity pattern of
+the matrix, but this is a common problem of virtually all \spmv
+formats and algorithms.
+(The only exception to this problem known to the authors is the CSC format, 
+where structured access to
+the vector $x$ is ensured at the price of complicated access to the vector $y$.)
+
+\subsection{CUDA realization of \coo \spmv}
+\label{ss:cuda-coo-spmv}
+
+We realize the specific implementation of the general approach described in 
+the previous subsection using the CUDA programming model.
+This model has all of the features required by the introductory paragraph of
+this section, with atomic instructions being the only critical component.
+While older generations of NVIDIA GPUs emulate double precision atomics in
+software (by using 64-bit atomic CAS), the new Pascal architecture offers
+native support for double precision atomics.
+
+A naive implementation assigns one chunk of memory to
+each CUDA thread. This, however, inevitably results in non-coalescent reads to the 
+matrix $A$, which is detrimental to performance.
+To ensure coalescent memory access, each chunk should be assigned to one warp
+(a group of 32 threads), and a thread $i$ of the warp should read elements at
+positions $32j + i,\, j = 0,1,\ldots$ of the chunk.
+(This is the motivation to use a more platform-agnostic term ``computational
+element'' in the previous subsection, as the terms ``thread'' or ``core'' may
+have different meanings in distinct programming models and/or hardware.)
+
+The main problem with this ``warp-level approach'' is the use of atomic operations.
+If each thread in the warp attempts to issue an atomic addition whenever it
+progresses to the next row, this will cause a large number of atomic
+collisions, since all the threads in a warp execute in lockstep (i.e. perfectly
+synchronized).
+A workaround is to conclude each iteration of the loop (line~7--9 in Figure~\ref{fig:spmv})
+with a ``warp vote function'' in which all threads in a warp 
+decide whether there is at least one of them that needs to
+write its results into global memory.
+If such a thread is identified, all threads collectively execute a
+warp-level segmented scan operation on their private registers, with segments
+defined by the distinct values of the \texttt{rowidx} array currently processed by
+the warp.
+The segmented scan (as opposed to a simple reduction) is required to
+ensure correct operation if the warp handles multiple rows of the matrix.
+For each of the handled \texttt{rowidx} values, the segmented scan determines
+the thread with the lowest thread index among all the threads that operate on
+this row.
+Then, these threads accumulate the partial sums present in their registers,
+and each of the threads with the lowest index will issue a global
+atomic addition before it progresses to a different \texttt{rowidx} value.
+This strategy avoids atomic collisions between threads of the same warp.
+Atomic collisions between threads of distinct warps are still
+possible, but these are unlikely as 
+1) threads of distinct warps operate on distinct data chunks (so the number of
+overlapping rows is limited) and
+2) distinct warps are not perfectly synchronized.
+The segmented scan approach radically reduces the number of atomic collisions, 
+however increases the number of arithmetic operations in the algorithm.
+As the \spmv kernel is heavily memory bound, it can be expected that 
+additional arithmetic operations rarely impact the overall performance,
+as long as they can be overlapped with memory operations.
+For completeness, we mention that this approach of avoiding intra-warp
+atomic collisions was also used to construct a balanced \csr \spmv kernel in
+Flegar et al.~\cite{csri}.
+
+An additional optimization on NVIDIA GPUs is related to the choice of the
+number of chunks.
+In contrast to the classical latency-minimizing CPU hardware, enabled by
+sophisticated cache hierarchy, NVIDIA GPUs use a latency-hiding approach
+where the 
+computational units are oversubscribed with warps.
+The intention of having a larger number of warps active
+is to quickly switch in-between them to cover memory latency~\cite{lawn2016}. 
+If threads in a warp issue a memory operation, those threads will stall while waiting for the
+memory transaction to complete. To combat this, rather than
+allowing the hardware to stall, the warp scheduler may find a
+warp that is not waiting for a memory operation to complete,
+and issue the execution of this warp instead. This constant juggling
+of active warps allows the GPU to tolerate the high memory
+latency and keep the compute cores occupied.
+To enable latency hiding, the number of generated chunks on this hardware
+should be higher than the amount of parallel processing resources.
+On the other hand, a high number of chunks increases the chance of atomic
+collisions as more chunks may contain data located in the same matrix row.
+We introduce an ``oversubscribing'' parameter $\omega$ that
+determines the number of threads 
+allocated per each physical core
+(e.g., $\omega = 2$ means that the number of threads is two times larger 
+than the number of physical cores, while $\omega = 4$ 
+means that there are four threads assigned to each physical core).
+The oversubscribing parameter is subject to hardware- and problem-specific optimization,
+and we experimentally identify reasonable choices in Section~\ref{s4-experiments}.
+
