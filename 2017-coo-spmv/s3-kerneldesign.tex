@@ -34,7 +34,7 @@ the CUDA programming model.
 The most natural approach to exploit hardware concurrency in an \spmv routine based
 on the COO format is to
 parallelize the loop traversing the nonzero elements in the matrix
-(line~7 in Figure~\ref{fig:spmv}) by splitting the workload into similar-sized subsets,
+(line~7 in Figure~\ref{2017-coo-spmv:fig:spmv}) by splitting the workload into similar-sized subsets,
 and distributing those among the parallel resources.
 This corresponds to assigning a contiguous ``chunk'' of the
 array containing the matrix values 
@@ -63,7 +63,7 @@ size, and
 While the above strategy yields a perfect distribution of the input matrix $A$,
 which typically comprises the majority of the data, it has several implications we discuss next.
 
-The core operation (line~8 in Figure~\ref{fig:spmv}) of \coo \spmv is composed of
+The core operation (line~8 in Figure~\ref{2017-coo-spmv:fig:spmv}) of \coo \spmv is composed of
 a (fused) multiply-add between an element of $A$, and elements of $x$ and $y$,
 indexed by the values in arrays \texttt{rowidx} and \texttt{colidx}.
 The element of $y$ is then updated with the result of this operation.
@@ -127,7 +127,8 @@ If each thread in the warp attempts to issue an atomic addition whenever it
 progresses to the next row, this will cause a large number of atomic
 collisions, since all the threads in a warp execute in lockstep (i.e. perfectly
 synchronized).
-A workaround is to conclude each iteration of the loop (line~7--9 in Figure~\ref{fig:spmv})
+A workaround is to conclude each iteration of the loop (line~7--9 in
+Figure~\ref{2017-coo-spmv:fig:spmv})
 with a ``warp vote function'' in which all threads in a warp 
 decide whether there is at least one of them that needs to
 write its results into global memory.

@@ -1,0 +1,28 @@
+\section{Conclusions}
+\label{sec:conclusion}
+
+We have re-formulated the parallelization of \spmv
+based on the CSR sparse matrix format
+to enforce a balanced partitioning of the data (and workload) on GPUs,
+optimized for matrices with an irregular row distribution
+of the non-zero entries.
+Our approach departs from the conventional parallelization across matrix rows
+advocated by standard implementations of CSR \spmv
+and other GPU-specific formats,
+instead facing potential race conditions via atomic transactions
+(supported by hardware in recent GPU architectures).
+Furthermore,
+our algorithm preserves the standard CSR format to store the sparse matrix,
+augmented with a vector
+which holds the row indexes of some key matrix elements. This 
+additional array
+can be built inexpensively and consumes only a minor amount of additional memory.
+
+Our experiments on two recent GPU architectures from NVIDIA,
+using both single and double precision arithmetic,
+show that our algorithm can be composed with the standard CSR \spmv
+to yield a GPU kernel that becomes a strong candidate
+for the implementation of \spmv
+in general-purpose sparse linear algebra libraries
+for this type of accelerators.
+

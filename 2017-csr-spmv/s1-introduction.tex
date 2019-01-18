@@ -1,0 +1,69 @@
+\section{Introduction}
+
+The sparse matrix-vector product (\spmv) is a classical yet pivotal kernel for the solution of numerical linear algebra problems 
+via iterative methods~\cite{saad}.
+In the last years, this operation has also gained relevance for 
+big data analytics~\cite{Buo15}
+and web search~\cite{pagerank}.
+It is thus natural that, over the past decades, a considerable research effort has been applied to design
+specialized data structures
+that offer a compact representation of the problem data to
+reduce the storage requirements, facilitate its manipulation,
+and diminish the volume of data movements
+for sparse computational kernels such as \spmv.
+
+Among the variety of storage layouts for sparse matrices,
+the CSR (Compressed Sparse Row) format~\cite{saad}
+conforms the current standard layout
+because of its storage efficiency which, in general, results in
+faster serial algorithms~\cite{Buluc:2009:PSM:1583991.1584053}.
+For this reason, CSR has become ubiquitous
+in sparse matrix
+computations~\cite{saad,Davis06,Buluc:2009:PSM:1583991.1584053}.
+
+For graphics processing units (GPUs), CSR can be outperformed by
+specialized sparse matrix layouts that sacrifice storage efficiency
+for fast (coalesced) memory access.
+Among these GPU-oriented formats,
+ELLPACK, ELLR-T~\cite{CPE:CPE1658} and
+SELL-C-$\sigma$~\cite{Kreu14,SELL-P} have shown notable performance.
+Unfortunately, none of these formats is truly general.
+Some suffer from increased memory consumption, which can grow significantly
+for irregular sparsity patterns, while others
+(like NVIDIA's HYB~\cite{cusparse})
+are only suitable for a few types of matrix operations (computational kernels)
+and/or require expensive format conversions. 
+Another common issue arising in
+\spmv computations on GPUs is load imbalance. This has been a topic of some
+recent research, resulting in new matrix formats like CSR5 \cite{csr5} and
+BCCOO \cite{bccoo}, which enable well-balanced \spmv algorithms.
+
+In this paper, we re-visit the CSR format, proposing a CSR-based \spmv variant
+that provides increased efficiency on GPUs
+and offers the following properties
+compared with standard CSR algorithm and GPU-specific solutions:
+\begin{itemize}
+\item Our balanced CSR algorithm for irregular matrices (\bcsr)
+    ensures an even distribution of the workload among
+    the CUDA threads participating in the \spmv,
+    at the cost of using atomic updates to avoid race conditions.
+\item \bcsr maintains the same data structure as CSR, and augments this with an
+    additional vector
+    of a dimension that is linear in the amount of available parallelism.
+    For moderate to large-scale problems
+    this introduces a negligible storage overhead,
+    in general much lower than that incurred by ELLPACK-type formats and
+    sliced versions (SELL-$*$).
+\item The additional data structure leveraged by \bcsr
+    can be built at execution time,
+    e.g. the first time an \spmv is invoked,
+    for a very small computational cost,
+    similar to that of reading once the solution vector for the \spmv.
+\item Our experiments with a subset of a sparse matrix benchmark show that
+    \bcsr outperforms CSR for about 40--50\% of the cases
+    on NVIDIA architectures providing hardware support for atomic updates.
+    Furthermore, it is easy to detect {\em a priori}
+    when \bcsr should be the preferred option. This property
+    leads to an optimal hybrid kernel
+    that employs either \bcsr or CSR, depending on the target problem.
+\end{itemize}

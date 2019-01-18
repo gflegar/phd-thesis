@@ -1,0 +1,150 @@
+\section{Balanced \spmv kernel}
+\label{sec:kernel}
+
+The culprit for the unbalance in the \spmv implementations
+discussed in Section~\ref{sec:spmv}
+is the irregular distribution of arrays \val and \colidx
+(and therefore workload) among the threads.
+This irregularity can result in significant performance loss,
+since the two vectors comprise the majority of CSR's data structure.
+Hence, the key objective of our kernel is to attain a balanced distribution of
+these arrays among the threads.
+The trade-off for this comes in the form of an increased number
+of integer operations and the introduction of potential race conditions,
+which may result in slightly lower performance on regular sparsity patterns.
+
+\begin{figure}[t]
+\begin{minipage}{\columnwidth}
+\lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
+parallel,private}]{codes/spmv_i.c}
+\end{minipage}
+\vspace*{-2ex}
+    \caption{A (sequential) C implementation of the \bcsr algorithm.
+        In a parallel implementation each thread needs to
+        efficiently determine its starting value of the \texttt{row} variable.
+        This is discussed in Section~\ref{sec:kernel}, ``Determining the first
+        row of each segment''.}
+\label{fig:spmvi}
+\end{figure}
+
+\subsection{General idea}
+
+In order to distribute the arrays \val and \colidx, both of size $n_z$,
+evenly among $T$ threads,
+thread $k \in \lbrace 0,1, \ldots, T-1 \rbrace$ is given
+a segment of the arrays starting at $\lfloor kn_z / T\rfloor$ (inclusive)
+and ending at $\lfloor (k+1)n_z/T\rfloor$ (exclusive).
+During the execution of the \spmv $y:=Ax + y$, with an $m \times n$ matrix $A$,
+each thread multiplies 
+the elements in its segment of \val with those of the input vector $x$
+determined by the corresponding indices in \colidx (dot product).
+The result has to be accumulated into the correct position
+of the output vector $y$.
+Thus, the thread has to keep track of the current row it is operating on,
+as well as the last entry of the row,
+in order to detect a change to the next row once this entry is reached.
+The sequential C~routine in Figure~\ref{fig:spmvi} illustrates this idea.
+Since there can be multiple threads operating on the same row,
+the updates on the solution vector $y$ have to be implemented
+as atomic transactions,
+resulting in one transaction per matrix element
+which rapidly becomes a performance bottleneck.
+However, this problem can be amended
+by accumulating the result to a thread-local variable,
+and updating the output vector only
+after the thread has finished processing the row.
+With this option, the upper limit on the number of atomic transactions
+is reduced to $m + T$.
+
+\subsection{Achieving good performance on GPUs}
+
+Although the approach underlying \bcsr does result
+in a balanced distribution of the data among the threads,
+it is not suitable for GPUs in such form.
+Concretely, since each thread operates on a different matrix segment,
+with that formulation the memory accesses of the threads within a warp
+will be noncoalesced.
+In a memory-bounded kernel like \spmv, this severely reduces performance.
+To tackle the issue, the segments can be distributed at the warp-level,
+so that each segment is assigned to one warp (instead of to one thread).
+The warp then reads its segment in chunks of 32 elements,
+with each thread within the warp reading one value of the chunk
+and accumulating the result into its local registers.
+After reaching the end of a row,
+all threads need to write their results to the output vector.
+If this was realized using atomic instructions,
+it would cause significant overhead,
+as the threads inside one warp are synchronized
+and all of them would then try to update the result at exactly the same time.
+Instead, the results are first accumulated
+by a single thread, using reduction via warp shuffles,
+and then a single atomic addition updates the result in global memory.
+
+A second question arising from the warp-level segment distribution is
+how to handle rows that end in the middle of a chunk.
+Waiting for the entire warp to complete the processing of a row
+before moving to the next one
+would cause a partial serialization
+in case the rows consisted of a few elements only.
+To address this, the threads are allowed to work
+on different rows at the same time,
+and the information about the current and the next rows
+becomes thread-specific.
+As a consequence, the algorithm to accumulate the results
+before writing to main memory needs to be changed.
+Each time at least one of the threads moves to a different row,
+the entire warp executes a segmented scan (instead of a reduction)
+which accumulates the result for each row
+in the register of the first thread working on that particular row.
+At this point the local results of the remaining threads are reset to zero,
+while the first threads will update the global output vector
+once they are finished with their row.
+This eliminates all race conditions inside a warp,
+since each thread updates a different location of the output vector.
+Determining whether at least one thread moved to the next row can be
+realized in only one instruction per chunk by using warp vote functions.
+
+Warp-level segment distribution also causes
+additional reads from \rowptr,
+since each thread may need to move multiple rows after each chunk.
+However, as the last thread in a warp
+always has the most up-to-date information
+about the starting row of the next chunk,
+the number of reads can be reduced
+by broadcasting this information to the other threads within the warp
+using a single warp shuffle.
+Finally, in order to ensure aligned accesses to arrays \val and \colidx,
+and fully utilize each fetched cache line,
+the segment sizes can be restricted to an integer multiple of the chunk size.
+Since the chunk size is a multiple of the cache-line size,
+if \val and \colidx arrays are aligned,
+the start of each segment will also be aligned.
+
+\subsection{Determining the first row of each segment}
+
+At the beginning of the \bcsr algorithm each warp has to determine
+the first row of its segment.
+This can be done by first constructing a histogram of \rowptr
+with $T$ bins associated with the segments of \val and \colidx.
+The number of elements $n_i$ in each bin corresponds to the number of rows
+which end in the segment associated with this particular bin.
+Since the first row of segment $k$
+is equal to the number of rows ending in previous segments
+(i.e., $\srow_k = n_1 + n_2 + \ldots + n_{k-1}$),
+the indices of these first rows can be determined by computing the exclusive scan
+of the histogram.
+
+In order to avoid repeating this computation at each \spmv invocation,
+the array \srow can be saved and ``attached'' to the CSR matrix structure.
+We note that the optimal number of warps $T$ does not depend on the matrix $A$,
+but only on the hardware-specific degree of thread-concurrency,
+adding a constant amount of storage overhead.
+Even though the procedure can be realized on the GPU in parallel,
+this is generally not needed,
+as its computational cost is very low compared with that of \spmv:
+the entire computation requires only one pass over
+\rowptr and one over the resulting histogram,
+comprising a total of $m + T$ data accesses and integer operations.
+Instead, it can be performed sequentially on the CPU
+and overlapped with the (initial) memory transfer of matrix $A$ to the GPU.
+
