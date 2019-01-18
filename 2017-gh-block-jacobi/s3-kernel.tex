@@ -1,0 +1,91 @@
+ \section{Design of CUDA Kernels}
+ \label{2017-gh-block-jacobi:sec:s3-kernel}
+
+Utilizing GH for a block-Jacobi preconditioner requires the initial extraction of the diagonal blocks
+from the matrix $A$ stored in the compressed sparse row (CSR) format
+(as required by MAGMA \cite{magma}).
+After this, the sequence of blocks is fed into a batched version of the GH algorithm (BGH),
+and the resulting decomposition, along with the pivoting information, is inserted back into the 
+preconditioner matrix and the pivot vector, respectively.
+The preconditioner application step uses this information to apply BGH
+to the right-hand side vector, ultimately turning each vector block into the solution 
+of the corresponding small linear system.
+Details of the distinct steps and their efficient realization on GPUs are described
+in this section.
+
+\subsection{Variable Size Batched Gauss-Huard decomposition}
+The BGH kernel applies the GH algorithm to factorize a set of small independent blocks. 
+Following the kernel design in~\cite{gje},
+the BGH implementation takes advantage of 
+the large register count and warp shuffle instructions in recent GPU architectures.
+The GH decomposition commences by reading the diagonal block,
+with each thread storing a single column in registers.
+The actual computation is realized entirely in the registers,
+using warp shuffles for inter-thread communication.
+This approach eliminates the latency of memory and caches,
+as well as the load and store instructions, decreasing the complexity of the kernel.
+Column permutations required to perform the pivoting can be avoided
+by using implicit pivoting as described in Section~\ref{2017-gh-block-jacobi:sec:s2-background}.
+The application of the pivoting is delayed until the preconditioner matrix is
+inserted into the sparse data structure.
+An additional register array is used to store the pivoting information,
+and this array is replicated in each thread for quick access during the GEMV step.
+
+The use of warp shuffles and registers limits the scope of the kernel to blocks
+of size up to $32$, as the number of threads cannot exceed the warp size.
+Nevertheless, this covers the typical application scenario for block-Jacobi preconditioning~\cite{gje}.
+
+\subsection{Batched Gauss-Huard application}
+The solution of the linear system lacks any reuse of matrix elements.
+Hence,
+the kernel has to be designed with focus on optimizing memory access.
+Since the solution vector is needed in each step of the GH algorithm, it is read into registers
+in an interleaved pattern, with each thread storing one component of the vector.
+
+Each outer loop iteration $k$ of the GH application algorithm
+updates the $k$-th element of the solution vector
+with the dot product between the first $k-1$ elements of the $k$-th matrix row
+and the solution vector (Figure~\ref{2017-gh-block-jacobi:fig:gh}, line 7).
+This can be implemented as a parallel reduction using warp shuffles.
+After that, a parallel \texttt{AXPY} updates the first $k-1$ elements of the solution vector using
+the first $k-1$ elements of $k$-th column (Figure~\ref{2017-gh-block-jacobi:fig:gh}, line 17).
+To attain coalescent memory access for both operations,
+the matrix $\widetilde{D}_i$ can be decomposed into lower and upper triangular parts: $\widetilde{D}_i = L_i + U_i$,
+with the diagonal belonging to the former.
+Matrix $L_i$ is stored in row-major order to enable coalescent access to its rows
+and $U_i$ in column-major order to provide fast access to the columns.
+Alternatively,
+matrix $U_i$ can be transposed with respect to the anti-diagonal
+to convert its columns into rows while preserving its upper triangular structure.
+The resulting matrix $\hat{D}_i = L_i^{} + U_i^{AT}$ is then stored in row-major order.
+In this manner, both, the rows of $L_i$ and the columns of $U_i$ (i.e. the rows of $U_i^{AT}$)
+can be accessed in coalescent manner.
+ 
+The application process is completed by writing the solution vector back to memory,
+taking into account the permutation generated in the decomposition step.
+
+\subsection{Batched data extraction and insertion}
+The extraction of a diagonal block from the sparse coefficient matrix is similar to the
+``shared extraction'' strategy in~\cite{gje}.
+A notable difference, though, is that the block has to be distributed among the threads in column-wise fashion.
+As a result, the strategy can be implemented using only a fraction of the amount of shared memory.
+Once the extraction of a single row to shared memory is completed,
+the elements of this row are immediately copied into the registers (one element per thread),
+making the shared memory locations available for the extraction of the next row.
+Thus, conversely to the shared memory extraction in~\cite{gje}, 
+the shared memory has to hold only a single row of the diagonal block.
+
+The insertion step writes the decomposed blocks $\widetilde{D}_i$ (or $\hat{D}_i$)
+back into the sparse matrix structure.
+Storing $\widetilde{D}_i$ is faster due to coalescent memory writes.
+At the same time, storing $\widetilde{D}_i$ results in noncoalescent memory access
+to the matrix $U_i$ during the preconditioner application.
+In contrast, storing $\hat{D}_i$ moves the cost of noncoalescent memory access
+from preconditioner application to preconditioner setup.
+The noncoalescent memory accesses when writing $\hat{D}_i$
+can be avoided by first preparing the matrix in shared memory, and then writing it to
+the main memory in coalescent fashion.
+However, this significantly increases shared memory consumption,
+decreasing the
+number of warps that can be scheduled per SM, and ultimately achieves lower performance.
+Consequently, we refrain from presenting performance results for this approach.

@@ -1,0 +1,59 @@
+\section{Introduction}
+\label{2017-gh-block-jacobi:sec:s1-intro}
+
+Iterative methods for the solution of sparse linear systems can strongly benefit from the integration of a
+preconditioner that is inexpensive to calculate
+and apply,
+and improves the convergence rate of the iterative scheme
+~\cite{saad}.
+On a parallel system, 
+the efficiency of the preconditioner 
+also depends on how well 
+these two building blocks, 
+preconditioner calculation and application, can be formulated in terms of parallel %and scalable 
+algorithms.
+
+Block-Jacobi preconditioners are more complex to handle than their (scalar) Jacobi counterparts, as they
+base the scaling on the inverse of the block diagonal. Nevertheless, 
+the additional effort can be justified, as block-Jacobi preconditioners often provide faster convergence 
+for problems that inherently carry a block structure.
+
+The higher cost of block-Jacobi schemes comes from the extraction of 
+the diagonal blocks from the coefficient matrix of the linear system,
+which is typically stored using a specialized data structure for sparse matrices,
+and the scaling with the inverse of this collection of small independent blocks.
+The latter can be realized by either explicit inversion in the preconditioner setup phase,
+or by generating LU factors that are then used in triangular solves during the preconditioner application (solve phase).
+Here, we note that parallelism in block-Jacobi preconditioners comes from
+the existence of multiple independent problems of small size.
+
+In~\cite{gje} we introduced a batched routine for GPUs that 
+explicitly generates the block-inverse of a block-Jacobi preconditioner.
+Our implementation, based on Gauss-Jordan elimination (BGJE),
+1) integrates an efficient scheme to extract the required matrix entries from the sparse data structures,
+2) applies an implicit pivoting strategy during the inversion,
+and 3) computes the inverses using the GPU registers.
+As a result, our BGJE kernel
+clearly outperforms the batched LU-based factorization kernel in
+MAGMA~\cite{magma}.
+
+In this paper we revisit the computation of block-Jacobi preconditioners on GPUs via variable size batched routines, 
+making the following contributions:
+\begin{itemize}
+\setlength\itemsep{0em}
+\item Our block-Jacobi preconditioner generation computes a triangular decomposition of the diagonal blocks, 
+      avoiding the computationally expensive and numerically dubious explicit generation of inverses.
+\item Instead of utilizing the conventional LU factorization for the decomposition, we
+      rely on the Gauss-Huard (GH) algorithm~\cite{Hua79}.
+      The cost of this algorithm is
+      analogous to that of the LU-based method, and
+      much lower than the cost of an explicit inversion (such as GJE).
+      Furthermore, 
+      when combined with {\em column} pivoting, GH offers a numerical stability that is comparable with that of the LU-based method
+      with partial pivoting~\cite{Dek97}.
+\item In contrast to the batched LU factorization kernels in MAGMA, and the GPU parallel version of
+      the GH algorithm in~\cite{Benner2016}, we design our CUDA kernel to address the small problems of variable size
+      arising in the computation of the block-Jacobi preconditioner by heavily exploiting the GPU registers. Furthermore,
+      we reduce data movements
+      by performing the column permutations (required for pivoting) implicitly.
+\end{itemize}

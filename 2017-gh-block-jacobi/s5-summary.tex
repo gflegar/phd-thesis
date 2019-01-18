@@ -1,0 +1,23 @@
+\section{Concluding Remarks}
+\label{2017-gh-block-jacobi:sec:s5-summary}
+
+
+We have designed data-parallel GPU kernels for the efficient generation and application of 
+block-Jacobi preconditioners, based on the Gauss-Huard method, which can be embedded into 
+any Krylov-based iterative solver for sparse linear systems.
+Our kernels exploit the intrinsic parallelism in the two algorithmic steps, 
+preconditioner generation and preconditioner application.
+In contrast, our kernel implementation is specifically designed
+for small block sizes, exploiting the GPU registers to outperform their MAGMA counterparts by a large margin. 
+Furthermore, our variable size batched Gauss-Huard kernel integrates an implicit version of column pivoting 
+to eliminate costly data movements due to column permutations, 
+while delivering the same numerical stability.
+Compared with block-Jacobi based on our register-tuned batched Gauss-Jordan elimination,
+which is also designed for small block sizes, the variable size batched Gauss-Huard kernels offer 
+faster preconditioner generation and higher numerical stability, but slower
+preconditioner application.
+Our experimental results, using a state-of-the-art NVIDIA's P100 GPU, are consistent with this analysis.
+Implementing the block-Jacobi preconditioner on top of the batched Gauss-Huard provides
+better performance if the iterative solver converges within a small number of iterations.
+In these cases the cost of the preconditioner generation is considerable compared with the 
+whole iterative solve (including the preconditioner application).

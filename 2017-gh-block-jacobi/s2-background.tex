@@ -1,0 +1,149 @@
+\section{Background and Related Work}
+\label{2017-gh-block-jacobi:sec:s2-background}
+
+\subsection{Block-Jacobi preconditioning}
+The block-Jacobi method arises as a
+blocked variation of its (scalar) Jacobi counterpart
+that extends the idea of diagonal scaling to block-diagonal 
+inversion 
+with
+the diagonal blocks of $A \in \R^{n \times n}$ gathered 
+into $D=\mbox{\rm diag}(D_1,D_2,\ldots,D_N)$, $D_i\in \R^{m_i \times m_i}$,
+$i=1,2,\ldots,N$,  $m_1 + \ldots + m_N = n$.
+ 
+An important question in this context is how to 
+choose the diagonal blocks. In the optimal case, these blocks
+should reflect the properties of the coefficient matrix $A$.
+Fortunately, many linear systems exhibit some inherent block structure.
+For example, if $A$ comes from a finite element
+discretization of a partial differential equation (PDE), 
+each element typically has multiple variables associated with it~\cite{jenniferscott}.
+These variables are typically tightly coupled, 
+leading to dense diagonal blocks. 
+As all variables belong to the same element, they share the same column sparsity pattern.
+Such sets of variables are often referred to as {\it supervariables}.
+A popular strategy to determine the blocks for block-Jacobi is 
+ {\it supervariable blocking}~\cite{jenniferscott}, which is based on identifying
+ variables sharing the same column-nonzero-pattern.
+ Depending on the predefined upper bound for the size of the blocks,
+ multiple supervariables adjacent in the coefficient matrix 
+ can be agglomerated within the same diagonal block.
+To help ensure that supervariables accumulated into the same Jacobi block are
+coupled, the matrix should be ordered so that
+nearby variables are also close in the PDE mesh.
+This is satisfied for locality-preserving 
+ordering techniques such as reverse Cuthill-McKee or natural orderings~\cite{jenniferscott}.  
+
+There exist different strategies of employing a block-Jacobi preconditioner
+in an iterative solver setting.
+One option is to explicitly compute the block-inverse before the 
+iterative solution phase, and apply the preconditioner in terms of 
+a matrix-vector multiplication. 
+A second approach is to only extract the diagonal blocks in the preconditioner setup
+phase, and solve one linear system per block within the preconditioner application.
+In-between these strategies falls the idea (explored in this paper) of factorizing the diagonal blocks in the 
+setup, and performing small triangular solves in the preconditioner application.
+These three strategies differ in the workload size, and how this work is distributed 
+between the preconditioner setup phase and the preconditioner application phase.
+
+\subsection{Solution of linear systems}
+The conventional procedure to solve a linear system with 
+an $m\times m$ coefficient matrix $D_i$
+commences with
+the computation of the LU factorization (with partial pivoting)
+$P_iD_i=L_iU_i$, where $L_i$ is unit lower triangular, $U_i$ is upper triangular, and $P_i$ is a permutation
+~\cite{GVL3}. This is followed by the
+application of $P_i$ to the right-hand side vector; and the solution
+of two triangular systems with $L_i$ and $U_i$.
+Assuming a single right-hand side vector, this four-stage procedure requires $2m^3/3$ floating-point operations (flops) for a linear system of order
+$m$.
+
+Gauss-Jordan elimination (GJE) is an efficient procedure for matrix inversion.
+In terms of theoretical cost and practical performance, GJE is competitive with the standard
+approach based on the LU factorization~\cite{doi:10.1137/S1064827598345679,CPE:CPE2933}.
+However, if the goal is not the matrix inversion but retrieving the solution of a linear system,
+GJE incurs significant overhead, requiring $2m^3$ flops.
+The {\it Gauss-Huard} (GH) algorithm is a variant of GJE for the solution of linear systems
+with a computational cost consistent with that of the LU-based approach.
+Furthermore, the GH-based solver can be combined with a column version of the standard partial (row) pivoting
+to offer a numerical stability that is comparable with that of the LU-based solver enhanced with partial pivoting~\cite{Dek97}.
+Figure~\ref{2017-gh-block-jacobi:fig:gh} illustrates a Matlab implementation of the GH solver for a system
+$D_i x_i = b_i$. 
+Column-pivoting is applied to the coefficient matrix during the factorization,
+and undone in the final step of the algorithm. 
+
+In the GH algorithm we distinguish a ``decomposition phase'',
+operating exclusively on the matrix entries; and an ``application phase'', which transforms the right-hand side 
+vector of the linear system into the sought-after solution.
+Although we realize that a GH decomposition does not provide a factorization
+in the classical LU interpretation,
+we use this term to distinguish the operations on the system matrix (in the preconditioner setup phase)
+from those on the right-hand side vector (in the preconditioner application).
+
+\begin{figure}
+\begin{center}
+\begin{minipage}{0.80\columnwidth}
+\lstinputlisting[language=matlab,morekeywords={SpMV,ddot,daxpy,dscal}]{code/GH3.m}
+\end{minipage}
+\caption{Simplified loop-body of the basic GH implementation in Matlab notation.}
+\label{2017-gh-block-jacobi:fig:gh}
+\end{center}
+\end{figure}
+
+\subsection{GH with implicit pivoting}
+Pivoting can be a costly operation on parallel architectures,
+as this process involves two different memory access patterns.
+For example, column pivoting requires the selection of the largest element in a single row,
+and this is followed by an exchange of two columns at each iteration of the algorithm.
+If the matrix rows are distributed among the processors column-wise,
+the selection can be performed using a parallel reduction,
+while the column swap exposes little parallelism
+since all but the two processors involved in the swap remain idle.
+If the matrix is distributed row-wise the situation is reversed.
+
+To tackle this problem for GJE,
+in~\cite{gje}
+we introduced implicit (row) pivoting,
+eliminating the sequential part of the process by postponing the
+exchange step, and applying the swaps from all iterations
+at the end of the algorithm in parallel.
+In GJE, implicit (row) pivoting is enabled by noticing that its iterations are row-oblivious
+(i.e., the operations performed do not depend on the actual position of the row in the matrix,
+but only on the currently selected pivot row).
+
+This is different for GH,
+as the operations performed on the columns do depend on the column position in the matrix.
+Precisely, iteration $i$ updates only the columns with index greater than $i$.
+By noticing that all the columns with smaller index were already chosen as pivots
+in an earlier iteration, this requirement can be reformulated in a column-oblivious manner:
+iteration $i$ updates only the columns that have not yet been chosen as pivot.
+This binary predicate still does not provide enough information to compute the GEMV 
+on line 6 of Figure~\ref{2017-gh-block-jacobi:fig:gh},
+as the order of elements in the input vector depends on the order of columns in the matrix:
+$j$-th value in the vector is the $i$-th element of the $j$-th column (i.e.,
+the $i$-th element of the column chosen as pivot in the $j$-th iteration).
+Without exchanging the columns, this information can be propagated 
+by maintaining a list of previous pivots.
+
+This implicit pivoting strategy incurs some instruction and memory overhead,
+however it is insignificant to the savings coming from omitting explicit column swapping.
+We note that introducing implicit pivoting in GH
+preserves the numerical stability of the original algorithm.
+
+\subsection{Related work on batched routines}
+The term ``batched'' refers to a setting where a certain computational kernel is applied
+to a large set of (independent) data items~\cite{ANU:10332060}. 
+The motivation for having a special design (and interface) of those routines is that applying
+them to a single data item does not fully utilize the hardware
+resources, so handling the distinct problems serially leaves them unused.
+The independence of the data items allows the application
+of the operations to multiple data items in parallel.
+In particular, for architectures providing a vast amount of hardware concurrency, such as GPUs,
+replacing standard algorithms with data-parallel implementations can result in significant
+performance gains~\cite{Abdelfattah2016119}. 
+
+For the previously mentioned GJE, we demonstrated in~\cite{gje} how
+the inversion of a set of small linear systems can be realized efficiently
+on NVIDIA GPUs. There we also described how to combine the 
+batched routine with data extraction and insertion steps to efficiently generate
+a block-inverse matrix for block-Jacobi preconditioning.
