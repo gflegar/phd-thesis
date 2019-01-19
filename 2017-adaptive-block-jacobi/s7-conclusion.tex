@@ -1,0 +1,35 @@
+\section{Concluding Remarks and Future Work} \label{2017-adaptive-block-jacobi:sec:summary}
+
+We proposed and validated a strategy to reduce the data transfer volume in
+a block--Jacobi preconditioner. Concretely, our technique individually selects
+an appropriate precision format to store the distinct blocks of the
+preconditioner based on their characteristics but performs all arithmetic
+(including the generation of the preconditioner) in \fpd. We note
+that the condition numbers can be obtained cheaply as our preconditioner is
+based on explicit inversion of the diagonal blocks.
+Furthermore, the overhead from selecting the appropriate storage format in the
+preconditioner setup can easily be amortized by the reduced cost of the
+preconditioner application in the solver iterations.
+
+Our experimental simulation using Octave on an Intel architecture shows that, in
+most cases, storing a block--Jacobi preconditioner in \fps has only a
+mild impact on the preconditioner quality. On the other hand, the reckless use 
+of \fph to
+store a block-Jacobi preconditioner fails in most cases and is therefore not 
+recommended. The adaptive precision block--Jacobi preconditioner basically
+matches the convergence rate of the conventional double precision preconditioner
+in all cases and automatically adapts the precision to be used on an individual
+basis. As a result, the adaptive precision preconditioner can decide to store
+some of the blocks at precisions even less than \fps, thereby outperforming a 
+fixed precision strategy that relies on only a single precision in terms of data
+transfers and, consequently, energy consumption.
+
+As part of our future work, we plan to investigate the effect of using
+other, non {\sc ieee}-compliant data formats in the adaptive block--Jacobi
+preconditioner, prioritizing the exponent range at the cost of reducing the
+bits dedicated to the mantissa. In this endeavor, we expect to reduce the
+problems with underflows/overflows while maintaining the ``balancing''
+properties of the preconditioner. Furthermore, we will also develop a
+practical implementation of the adaptive precision block--Jacobi using {\sc
+  ieee} formats with 16, 32, and 64 bits for modern GPUs.
+

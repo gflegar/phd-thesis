@@ -1,0 +1,17 @@
+We propose an adaptive scheme to reduce communication overhead caused by data
+movement by selectively storing the diagonal blocks of a block Jacobi 
+preconditioner
+in different precision formats (half, single, or double). This specialized
+preconditioner can then be combined with any Krylov subspace method for the
+solution of sparse linear systems to perform all arithmetic in double
+precision. We assess the effects of the adaptive precision preconditioner on the
+iteration count and data transfer cost of a preconditioned conjugate gradient 
+solver. A preconditioned conjugate gradient method is, in general, a memory 
+bandwidth-bound algorithm, and therefore
+its execution time and energy consumption are largely dominated by the costs of
+accessing the problem's data in memory. Given this observation, we propose a
+model that quantifies the time and energy savings of our approach based on the
+assumption that these two costs depend linearly on the bit length of a floating
+point number. Furthermore, we use a number of test problems from the SuiteSparse
+matrix collection to estimate the potential benefits of the adaptive
+block-Jacobi preconditioning scheme.

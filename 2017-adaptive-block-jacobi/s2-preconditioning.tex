@@ -1,0 +1,188 @@
+\section{Reduced Precision Preconditioning in the PCG Method}
+\label{2017-adaptive-block-jacobi:sec:cg}
+
+\subsection{Brief review}
+
+\newcommand{\fpd}{\mbox{\rm fp64}\xspace}
+\newcommand{\fps}{\mbox{\rm fp32}\xspace}
+\newcommand{\fph}{\mbox{\rm fp16}\xspace}
+\newcommand{\fpv}{\mbox{\rm fpxx}\xspace}
+\newcommand{\inti}{\mbox{\rm int32}\xspace}
+
+Figure~\ref{2017-adaptive-block-jacobi:fig:pcg} shows the PCG method for the solution of the linear system
+$Ax=b$; where the coefficient matrix, $A \in \Rnn$, is SPD and sparse with $n_z$
+nonzero entries; $b \in \Rn$ is the right-hand side; and
+$x \in \Rn$ is the sought-after solution. The most challenging operations in
+this algorithm are the computation of the preconditioner (before the iteration
+commences), the computation of the sparse matrix-vector product (\spmv) (at 
+each iteration), 
+and the preconditioner application (at each iteration). The
+remaining operations are scalar computations or simple vector kernels like
+the dot product (\dotp) and \axpy-type vector updates~\cite{barrettemplates}.
+
+\begin{figure}[thb]
+{\small
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+  $A \rightarrow M$  
+\\Initialize $x_0, p_0, r_0 := b-Ax_0, \tau_0 := \parallel r_{0}\parallel_2, 
+\gamma_0$
+\\ $k := 0$                                                
+\\ {\bf while} $(\tau_{k} > \tau_{\max})$   
+\\ ~~~ $q_{k+1}:=Ap_{k}$                        
+\\ ~~~ $\eta_k:=p_{k}^Tq_{k+1}$    
+\\ ~~~ $\alpha_k:=\gamma_k/\eta_k$    
+\\ ~~~ $x_{k+1}:=x_k+\alpha_k p_{k}$           
+\\ ~~~ $r_{k+1}:=r_k-\alpha_k q_{k+1}$            
+\\ ~~~ $\tau_{k+1}:=\parallel r_{k+1}\parallel_2 $  
+\\ ~~~ $z_{k+1}:=M^{-1} r_{k+1}$            
+\\ ~~~ $\gamma_{k+1}:= r_{k+1}^T z_{k+1}$    
+\\ ~~~ $\beta_{k+1}:=\gamma_{k+1}/\gamma_{k}$  
+\\ ~~~ $p_{k+1}:= z_{k+1} + \beta_{k+1} p_k$ 
+
+\\ ~~~ $k:=k+1$   
+\\ {\bf endwhile}  
+\\\hline
+\end{tabular}
+\end{center}
+}
+\caption{Mathematical formulation of the PCG method. Here, $\tau_{\max}$ is
+the relative residual stopping criterion.}
+\label{2017-adaptive-block-jacobi:fig:pcg}
+\end{figure}
+
+In the PCG method, the \dotp operations present a
+one-to-one ratio
+of FLOPs to memory accesses (MEMOPS), and the \axpy-type operations present a 
+two-to-three ratio of FLOPs to MEMOPS, which clearly identifies these 
+operations as 
+memory bandwidth-bound kernels. For simplicity, moving forward we make no 
+distinction between 
+the cost of reading a number and the cost of writing a number. Assuming the 
+sparse 
+matrix is stored in compressed sparse row (CSR) format~\cite{saad}---and is 
+using 64~bits for double precision numbers/values (\fpd) and 32~bits for 
+integers/indices (\inti)---the 
+ratio of FLOPs:MEMOPS for \spmv is $2n_z/((n+n_z) \cdot \fpd + (n+n_z) \cdot
+\inti)$. As a consequence,
+this operation is also memory bounded.
+An analysis of the operations using the preconditioner is provided later
+in this section.
+
+\subsection{Orthogonality-Preserving Mixed Precision Preconditioning}
+
+In general, using a reduced precision preconditioner (i.e., 32-bit or 16-bit 
+arithmetic) 
+instead of ``full'' 64-bit, double precision arithmetic
+requires a careful consideration of the numerical effects. In this section we 
+discuss how our preconditioning strategy results in a constant preconditioning
+operator. This preserves the orthogonality of the 
+generated Krylov search directions, 
+and therefore allows us to employ the standard CG solver based on the 
+Fletcher-Reeves orthogonalization instead of the flexible CG based on the 
+Polak-Ribi\`{e}re formula.
+
+The PCG method
+presented in Figure~\ref{2017-adaptive-block-jacobi:fig:pcg} assumes that the preconditioner is a constant
+operator acting on the input vector, $r=r_{k+1}$, as
+$z=z_{k+1}:=M^{-1}r$~\cite{saad}. In this case, $r_k^Tz_{k+1}=0$, that is to 
+say, the
+orthogonality with respect to the previous residual is preserved. Strictly
+speaking, even when using double precision, the preconditioner application
+introduces some rounding error so that the computed operator satisfies
+$z=M^{-1}r + \mathcal{O}(\varepsilon_d)$, where $\varepsilon_d$ stands for \fpd
+machine precision. Hence, a preconditioner in double precision can also
+have an impact on the orthogonality. However, as the effects are in the order of
+the approximation accuracy, the non-consistency of the preconditioning operator
+is typically disregarded in practice.
+
+In contrast, when applying a preconditioner in less than double precision, 
+this issue becomes more relevant, because the rounding
+error now grows to $z=M^{-1}r + \mathcal{O}(\varepsilon_r)$, where
+$\varepsilon_r$ is the machine precision of the reduced format. As a result, the
+orthogonality error increases to $\varepsilon_r$, which becomes relevant if
+convergence beyond $\varepsilon_r$ is desired.
+
+A straightforward workaround is to introduce an additional orthogonalization
+step to account for the loss in orthogonality. Concretely, replacing the
+Fletcher-Reeves formula from Figure~\ref{2017-adaptive-block-jacobi:fig:pcg},
+\begin{align}
+\beta_{k}:=\gamma_{k+1}/\gamma_{k}=\frac{r_{k+1}^T z_{k+1}}{r_{k}^T z_{k}},
+\label{2017-adaptive-block-jacobi:eq:fr}
+\end{align}
+with the Polak-Ribi\`{e}re formula,
+\begin{align}
+\beta_{k}:=\frac{(r_{k+1}-r_k)^T z_{k+1}}{r_{k}^T z_{k}},
+\label{2017-adaptive-block-jacobi:eq:pr}
+\end{align}
+naturally accounts for $z_{k+1}$ losing orthogonality with respect to the
+previous residual, $r_k$~\cite{doi:10.1137/S1064827597323415}. Compared
+with the original formulation of the CG method, this
+orthogonality-preserving ``flexible CG''
+(FCG)~\cite{doi:10.1137/S1064827597323415} incurs an overhead that
+corresponds to keeping the last residual vector in memory and computing an
+additional vector operation and \dotp product. The benefits are that the
+iterative method can handle a flexible (non-constant)
+preconditioner~\cite{notay}, which is needed when applying a preconditioner in
+reduced precision.
+
+\begin{figure}
+\begin{center}
+\begin{minipage}{\columnwidth}
+{\small
+\lstinputlisting[language=matlab,caption=,keywords={while,end}]{code/pcg.m}
+}
+\end{minipage}
+\caption{Algorithmic formulation (in MATLAB) of the PCG method.
+For a problem of size $n$ containing $n_z$ nonzero elements in the system matrix
+stored in CSR format, ignoring the preconditioner application, each PCG
+iteration requires $(14n+n_z)\cdot\fpd+(n_z+n)\cdot\inti$ memory transactions.}
+\label{2017-adaptive-block-jacobi:fig:codepcg}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\begin{minipage}{\columnwidth}
+{\small
+\lstinputlisting[language=matlab,caption=,keywords={while,end}]{code/fcg.m}
+}
+\end{minipage}
+\caption{Algorithmic formulation (in MATLAB) of the FCG method.
+For a problem of size $n$ containing $n_z$ nonzero elements in the system matrix
+stored in CSR format, ignoring the preconditioner application, each FCG
+iteration requires $(21n+n_z)\cdot\fpd+(n_z+n)\cdot\inti$ memory transactions.}
+\label{2017-adaptive-block-jacobi:fig:codefcg}
+\end{center}
+\end{figure}
+
+
+Obviously, with a constant preconditioner, $r_{k}^T z_{k+1} = 0$, i.e. both
+formulas~\eqref{2017-adaptive-block-jacobi:eq:fr} and~\eqref{2017-adaptive-block-jacobi:eq:pr} are identical.
+For $r_{k}^T z_{k+1} \neq 0$, the Polak-Ribi\`{e}re formula specifies a locally 
+optimal search
+direction, which means that the convergence rate of this method will not be 
+slower than that of a locally optimal steepest descent
+method~\cite{doi:10.1137/060675290}. We complement the preconditioned CG method,
+based on the Fletcher-Reeves formula shown in Figure~\ref{2017-adaptive-block-jacobi:fig:codepcg}, with the
+flexible conjugate gradient (FCG) method based on the Polak-Ribi\`{e}re formula 
+in Figure~\ref{2017-adaptive-block-jacobi:fig:codefcg}. The two codes differ only in lines 6--8 
+(computation of {\tt \small gamma\_new} and additional recurrence for vector 
+{\tt t}), which results in $7n$ additional memory accesses.  A faster 
+preconditioner application 
+(i.e., using reduced precision arithmetic operations in the actual 
+preconditioner
+application) could barely compensate for this overhead.
+
+In our approach, we store the preconditioner at reduced precision, 
+but we convert the data to double precision right after reading it from
+memory and before invoking the arithmetic computations of the preconditioner
+application. Hence, although stored at a reduced precision, the preconditioner
+itself remains constant across all iterations. This strategy does
+introduce some overhead in terms of converting the preconditioner data to
+double precision and using double precision in all arithmetic operations, but it
+comes with the benefit of using the Fletcher-Reeves formula~\eqref{2017-adaptive-block-jacobi:eq:fr} for
+the orthogonalization step, which results in the more attractive (in terms 
+of memory) standard PCG solver.
+

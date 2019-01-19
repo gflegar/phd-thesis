@@ -1,0 +1,80 @@
+\section{Rounding Error Analysis}
+\label{2017-adaptive-block-jacobi:sec:erroranalysis}
+
+As previously elaborated, we invert the diagonal blocks explicitly using double 
+precision, e.g. via (batched) Gauss-Jordan Elimination~\cite{ANZT2018,gje}.
+Let $E_i = D_i^{-1}$ be the inverse of block $i$ computed in
+double precision arithmetic with unit roundoff $\ud$.
+By storing the inverse in reduced precision ($\Ehat_i$) with unit roundoff $u$, 
+we introduce the error $\dE_i$ and get~\cite{duhi92},
+\cite[secs.~14.3, 14.4]{higham2}
+\begin{align}
+   \Ehat_i  = E_i + \dE_i,
+   \qquad 
+   \norm{\dE_i} \le c_{m_i} \k(D_i) \norm{\Ehat_i}\ud 
+                 + u \norm{\Ehat_i},
+\label{2017-adaptive-block-jacobi:eq:th1}
+\end{align}
+for some constant $c_{m_i}$.
+For the vector segments in $z_i$ and $r_i$ corresponding to the diagonal block 
+$i$, the subsequent multiplication in double precision results
+in~\cite[sec.~3.5]{higham2}
+\begin{align}
+  \zhat_i = fl(\Ehat_i r_i) = \Ehat_i r_i + \dz_i,
+\qquad  \norm{\dz_i} \le c_{m_i}' \ud \norm{\Ehat_i} \norm{r_i}.
+\label{2017-adaptive-block-jacobi:eq:th2}
+\end{align}
+Hence 
+\begin{align}
+  \zhat_i = (E_i + \dE_i) r_i + \dz_i
+= E_i r_i + \dzz_i,
+\end{align}
+where combining~\eqref{2017-adaptive-block-jacobi:eq:th1} and~\eqref{2017-adaptive-block-jacobi:eq:th2} gives
+\begin{align}
+  \norm{\dzz_i} &= \norm{\dE_i r_i + \dz_i}\nonumber\\
+                &\le c_{m_i} \k(D_i) \norm{\Ehat_i}\norm{r_i}\ud 
+                 + u \norm{\Ehat_i}\norm{r_i} 
+                 + c_{m_i}' \ud \norm{\Ehat_i} \norm{r_i}\nonumber\\
+                &= \bigl(c_{m_i} \k(D_i)\ud 
+                 + u + c_{m_i}' \ud\bigr) \norm{\Ehat_i} \norm{r_i}.
+\label{2017-adaptive-block-jacobi:eq:th4}
+\end{align}
+We may assume that the constant term $c_{m_i}' \ud$ becomes negligible when 
+storing the diagonal block in the reduced precision format with unit roundoff 
+$u\gg u_d$. With this assumption,
+\begin{align}
+\norm{\dzz_i} &\le c_{m_i} \bigl(\k(D_i)\ud 
++  u\bigr) \norm{\Ehat_i} \norm{r_i}.
+\label{2017-adaptive-block-jacobi:eq:th5}
+\end{align}
+
+Noting that $r_i = E_i^{-1}z_i = D_i z_i$, this bound yields
+\begin{align}
+  \norm{\dzz_i} &\le c_{m_i} \bigl(\k(D_i)\ud 
+                 +  u\bigr) \norm{\Ehat_i} \norm{D_i} \norm{z_i}\nonumber\\
+                &\approx c_{m_i} \bigl(\k(D_i)\ud 
+                 +  u\bigr) \k(D_i) \norm{z_i},
+                 \label{2017-adaptive-block-jacobi:eq:th6}
+\end{align}
+so that 
+\begin{align}
+ \frac{\norm{\dzz_i}}{\norm{z_i}}
+  \le c_{m_i} \bigl(\k(D_i)\ud  +  u\bigr) \k(D_i).
+   \label{2017-adaptive-block-jacobi:eq:th7}
+\end{align}
+As expected, the relative error depends on the conditioning of the diagonal 
+block $D_i$. With the unit roundoff being a format-specific constant 
+($u_h \approx 4.88e-04$ for half precision, $u_s \approx 5.96e-08$ for 
+single precision, and $u_d\approx 1.11e-16$ for double precision),
+\eqref{2017-adaptive-block-jacobi:eq:th7} provides bounds for the relative error.
+
+Recalling that we are within a preconditioner framework, by ignoring all
+entries outside the block-diagonal in the inversion process we may have
+already introduced a significant error. In fact, experiments reveal that
+preconditioners based on block-Jacobi often come with an error as large as
+$1.0e-2$ to $1.0e-1$. This makes it reasonable to allow for similar errors
+in~\eqref{2017-adaptive-block-jacobi:eq:th7}, which yields the bounds for the condition numbers that
+are allowed in the respective formats.  In the experimental section we use
+the bounds $\tau_h^U = \tau_s^L:=1.0e+2$, and $\tau_s^U := 1.0e+6$.
+
+

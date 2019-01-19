@@ -1,0 +1,150 @@
+\section{Introduction}
+Krylov subspace-based iterative methods for the solution of sparse linear
+systems typically benefit from the integration of a preconditioner that improves
+the conditioning of the linear system and, consequently, accelerates the
+convergence process~\cite{saad}.
+
+A popular preconditioner is the Jacobi preconditioner and its block-Jacobi 
+variants.
+Preconditioners of this class are based on simple (block-)diagonal scaling, 
+which makes them highly parallel schemes suitable for fine-grained parallelism,
+and they have proven to provide a fair acceleration for many applications. 
+For example, block-Jacobi preconditioners
+can efficiently exploit the massive hardware concurrency of
+graphics processing units (GPUs)~\cite{gje,lu}.
+
+For virtually all current hardware technologies, the computational performance 
+of
+preconditioned Krylov methods is limited by the memory bandwidth and 
+depends heavily on the cost of memory access. Furthermore, for current 
+architectures, 
+data movement is not just a performance constraint but also a major source of
+energy consumption. Therefore, with highly parallel, high-performance 
+computing (HPC) systems moving in the direction of an increasing
+floating point operations (FLOP) per byte ratio, innovative techniques to 
+reduce communication and data transfers are critical for future 
+applications~\cite{Don14,Dur15,Luc14,Lec13}.
+
+When a block-Jacobi preconditioner is combined with a simple Krylov iterative
+method---like the preconditioned conjugate gradient (PCG) method, which is
+suitable for the solution of sparse linear systems with a symmetric 
+positive--definite 
+(SPD) coefficient matrix~\cite{saad}---a significant portion of the accesses to 
+main
+memory is caused by the application of the preconditioner at
+each iteration. To decrease the costs of this stage, we analyze a
+version of the block-Jacobi preconditioner that selectively stores part of its
+data in low precision. This strategy reduces the data access volume during the
+application of the block-Jacobi preconditioner. We emphasize that, for a
+memory bandwidth-bound operation such as the PCG method, the time and energy 
+savings of
+operating with reduced precision mostly come from the reduction of the volume of
+data being transferred, not from the increase in the single instruction, 
+multiple data (SIMD) 
+capacity associated with using reduced precision arithmetic.
+Therefore, our solution aims to reduce the cost of main memory data transfers 
+due to the
+preconditioner application only. All other data (including the sparse matrix
+entries) as well as all arithmetic occurs in the conventional double precision.
+In more detail, our work makes the following contributions:
+
+
+\begin{itemize} \item We propose an adaptive preconditioner that {\em stores}
+	the diagonal Jacobi blocks in the preconditioner using half, single, or 
+	double
+	precision, depending on the conditioning and data range. In our scheme, the
+	preconditioner blocks are retrieved from memory in the corresponding format 
+	and
+	transformed into double precision once in the processor registers; all
+	arithmetic operations are then performed at double precision level. As 
+	stated
+	earlier, the entries for the sparse matrix and recurrence vectors for the 
+	conjugate gradient (CG)
+	method (or any other Krylov subspace method) are maintained and retrieved 
+	in main
+	memory using standard double precision.
+	\item We investigate the impact that
+	storing a block-Jacobi preconditioner in low precision exerts on the PCG
+	convergence rate and the effectiveness of the adaptive precision 
+	block--Jacobi
+        at maintaining the reference convergence rate.
+	\item We develop a model that quantifies the runtime and energy savings 
+	based on
+	the assumption that these costs depend linearly on the bit length of a 
+	floating
+	point number. 
+	\item We use a set of test problems from the SuiteSparse matrix
+	collection~\cite{ufmc} to analyze the robustness of the adaptive
+	preconditioning in a CG method, and to estimate the potential energy 
+	savings. 
+\end{itemize}
+
+The use of mixed precision in preconditioned iterative solvers was previously 
+explored with a primary focus on reducing the cost of arithmetic operations.
+In~\cite{Arioli2008}, Arioli and Duff show that, when using a lower-upper (LU) 
+preconditioner
+computed in single precision within a flexible generalized minimal residual 
+method (GMRES) 
+based iterative solver (which enables one to use a non-constant preconditioning 
+operator), backward stability at double precision can be preserved even for 
+ill-conditioned systems. In~\cite{carson1}, Carson and Higham provide a 
+detailed 
+error analysis of LU-based mixed refinement approaches for ill-conditioned 
+systems.
+In~\cite{carson2}, the same authors go as far as using half precision for
+computing an LU preconditioner that is used in the solution process of a GMRES
+solver that is part of a mixed precision iterative refinement process.
+
+Our approach is fundamentally different. We do not aim to
+employ reduced precision in the generation or application of the
+preconditioner nor in any other arithmetical computation. Instead, we preserve
+full precision in all computations but store part of the preconditioner at a
+reduced precision. After reading the preconditioner stored at reduced precision,
+all data is converted to full precision before proceeding with the arithmetic
+operations in the actual preconditioner application. We argue that this 
+approach has
+significantly higher potential for runtime- and energy savings 
+than the previously proposed strategies for three reasons: 
+(1) since the performance of sparse linear algebra algorithms
+is typically memory bound, the performance benefit obtained by reducing the 
+data 
+access volume is greater than the benefit obtained by reducing the cost of 
+FLOPs; 
+(2) since the energy cost of data access is more than an order of magnitude 
+greater than that of
+arithmetic operations~\cite{shalf}, more resources can be saved by
+reducing data accesses; 
+and (3) running the preconditioner application at reduced precision results
+in a preconditioning operator not preserving orthogonality in double precision, 
+implying that previously orthogonal
+Krylov vectors may not be orthogonal after the preconditioner application. To 
+account for this
+situation, flexible variants that introduce an additional orthogonalization step
+are required to preserve convergence~\cite{doi:10.1137/S1064827597323415}.
+Performing the arithmetic operations in the distinct preconditioner 
+applications in
+full precision (even though the preconditioner data is stored at reduced
+precision) preserves the orthogonality of the Krylov subspace and 
+removes the burden of expensive reorthogonalization.
+Hence, in our approach we do not need to employ a flexible Krylov solver.
+
+Section~\ref{2017-adaptive-block-jacobi:sec:cg} provides a some background on the need for 
+reorthogonalization when using non-constant preconditioning.
+We also discuss how our strategy using full precision in the arithmetic 
+operations results in a constant preconditioner, 
+which avoids the need for a flexible Krylov method.
+A brief recap/overview of block-Jacobi preconditioning is
+provided in Section~\ref{2017-adaptive-block-jacobi:sec:jacobi}. In Section~\ref{2017-adaptive-block-jacobi:sec:adaptive}, we
+introduce the concept of adaptive precision preconditioning, and we introduce 
+the evaluation
+criteria for selecting the storage format of the distinct diagonal blocks. 
+Rounding error analysis to support the criteria is given in 
+Section~\ref{2017-adaptive-block-jacobi:sec:erroranalysis}.
+We report the experimental results in Section~\ref{2017-adaptive-block-jacobi:sec:experiments}, which 
+includes
+an analysis of ``reckless'' precision reduction in block-Jacobi preconditioning,
+the assessment of the evaluation criteria, and an energy consumption model that
+quantifies the savings owed to adaptive precision preconditioning. We summarize
+our findings in Section~\ref{2017-adaptive-block-jacobi:sec:summary} and provide details about the path
+forward for this research.
+

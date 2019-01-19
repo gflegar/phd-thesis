@@ -1,0 +1,39 @@
+\section{Block-Jacobi Preconditioning} \label{2017-adaptive-block-jacobi:sec:jacobi}
+
+\newcommand{\hD}{E}
+
+The Jacobi  method splits the coefficient matrix as $A=L+D+U$, with a diagonal
+matrix $D=(\{a_{ii}\})$, a lower triangular factor $L=(\{a_{ij}~:~i>j\})$, and
+an upper triangular factor $U=(\{a_{ij}~:~i<j\})$. The block-Jacobi variant is
+an extension that gathers the diagonal blocks of $A$ into
+$D=(D_1,D_2,\ldots,D_N)$, with $D_i\in \R^{m_i \times m_i}$, $i=1,2,\ldots,N$,
+and $n=\sum_{i=1}^Nm_i$.
+The remaining elements of $A$ are then partitioned into matrices $L$ and $U$
+such that $L$ contains the elements below the diagonal blocks in $D$, while $U$
+contains those  above them~\cite{gje}. The block-Jacobi method is well defined
+if all diagonal blocks are nonsingular. The resulting preconditioner, $M=D$,
+is particularly effective if the blocks succeed in reflecting the nonzero
+structure of the coefficient matrix,~$A$. Fortunately, this is the case for many
+linear systems that, for example, exhibit some inherent block structure because
+they arise from a finite element discretization of a partial differential
+equation (PDE)
+~\cite{gje}.
+
+There are several strategies to integrate a block-Jacobi preconditioner into
+an iterative solver like CG. In this work, we adopt an approach that
+explicitly computes the block-inverse matrix,
+$D^{-1}=(D_1^{-1},D_2^{-1},\ldots,D_N^{-1}) =(\hD_1,\hD_2,\ldots,\hD_N)$, before
+the iterative solution process commences, and then applies the preconditioner in
+terms of a dense matrix-vector multiplication (\gemv) per inverse block 
+$\hD_i$~\cite{ANZT2018}.
+Note that \gemv is still a memory bandwidth-bound kernel, independent of the 
+block
+size. In practice, this strategy shows numerical stability similar to the
+conventional alternative that computes the LU factorization (with partial
+pivoting)~\cite{GVL3} of each block ($D_i=L_iU_i$) and then applies the
+preconditioner using two triangular solvers (per factorized block). By 
+comparison,
+the \gemv kernel is highly parallel, while the triangular solves offer only 
+limited 
+parallelism.
+
