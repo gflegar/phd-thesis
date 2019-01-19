@@ -1,0 +1,79 @@
+\section{Introduction}
+
+The development of batched routines for linear algebra operations has received considerable interest in the past few
+years because of the hardware concurrency often exceeding the degree of parallelism present in the algorithms. 
+At the same time, many problems arising
+in
+astrophysics, quantum chemistry, hydrodynamics and hyperspectral image processing, among others, 
+require the application of the same computational kernel not only to one, 
+but to a large number of data instances.
+Batched routines are optimized to tackle this embarrassingly-parallel 
+scenario that comprises a large collection of independent problems,
+each of small dimension.
+Compared with conventional multi-threaded implementations of 
+the {\em Basic Linear Algebra Subprograms} (BLAS)~\cite{blas}, 
+optimized for moderate- and large-scale individual problem instances,
+batched routines may also exploit the parallelism available within the 
+computational kernel, but mainly target the parallelism in-between the
+distinct data items.
+
+With the increasing core-per-node ratio, there is an urging demand for batched 
+routines, which are eventually expected to cover a 
+significant fraction of the functionality currently supported by dense linear algebra libraries such
+as BLAS and the {\em Linear Algebra PACKage} (LAPACK)~\cite{lapack}. In addition, 
+batched kernels are becoming a key ingredient for the solution of sparse linear systems 
+via direct multifrontal solvers
+as well as for the efficient preconditioning of iterative solvers based on Krylov subspaces.
+
+Preconditioning via a block-Jacobi scheme is a particularly simple technique that produces an effective acceleration
+of the iterative solve for some problem instances~\cite{saad}.
+One option to realize block-Jacobi preconditioning requires to:
+\begin{enumerate}
+\item Extract multiple small-sized diagonal blocks of the sparse coefficient matrix of the linear system and
+      factorize this collection of blocks during the preconditioner computation (setup).
+\item Solve the resulting triangular systems during the preconditioner application (once per step of the iterative solve).
+\end{enumerate}
+As the diagonal blocks are all pairwise independent, preconditioning via block-Jacobi naturally leads to a batched scenario.
+Our effort in this work is oriented towards elaborating efficient batched routines for these two steps, 
+preconditioner setup and preconditioner application, yielding the following contributions:
+\begin{itemize}
+\item A batched LU factorization routine on GPUs tuned for small sizes.
+\item A complementary batched lower and upper triangular solve routine on GPUs
+    tuned for small sizes.
+\item An implicit pivoting technique that preserves the stability of the factorization 
+      without explicitly swapping the matrix elements in memory.
+\item A routine for efficiently extracting the diagonal blocks from a sparse matrix layout
+that ensures a good workload balance even for matrices with an unbalanced nonzero distribution.
+\item A complete block-Jacobi preconditioner ecosystem based on batched LU factorization and batched triangular solves
+that improves time-to-solution of iterative Krylov solvers for a large set of test problems.
+\end{itemize}
+At this point, we note that
+the term ``batched'' has been frequently used 
+to refer to a large collection of small-size problems. 
+However, the definition of large and small are at best blurry. 
+Here we target a realistic case study for block-Jacobi preconditioning, where 
+small can be defined as the diagonal blocks that participate in steps 1)--2) above being in the range $4\times4$ to $32\times32$,
+while large refers to thousands or even tens of thousands of independent problems.
+We consider this as scientifically relevant as the block-Jacobi preconditioner %typically
+aims at reflecting the sparsity block structure of a finite element discretization.
+
+Due to their small size, processing the problem instances 
+usually involves memory-bound operations, which can question the utilization of discrete accelerators
+(with a memory detached from that of the host memory).
+For the particular case of block-Jacobi preconditioning, 
+the use of a discrete hardware accelerator device
+is justified as the Krylov solvers require the coefficient matrix to reside in the device memory in order to build up the
+Krylov subspace via the Krylov iterations. 
+Therefore, the cost of transferring this matrix
+from the host to the accelerator is quickly amortized,
+and the on-device generation of the batched block-Jacobi preconditioner
+incurs no additional host-to-device communication.
+
+The rest of the paper is structured as follows. In Section~\ref{2017-lu-block-jacobi:sec:related} we review a few related works and offer
+a brief survey of (batched) factorization for the solution of linear systems.
+In Section~\ref{2017-lu-block-jacobi:sec:kernel} we describe the implementation of our CUDA kernels for batched LU factorization 
+(paying special attention to the introduction of implicit pivoting),
+batched triangular system solves, and the extraction procedure.
+In Section~\ref{2017-lu-block-jacobi:sec:experiments}
+we assess the performance of the new batched kernels on an NVIDIA Tesla P100 (Pascal) GPU,
+and in Section~\ref{2017-lu-block-jacobi:sec:summary} we close the paper with a discussion of remarks and future work.

@@ -1,5 +1,5 @@
 \section{Experimental Evaluation}
-\label{s4-experiments}
+\label{2017-gje-block-jacobi:s4-experiments}
 
 In this section, we (1) benchmark gigaFLOPS enhanced version of the variable-size
 batched matrix inversion routine based on GJE; (2)
@@ -73,7 +73,7 @@ K40 & P100\\
 Performance comparison of batched matrix inversion routines for various batch sizes. 
 Top row shows matrices of size 32 $\times$ 32 and the bottom row shows matrices of size 16 $\times$ 16.
 }
-\label{fig:bgje-mpw-performance}
+\label{2017-gje-block-jacobi:fig:bgje-mpw-performance}
 \end{figure*}
 
 \begin{figure*}
@@ -90,7 +90,7 @@ K40 & P100\\
 \caption{%
 Performance comparison of batched matrix inversion routines
     for various matrix sizes.}
-\label{fig:bgje-mpw-fixed-batch}
+\label{2017-gje-block-jacobi:fig:bgje-mpw-fixed-batch}
 \end{figure*}
 
 \subsection{Batched matrix inversion}
@@ -127,7 +127,7 @@ matrices is essential to accommodating the inherent block structure of FEM
 discretizations. Consequently, the cuBLAS routines will not be considered
 in the complete preconditioner generation and application experiments.
 
-Figure~\ref{fig:bgje-mpw-performance} compares the performance, in terms of
+Figure~\ref{2017-gje-block-jacobi:fig:bgje-mpw-performance} compares the performance, in terms of
 gigaFLOPS (billions of arithmetic floating-point operations per second), for two 
 fixed matrix sizes (32 $\times$ 32 and 16 $\times$ 16) while increasing the matrix count (batch size).
 In a case where the matrix order is 32, both {\tt BGJE} and {\tt BGJE-MPW} deliver the
@@ -144,7 +144,7 @@ use of registers, a reduced register count limits the number of threads/warps
 that can be active on a multiprocessor, which explains the large performance gap
 between the K40 and P100 GPUs.
 
-The two graphs on the left side of Figure~\ref{fig:bgje-mpw-performance} clearly show 
+The two graphs on the left side of Figure~\ref{2017-gje-block-jacobi:fig:bgje-mpw-performance} clearly show 
 that the registers are indeed a performance bottleneck on the K40. 
 For batched problems consisting of 16 $\times$ 16 matrices, each thread only utilizes 
 16 registers (instead of 32 registers for 32 $\times$ 32 matrices), allowing more active 
@@ -167,7 +167,7 @@ size), {\tt BGJE-MPW} is about one order of magnitude faster than the matrix
 inversion functions provided in NVIDIA's cuBLAS.
 
 A detailed analysis for different matrix sizes is given in
-Figure~\ref{fig:bgje-mpw-fixed-batch}. In this experiment we fixed the batch
+Figure~\ref{2017-gje-block-jacobi:fig:bgje-mpw-fixed-batch}. In this experiment we fixed the batch
 size to 500,000 matrix problems and varied the dimension of the matrices in the
 batch from 1~$\times$~1 to 32~$\times$~32. For both architectures, {\tt BGJE} exhibits a superlinear
 performance drop as the matrix size is reduced. This is because,
@@ -198,7 +198,7 @@ ultimately, the kernel-specific performance.
 Performance improvement from reducing the shared memory size in the 
 block-Jacobi generation using shared extraction/insertion.
 }
-\label{fig:reducedshared}
+\label{2017-gje-block-jacobi:fig:reducedshared}
 \end{figure}
 \subsection{Block-Jacobi generation}
 
@@ -214,16 +214,16 @@ this subsection, we compare three strategies for the generation of the
 block-Jacobi preconditioner, with the first strategy corresponding to an
 implementation that was already proposed
 in~\cite{Anzt:2017:BGE:3026937.3026940}, and the last two strategies realizing the
-improvements described in section~\ref{sec:s3-kernel}:
+improvements described in section~\ref{2017-gje-block-jacobi:sec:s3-kernel}:
 \begin{enumerate}
     \item {\sc cached}: cached extraction/insertion with {\tt BGJE};
     \item {\sc shared}: shared extraction/insertion with {\tt BGJE}; and
     \item {\sc shared-mpw}: shared extraction/insertion with {\tt BGJE-MPW}.
 \end{enumerate}
 Both {\sc shared} and {\sc shared-mpw} use the reduced memory shared extraction
-described in subsection~\ref{subsec:s3-extraction}.  
+described in subsection~\ref{2017-gje-block-jacobi:subsec:s3-extraction}.  
 {
-Figure~\ref{fig:reducedshared} reveals that reducing the shared memory in the 
+Figure~\ref{2017-gje-block-jacobi:fig:reducedshared} reveals that reducing the shared memory in the 
 {\sc shared} strategy can make the block-Jacobi generation up to four times 
 faster. The problem-specific benefits depend on the the upper bound for the 
 block size, the pattern of the system matrix determining the actual size of the 
@@ -250,7 +250,7 @@ Arrow structure & Tridiagonal structure & Random block struct. & Laplace structu
 \caption{%
 Sparsity plots of test matrices used to evaluate the diagonal block extraction.%
 }
-\label{fig:sparsityplots}
+\label{2017-gje-block-jacobi:fig:sparsityplots}
 \end{figure*}
 
 
@@ -286,12 +286,12 @@ K40 & P100\\
 Block-Jacobi generation time for increasing block sizes and nonzero distributions
 from top to bottom: arrow, tridiagonal, random block and Laplace.
 }
-\label{fig:block-jacobi-runtime}
+\label{2017-gje-block-jacobi:fig:block-jacobi-runtime}
 \end{figure*}
 
 Because the performance of the extraction strategies depends on the structure of the
 problem matrix, we consider four nonzero distributions that are characteristic
-in sparse linear algebra. In Figure~\ref{fig:sparsityplots}, the arrow
+in sparse linear algebra. In Figure~\ref{2017-gje-block-jacobi:fig:sparsityplots}, the arrow
 	structure presents all nonzero entries on the (main) diagonal plus the last
 row/column of the matrix. In contrast, in the tridiagonal structure all
 nonzeros lie on the diagonal plus the diagonal immediately above/below it. These
@@ -325,18 +325,18 @@ Block-Jacobi generation time on NVIDIA P100
 for a set of matrices taken from the SuiteSparse sparse matrix collection and varied 
 block sizes: 4, 8, 12, 16, 24 and 32.
 }
-\label{fig:block-jacobi-suitsparse}
+\label{2017-gje-block-jacobi:fig:block-jacobi-suitsparse}
 \end{figure*}
 
 
-In Figure~\ref{fig:block-jacobi-runtime}, we report the total execution time of
+In Figure~\ref{2017-gje-block-jacobi:fig:block-jacobi-runtime}, we report the total execution time of
 the three block-Jacobi generation strategies applied to the four matrix
 structures. In this experiment, we fix the size of the matrix to 1,000,000 and
 increase the size of the diagonal blocks from 1 to 32.
 
 For the arrow sparsity structure, the {\sc shared} strategy is much faster than
 its {\sc cached} counterpart; see results in the first row of
-Figure~\ref{fig:block-jacobi-runtime}. This result was expected because the arrow nonzero
+Figure~\ref{2017-gje-block-jacobi:fig:block-jacobi-runtime}. This result was expected because the arrow nonzero
 pattern contains a single dense row, which results in dramatic load imbalance if
 each row is traversed by a single thread, as is the case for {\sc cached}. The
 {\sc shared} alternative uses all threads of the warp to traverse this row,
@@ -353,8 +353,8 @@ winner.
 We now asses the performance of the extraction routines for a set of test
 matrices from the SuiteSparse matrix collection. For brevity, we display the
 results for the P100 GPU only. The selected test matrices are listed along with
-some key properties in Table~\ref{tab:idr4comparison}. In
-Figure~\ref{fig:block-jacobi-suitsparse}, we report the runtime of the
+some key properties in Table~\ref{2017-gje-block-jacobi:tab:idr4comparison}. In
+Figure~\ref{2017-gje-block-jacobi:fig:block-jacobi-suitsparse}, we report the runtime of the
 block-Jacobi preconditioner generation for different block sizes. In these
 tests, the block sizes only correspond to an upper bound, and the blocks are
 identified via supervariable blocking. Also, some blocks can be smaller to better
@@ -377,7 +377,7 @@ Performance comparison of the block-Jacobi preconditioner application.
 from~\cite{Anzt:2017:BGE:3026937.3026940}.
 {\sc sa-spmv} is the specialized batched {\sc gemv}--based kernel developed as part of this work.  
 }
-\label{fig:precappl}
+\label{2017-gje-block-jacobi:fig:precappl}
 \end{figure*}
 
 
@@ -388,10 +388,10 @@ In an iterative solver setting, the efficiency of a preconditioner depends on
 the overhead of generating the preconditioner and, to even a larger extent, on
 the cost of applying it during the iterative solution process.
 
-In Figure~\ref{fig:precappl}, we assess the performance of the preconditioner
+In Figure~\ref{2017-gje-block-jacobi:fig:precappl}, we assess the performance of the preconditioner
 application using a generic {\sc spmv} kernel proposed
 in~\cite{Anzt:2017:BGE:3026937.3026940} versus our structure-aware {\sc spmv}
-({\sc sa-spmv}) introduced in Section~\ref{sec:precapply}. On both architectures,
+({\sc sa-spmv}) introduced in Section~\ref{2017-gje-block-jacobi:sec:precapply}. On both architectures,
 {\sc sa-spmv} outperforms the initial {\sc spmv} kernel for the preconditioner
 application. For a block size of 32, this routine achieves about 32~gigaFLOPS on the K40
 architecture, and around 80~gigaFLOPS on the P100 architecture. Local performance peaks
@@ -406,12 +406,12 @@ can be identified for block sizes 8 and 16.
 \end{center}
 \caption{
 IDR(4) convergence and performance comparison for different block sizes used in the block-Jacobi preconditioner. 
-The problem matrices are listed along with key characteristics in Table~\ref{tab:idr4comparison}.
+The problem matrices are listed along with key characteristics in Table~\ref{2017-gje-block-jacobi:tab:idr4comparison}.
 }
-\label{fig:solverperformance}
+\label{2017-gje-block-jacobi:fig:solverperformance}
 \end{figure*}
 
-Table~\ref{tab:idr4comparison} in the appendix details the convergence rate and
+Table~\ref{2017-gje-block-jacobi:tab:idr4comparison} in the appendix details the convergence rate and
 execution time of an IDR(4) iterative solver~\cite{idr1} enhanced with either a
 scalar-Jacobi preconditioner or a block-Jacobi preconditioner for the selected
 cases from the SuiteSparse collection. The execution time includes both the
@@ -430,7 +430,7 @@ architecture only. We start the iterative solution process with an initial guess
 $x_0=0$, solve for a right-hand side composed of random values in the interval
 $[0,1]$, and stop the iteration process once the relative residual norm has
 decreased by nine orders of magnitude. We allow for up to 50,000 iterations of
-the IDR(4) solver. In Figure~\ref{fig:solverperformance}, we summarize the
+the IDR(4) solver. In Figure~\ref{2017-gje-block-jacobi:fig:solverperformance}, we summarize the
 results showing for how many problems a certain configuration was the best
 choice (i.e., provided the fastest time to solution), and for how many problems
 a certain configuration was ``successful'' (concretely, reduced the relative
@@ -445,7 +445,7 @@ For the test matrices where IDR(4) preconditioned with the scalar Jacobi
 converges, the faster convergence obtained from using a block-Jacobi
 preconditioner typically compensates for the higher costs of preconditioner
 setup and application.
-In Figure~\ref{fig:solverperformance-detailed}, we offer a
+In Figure~\ref{2017-gje-block-jacobi:fig:solverperformance-detailed}, we offer a
 head-to-head comparison of different block-size bounds for the
 block-Jacobi preconditioner used in IDR(4).
 The orange area in the plot at position ``row Jacobi($x$) vs. column 
@@ -572,7 +572,7 @@ preconditioner.
 Detailed comparison of IDR(4) enhanced with block Jacobi
 using different block sizes.
 }
-\label{fig:solverperformance-detailed}
+\label{2017-gje-block-jacobi:fig:solverperformance-detailed}
 \end{figure}
 
 \end{landscape}

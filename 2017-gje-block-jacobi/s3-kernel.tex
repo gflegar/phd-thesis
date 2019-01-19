@@ -1,5 +1,5 @@
 \section{Design of CUDA Kernels}
-\label{sec:s3-kernel}
+\label{2017-gje-block-jacobi:sec:s3-kernel}
 
 In~\cite{Anzt:2017:BGE:3026937.3026940} we designed a set of routines
 for the generation and application of block-Jacobi preconditioners
@@ -12,7 +12,7 @@ The generation of an inversion-based block-Jacobi preconditioner can be
 decomposed into three distinct steps:
 1) extraction of the diagonal blocks; 2) inversion of {these blocks};
 and 3) insertion of the inverse blocks into the preconditioner matrix.
-We visualize these steps for non-uniform block sizes in Figure~\ref{fig:batchedgje}.
+We visualize these steps for non-uniform block sizes in Figure~\ref{2017-gje-block-jacobi:fig:batchedgje}.
 The three steps can be realized as three separate CUDA kernels,
 or in terms of a single kernel doing all steps in sequence.
 The experimental results in~\cite{Anzt:2017:BGE:3026937.3026940}
@@ -39,11 +39,11 @@ available in MAGMA-sparse~\cite{magma}.
 The block structure is indicated with orange circles, the original nonzero pattern with blue dots, 
     {and} the block inverses with purple circles.
 }
-\label{fig:batchedgje}
+\label{2017-gje-block-jacobi:fig:batchedgje}
 \end{figure}
 
 \subsection{Variable-size batched Gauss-Jordan elimination}
-\label{subsec:s3-inversion}
+\label{2017-gje-block-jacobi:subsec:s3-inversion}
 
 The central operation in the generation of an 
 inversion-based block-Jacobi preconditioner
@@ -77,7 +77,7 @@ their inverses are dense.
 We therefore handle and store the diagonal blocks in dense format during the complete inversion process.
 
 The pivoting process ensuring numerical stability requires to identify the pivot element, 
-see line~8 in Figure~\ref{fig:gje2}. 
+see line~8 in Figure~\ref{2017-gje-block-jacobi:fig:gje2}. 
 Since the matrix is distributed row-wise among the threads,
 this requires a parallel reduction.
 We realize this step via warp shuffles.
@@ -119,7 +119,7 @@ which warp can process which set of blocks. {Furthermore,
 it would} also result in thread divergence between the two parts of the warp.
 
 \subsection{Data extraction from the sparse coefficient matrix}
-\label{subsec:s3-extraction}
+\label{2017-gje-block-jacobi:subsec:s3-extraction}
 
 As BGJE expects a collection of small dense blocks as input,
 these blocks need to be extracted from the sparse coefficient matrix
@@ -149,10 +149,10 @@ The key idea is to eliminate non-coalescent memory access and
 (potential) load imbalance at the cost of using shared memory.
 Precisely, all threads of the warp collaborate on the extraction of the block
 by accessing each row containing part of the block in a coalesced mode
-(see Figure~\ref{fig:memtransact}).
+(see Figure~\ref{2017-gje-block-jacobi:fig:memtransact}).
 The diagonal block is then converted to dense format and stored 
 into shared memory by writing the extracted 
-values into the appropriate locations in shared memory, see right-hand side  in Figure~\ref{fig:memtransact}.
+values into the appropriate locations in shared memory, see right-hand side  in Figure~\ref{2017-gje-block-jacobi:fig:memtransact}.
 Once the extraction of a block is completed,
 each thread reads the values of the row assigned to it from shared memory.
 This strategy makes all memory accesses coalescent
@@ -213,11 +213,11 @@ the access to the actual values induces far less overhead,
 as these memory locations are accessed only if a location belonging to a diagonal block is found.
 In that case, the access pattern is equivalent to the one used for {\sf col-indices}.
 }
-\label{fig:memtransact}
+\label{2017-gje-block-jacobi:fig:memtransact}
 \end{figure}
 
 \subsection{Preconditioner application}
-\label{sec:precapply}
+\label{2017-gje-block-jacobi:sec:precapply}
 Once the block-inverse is generated,
 the block-Jacobi preconditioner can be applied in terms 
 of a sparse matrix-vector product

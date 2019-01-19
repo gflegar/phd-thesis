@@ -1,5 +1,5 @@
 \section{Background and Related Work}
-\label{sec:s2-background}
+\label{2017-gje-block-jacobi:sec:s2-background}
 
 \subsection{Block-Jacobi preconditioning}
 
@@ -20,7 +20,7 @@ the iterative Jacobi solver can then be formulated as:
 \begin{equation}
 \begin{array}{rcl}
 \vki{x}{k}{} &:=& D^{-1}\left(b-(A-D)\vki{x}{k-1}{}\right)\\
-\label{eq:jacobirelax}
+\label{2017-gje-block-jacobi:eq:jacobirelax}
 &=& D^{-1}b + M \vki{x}{k-1}{},
 \qquad k=1,2,\ldots,
 \end{array}
@@ -33,22 +33,22 @@ In case it is well-defined, the \mbox{(block-)Jacobi} matrix can be used as prec
 transforming the original system $Ax=b$ into either the left-preconditioned system
 \begin{eqnarray}
 D^{-1}Ax&=& c \quad (=~D^{-1}b),
-\label{eq:jacobiprecleft}
+\label{2017-gje-block-jacobi:eq:jacobiprecleft}
 \end{eqnarray}
 or the right-preconditioned system
 \begin{eqnarray}
 AD^{-1}y&=& b, 
-\label{eq:jacobiprecright}
+\label{2017-gje-block-jacobi:eq:jacobiprecright}
 \end{eqnarray}
 with $x = D^{-1}y$. {Hereafter, we will consider the left-preconditioned case.}
 
 When integrated into a Krylov subspace-based solver, 
-the application of a block-Jacobi preconditioner in~\eqref{eq:jacobiprecleft}
+the application of a block-Jacobi preconditioner in~\eqref{2017-gje-block-jacobi:eq:jacobiprecleft}
 requires the solution of the block-diagonal linear system (i.e., a linear system
 for each block $D_i$).
 Alternatively, 
 assuming the block-inverse matrix $\hat{D}=D^{-1}$
-is available, the block-diagonal scaling in~\eqref{eq:jacobiprecleft}
+is available, the block-diagonal scaling in~\eqref{2017-gje-block-jacobi:eq:jacobiprecleft}
 can be realized in terms of a matrix-vector multiplication with the inverse blocks
 $\hat{D}_i=D_i^{-1}, i=1,2,\dots,N$.
 In general, pre-computing explicitly the block-inverse $\hat{D}$ during the preconditioner setup 
@@ -68,10 +68,10 @@ by generating their individual inverses in parallel.
 \end{minipage}
 \caption{Simplified loop-body of the basic GJE implementation in Matlab
     notation using standard pivoting.}
-\label{fig:gje}
+\label{2017-gje-block-jacobi:fig:gje}
 \end{center}
 \end{figure}
-\subsection{GJE for matrix inversion}\label{sec:gauss-jordan}
+\subsection{GJE for matrix inversion}\label{2017-gje-block-jacobi:sec:gauss-jordan}
 
 GJE has been proposed in the last years
 as an efficient method for matrix inversion on 
@@ -85,7 +85,7 @@ triangular factors.
 
 The basic algorithm for matrix inversion via GJE consists of
 a loop that comprises a pair of vector scalings ({\sc scal}) and a rank-1
-update ({\sc ger}); see Figure~\ref{fig:gje}.
+update ({\sc ger}); see Figure~\ref{2017-gje-block-jacobi:fig:gje}.
 The unblocked version of the GJE algorithm in this figure, based
 on Level-2 BLAS operations,
 generally yields a poor exploitation of the memory hierarchy on current processors.
@@ -106,14 +106,14 @@ which dramatically reduces explicit data movements.
 \end{minipage}
 \caption{Simplified loop-body of the basic GJE implementation in Matlab
     notation using implicit pivoting.}
-\label{fig:gje2}
+\label{2017-gje-block-jacobi:fig:gje2}
 \end{center}
 \end{figure}
 
-\subsection{GJE with implicit pivoting}\label{sec:implicit-pivoting}
+\subsection{GJE with implicit pivoting}\label{2017-gje-block-jacobi:sec:implicit-pivoting}
 To ensure numerical stability, GJE needs to {include} a pivoting strategy.
 On parallel architectures, the row swaps required
-in the standard partial pivoting technique (Figure~\ref{fig:gje}, line~8)
+in the standard partial pivoting technique (Figure~\ref{2017-gje-block-jacobi:fig:gje}, line~8)
 can be costly.
 This is particularly the case if the data is distributed row-wise
 among the processor cores.
@@ -143,7 +143,7 @@ of the remaining elements.
 Hence, the actual order of the rows
 is not important during the application of the Gauss-Jordan transformations,
 and the swaps can be postponed until the algorithm is completed.
-This idea is illustrated in Figure~\ref{fig:gje2}.
+This idea is illustrated in Figure~\ref{2017-gje-block-jacobi:fig:gje2}.
 
 
 The selection of the pivot entry has to be modified when pivoting implicitly.
@@ -153,14 +153,14 @@ When using implicit pivoting, {none of the rows} have been swapped, so we need t
 track of the previously chosen pivots.
 At step \texttt{k}, the next pivot is chosen among the set of rows
 that were not yet selected as pivots.
-In Figure~\ref{fig:gje2}, the potential pivots are the entries in rows {\tt i} with ``\texttt{p(i)} = 0''  in lines~6--9.
+In Figure~\ref{2017-gje-block-jacobi:fig:gje2}, the potential pivots are the entries in rows {\tt i} with ``\texttt{p(i)} = 0''  in lines~6--9.
 
 
 Since implicit pivoting does not change the execution order of the 
 operations applied or the numerical values,
 this variant of pivoting preserves the numerical properties of the algorithm.
 
-\subsection{Batched GPU routines} \label{sec:batched}
+\subsection{Batched GPU routines} \label{2017-gje-block-jacobi:sec:batched}
 
 The qualifier ``batched'' identifies a procedure that applies the same operation to a large collection of data entities.
 In general, the subproblems (i.e., the data entities) are all small and independent, 

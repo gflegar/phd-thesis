@@ -1,0 +1,16 @@
+\section{Concluding Remarks and Future Work}
+\label{2017-lu-block-jacobi:sec:summary}
+
+We have presented flexible-size batched CUDA kernels for the solution of linear systems via the LU 
+factorization that are optimized for small-size problems
+and outperform existing counterparts offering the same functionality by a large margin. 
+This performance is achieved by extensive use of the GPU registers, and
+the integration of an implicit pivoting technique that preserves numerical stability
+while removing the costly data movements due to the row exchanges.
+
+Combined with an efficient strategy for the extraction of the diagonal blocks from a sparse data structure,
+we have presented an ecosystem of a factorization-based block-Jacobi preconditioner
+which succeeds in reducing the time-to-solution of the iterative IDR(4) Krylov method for a large range of problems.
+
+Future work will address the development of a Cholesky-based variant 
+for symmetric positive definite problems and the optimization of the batched kernels for any problem size.

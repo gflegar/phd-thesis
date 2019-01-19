@@ -1,0 +1,120 @@
+\section{Background and Related Work}
+\label{2017-lu-block-jacobi:sec:related}
+
+
+\subsection{Block-Jacobi preconditioning}
+For a coefficient matrix $A\in \R^{n \times n}$, 
+the block-Jacobi method can be regarded 
+as a straight-forward extension of its (scalar) Jacobi counterpart.
+Concretely, instead of splitting the  
+coefficient matrix as $A=L+D+U$
+(with diagonal $D=(\{a_{ii}\})$, lower triangular $L=(\{a_{ij}~:~i>j\})$ and upper triangular $U=(\{a_{ij}~:~i<j\})$),
+the block-Jacobi variant gathers 
+the diagonal blocks of $A$ 
+into $D=(D_1,D_2,\ldots,D_N)$, $D_i\in \R^{m_i \times m_i}$, $i=1,2,\ldots,N$,
+with $n=\sum_{i=1}^Nm_i$. 
+(For simplicity, hereafter we assume that all blocks have the same size $m$ and $n$ is an integer multiple of $m$.)
+The remaining elements of $A$ are then partitioned into matrices $L$ and $U$ such that
+$L$ contains the elements below the diagonal blocks
+while $U$ comprises those  above them~\cite{gje}.
+The block-Jacobi method is well-defined if all diagonal 
+blocks are non-singular, and the resulting preconditioner is expected to work effectively
+if the blocks succeed in reflecting the nonzero structure of the coefficient matrix $A$.
+
+Fortunately, many linear systems exhibit some inherent block structure,
+for example because they arise from a finite element discretization
+of a partial differential equation (PDE), with multiple variables associated to each element~\cite{gje}.
+The variables belonging to the same element usually share the same column sparsity pattern,
+and the set of variables is often referred to as a {\it supervariable}.
+ {\it Supervariable blocking}~\cite{jenniferscott} aims to identify
+ variables sharing the same column-nonzero-pattern, and turns this information
+ into a block-structure that can be used, for example, in block-Jacobi preconditioning.
+Depending on the pre-defined upper bound for the size of the diagonal blocks,
+multiple supervariables adjacent in the coefficient matrix 
+ can be clustered within the same diagonal block~\cite{jenniferscott}.
+This is particularly efficient if the supervariables
+accumulated into the same Jacobi block are tightly coupled,
+which is the case if the variables ordered close-by in the matrix representation 
+belong to elements that are nearby in the PDE mesh.
+Some reordering techniques such as reverse Cuthill-McKee or natural orderings
+preserve this locality~\cite{jenniferscott}.  
+
+Although there exist different strategies to integrate a block-Jacobi preconditioner
+into an iterative solver setting, in this paper we focus on an approach that
+factorizes the diagonal blocks in the preconditioner setup,
+and then applies the preconditioner in terms of triangular solves.
+Alternatively, it is possible to explicitly compute the block-inverse prior to the 
+iterative solution phase, and apply the preconditioner as
+a matrix-vector multiplication. 
+These two strategies primarily differ in the workload size, and how this work is distributed
+between the preconditioner setup and the preconditioner application.
+Additionally, the factorization-based approach might exhibit more favorable 
+numerical stability as it avoids the explicit inversion of the blocks in $D$.
+
+
+
+\subsection{Solution of linear systems via the LU factorization}
+
+The standard procedure to solve a dense linear system $D_ix=b$, 
+for a square block $D_i$ of order $m$ and vectors $x,b$ each with $m$ entries, 
+consists of the following four steps~\cite{GVL3}:
+\begin{enumerate}
+\item The computation of the LU factorization (with partial pivoting)
+         $PD_i=LU$, where $L$ is unit lower triangular, $U$ is upper triangular, $P$ is a permutation matrix, and all three
+         matrices $L,U,P$ are of the same order as $D_i$;
+\item the application of the permutation $P$ to the right-hand side $b$; i.e., $b:=Pb$;
+\item the solution of the unit lower triangular system $Ly=b$ for $y$; and
+\item the solution of the upper triangular system $Ux=y$ to obtain the sought-after vector $x$.
+\end{enumerate}
+The computational cost of 
+this four-step solution process is
+$\frac{2}{3}m^3+\mathcal{O}(m^2)$ flops (floating-point arithmetic operations), where the dominating 
+term $\frac{2}{3}m^3$ comes from the factorization step.
+Neglecting the pivoting process associated with the permutation matrix $P$ can result in the triangular factors 
+becoming singular and the break-down of the algorithm~\cite{GVL3}.
+Partial pivoting limits the process to row exchanges only,
+it is numerically stable in practice, and has become the norm in standard implementations of the LU factorization.
+
+\subsection{Batched solution of small linear systems}
+
+Batched routines for small-size problems play an important role in the context of preconditioning 
+iterative methods for sparse linear systems.
+One example is the technique of block-Jacobi preconditioning, where the sparse
+coefficient matrix is scaled with its block-inverse~\cite{saad}. 
+This type of scaling requires the solution of a set of small linear systems 
+induced by the diagonal blocks in $D$, which can be addressed via a factorization-based method.
+As argued earlier, for each block $D_i$, of dimension $m$, the cost of its LU factorization is $\frac{2}{3}m^3$ flops,
+while solving the triangular block system for a single block and right-hand side requires $2m^2$ flops.
+Alternatively, as the block-diagonal scaling is applied at each
+iteration of the solver, it may pay off to explicitly compute the block-inverse 
+prior to the iteration process, 
+at a cost of $2m^3$ flops (per block).
+With this approach, the preconditioner application can then be cast in terms of the matrix-vector product,
+with a cost of $2m^2$ flops (per block), but a much faster execution than a triangular block solve.
+
+These two approaches, factorization-based
+and inversion-based,
+differ in the computational cost, numerical stability,
+and how they distribute the workload between preconditioner setup and preconditioner application.
+Which strategy is preferrable depends on how often the preconditioner is applied 
+and the size of the distinct diagonal blocks.
+
+In block-Jacobi preconditioning, the diagonal blocks are typically chosen to be of small size,
+for example when reflecting the block structure of a system matrix coming from a finite element discretization.
+At the same time, the number of these small blocks is typically large, which motivates the use of batched routines.
+For GPU architectures, we showed in~\cite{gje}
+how to realize an inversion-based block-Jacobi preconditioner efficiently using Gauss-Jordan elimination (GJE).
+As the explicit inversion may be questionable in terms of numerical stability, 
+in~\cite{gh} 
+we compared this solution 
+to a block-Jacobi preconditioning procedure based on the factorization of diagonal blocks.
+The factorization method we used in that comparison was the Gauss-Huard (GH) algorithm~\cite{Hua79}, 
+which is algorithmically similar to GJE.
+
+In this paper we extend our survey on using batched routines for block-Jacobi preconditioning by
+addressing the factorization of the diagonal blocks via the mainstream LU factorization.
+From the numerical perspective, the LU factorization (with partial pivoting) and the GH algorithm (with column pivoting)
+present the same properties. However, they build upon distinct algorithms, resulting in different implementations, 
+and, consequently, distinguishable computational performance.
+
+

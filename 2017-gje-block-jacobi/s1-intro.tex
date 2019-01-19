@@ -1,5 +1,5 @@
 \section{Introduction}
-\label{sec:s1-intro}
+\label{2017-gje-block-jacobi:sec:s1-intro}
 
 Solving large, sparse-linear systems of equations is a prevailing problem
 in scientific and engineering applications that involve the discretization of
@@ -58,14 +58,14 @@ consisting of small blocks like those appearing in block-Jacobi preconditioning
 for problems arising from finite element method (FEM) discretizations.
 
 The rest of the paper is structured as follows. In
-Section~\ref{sec:s2-background} we offer a short review of Jacobi-type iterative
-solvers and batched routines for linear algebra. In Section~\ref{sec:s3-kernel}
+Section~\ref{2017-gje-block-jacobi:sec:s2-background} we offer a short review of Jacobi-type iterative
+solvers and batched routines for linear algebra. In Section~\ref{2017-gje-block-jacobi:sec:s3-kernel}
 we further elaborate on the batched Gauss-Jordan elimination (BGJE) procedure presented
 in~\cite{Anzt:2017:BGE:3026937.3026940}, and we describe the batched kernels and
 highlight the major improvements in the block-Jacobi generation step, extraction
-step, and preconditioner application. In Section~\ref{s4-experiments} we report on
+step, and preconditioner application. In Section~\ref{2017-gje-block-jacobi:s4-experiments} we report on
 our extensive evaluation of the new BGJE routine on NVIDIA's K40 and P100 GPUs.
 Particularly, we focus on the performance acceleration {produced by} the
-modifications of the original BGJE. Finally, in Section~\ref{sec:s5-summary} we
+modifications of the original BGJE. Finally, in Section~\ref{2017-gje-block-jacobi:sec:s5-summary} we
 summarize our contributions and the insights gained from the experimental
 evaluation.
