@@ -1,0 +1,71 @@
+\section{Introduction}
+\label{sec:s1-intro}
+
+Solving large, sparse-linear systems of equations is a prevailing problem
+in scientific and engineering applications that involve the discretization of
+partial differential equations (PDEs). A standard approach to tackle these
+problems combines a Krylov method with a preconditioner that accelerates the
+iterative solution process~\cite{saad}. In the context of high-performance
+computing, the efficiency of the preconditioner depends on the parallel
+scalability of both the preconditioner generation (prior to the iterative solve)
+and the preconditioner application (at each step of the iterative solve).
+
+Using preconditioners based on Jacobi (diagonal scaling) and block-Jacobi
+typically renders moderate improvements to the convergence of the iterative
+solver~\cite{saad}. These acceleration techniques are nevertheless reasonably
+attractive as block-diagonal scaling introduces very small computational
+overhead to the solver iteration.
+Furthermore, the application of a Jacobi-type preconditioner is inherently
+parallel and, therefore, highly appealing for massively parallel architectures.
+
+In~\cite{Anzt:2017:BGE:3026937.3026940} we proposed a batched routine for the 
+generation of a block-Jacobi preconditioner using the explicit inversion of the
+diagonal blocks. Precisely, we designed a variable-size batched routine for
+matrix inversion on graphics processing units (GPUs) based on Gauss-Jordan
+elimination (GJE)~\cite{Householder}. Furthermore, we introduced an implicit
+pivoting strategy in the GJE procedure that replaces row-swapping {with a
+	migration of the workload (i.e., operations) to the thread that owns the
+	necessary data}, which allowed us to realize the complete inversion process in thread-local
+registers. For the block-Jacobi preconditioner generation, the inversion process
+needs to be combined with routines that extract the diagonal blocks from the
+sparse data structure that stores the coefficient matrix. This extraction step
+can be costly, particularly for matrices with an unbalanced nonzero
+distribution. In response, we developed an extraction routine that balances
+coalescent data access, workload imbalance, and use of shared memory.
+
+In this paper, we extend our previous work in~\cite{Anzt:2017:BGE:3026937.3026940} with new contributions, listed below.
+\begin{itemize}
+\item We propose a modified version of our variable-size batched GJE (BGJE) inversion routine for GPUs that 
+      {can invert} 
+      several blocks per warp. This avoids idle CUDA cores and
+        operations on dummy values when processing a matrix batch where each
+        matrix is less than or equal to ~16 $\times$ 16.
+\item We introduce a new variant of the extraction procedure that 
+requires a much smaller amount of shared memory.
+      This strategy transposes the diagonal blocks at the time they are extracted from
+        the sparse {coefficient} matrix,
+      inverts the transposed diagonal block, and ultimately writes the inverse of the transpose in transposed {mode}.
+      The result provides a functionality equivalent to the original block inversion 
+      but reduces the amount
+      of shared memory in the block size, utilized during the inversion procedure, from quadratic to linear only.
+\item We replace the general sparse matrix--vector multiplication kernel in the preconditioner application with a 
+      specialized variant that exploits the block-diagonal structure of the preconditioner matrix. 
+      This accelerates the application of the block-Jacobi preconditioner in the iterative solution process.
+\end{itemize}
+{Our} results revealed that these modifications can render
+significant performance improvements, particularly when targeting batches
+consisting of small blocks like those appearing in block-Jacobi preconditioning
+for problems arising from finite element method (FEM) discretizations.
+
+The rest of the paper is structured as follows. In
+Section~\ref{sec:s2-background} we offer a short review of Jacobi-type iterative
+solvers and batched routines for linear algebra. In Section~\ref{sec:s3-kernel}
+we further elaborate on the batched Gauss-Jordan elimination (BGJE) procedure presented
+in~\cite{Anzt:2017:BGE:3026937.3026940}, and we describe the batched kernels and
+highlight the major improvements in the block-Jacobi generation step, extraction
+step, and preconditioner application. In Section~\ref{s4-experiments} we report on
+our extensive evaluation of the new BGJE routine on NVIDIA's K40 and P100 GPUs.
+Particularly, we focus on the performance acceleration {produced by} the
+modifications of the original BGJE. Finally, in Section~\ref{sec:s5-summary} we
+summarize our contributions and the insights gained from the experimental
+evaluation.

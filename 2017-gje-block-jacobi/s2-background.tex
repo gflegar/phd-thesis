@@ -1,0 +1,189 @@
+\section{Background and Related Work}
+\label{sec:s2-background}
+
+\subsection{Block-Jacobi preconditioning}
+
+Consider the linear system
+$A x = b$, 
+with the coefficient matrix $A\in \R^{n \times n}$, 
+the right-hand side vector
+$b\in \R^{n}$, 
+and the sought-after solution
+$x\in \R^{n}$. 
+The block-Jacobi method partitions the entries of the
+coefficient matrix as $A=L+D+U$,
+where $D=(D_1,D_2,\ldots,D_N)$ contains a collection of blocks (of
+variable-size) located on the diagonal of $A$,
+while $L$ and $U$ comprise the entries of $A$ below and above those in $D$, respectively.
+For a starting solution guess $\vki{x}{0}{}$, 
+the iterative Jacobi solver can then be formulated as:
+\begin{equation}
+\begin{array}{rcl}
+\vki{x}{k}{} &:=& D^{-1}\left(b-(A-D)\vki{x}{k-1}{}\right)\\
+\label{eq:jacobirelax}
+&=& D^{-1}b + M \vki{x}{k-1}{},
+\qquad k=1,2,\ldots,
+\end{array}
+\end{equation}
+where the convergence is ensured if the spectral radius of the iteration matrix $M=I-D^{-1}A$ 
+is smaller than one~\cite{saad}.
+This occurs, for instance, in diagonally-dominant systems~\cite{saad}.
+
+In case it is well-defined, the \mbox{(block-)Jacobi} matrix can be used as preconditioner, 
+transforming the original system $Ax=b$ into either the left-preconditioned system
+\begin{eqnarray}
+D^{-1}Ax&=& c \quad (=~D^{-1}b),
+\label{eq:jacobiprecleft}
+\end{eqnarray}
+or the right-preconditioned system
+\begin{eqnarray}
+AD^{-1}y&=& b, 
+\label{eq:jacobiprecright}
+\end{eqnarray}
+with $x = D^{-1}y$. {Hereafter, we will consider the left-preconditioned case.}
+
+When integrated into a Krylov subspace-based solver, 
+the application of a block-Jacobi preconditioner in~\eqref{eq:jacobiprecleft}
+requires the solution of the block-diagonal linear system (i.e., a linear system
+for each block $D_i$).
+Alternatively, 
+assuming the block-inverse matrix $\hat{D}=D^{-1}$
+is available, the block-diagonal scaling in~\eqref{eq:jacobiprecleft}
+can be realized in terms of a matrix-vector multiplication with the inverse blocks
+$\hat{D}_i=D_i^{-1}, i=1,2,\dots,N$.
+In general, pre-computing explicitly the block-inverse $\hat{D}$ during the preconditioner setup 
+allows for faster preconditioner application in the iterative solver.
+However, when dealing with large blocks and 
+sparse data structures, 
+the inversion of matrix $D$ can become a bottleneck. 
+On parallel architectures, it is possible to exploit the pairwise independence of the diagonal blocks in $D$
+by generating their individual inverses in parallel.
+
+\begin{figure}
+\begin{center}
+\begin{minipage}{\columnwidth}
+{\small
+\lstinputlisting[language=matlab,caption=,morekeywords={SpMV,ddot,daxpy,dscal}]{code/GJE.m}
+}
+\end{minipage}
+\caption{Simplified loop-body of the basic GJE implementation in Matlab
+    notation using standard pivoting.}
+\label{fig:gje}
+\end{center}
+\end{figure}
+\subsection{GJE for matrix inversion}\label{sec:gauss-jordan}
+
+GJE has been proposed in the last years
+as an efficient method for matrix inversion on 
+clusters of multicore processors and many-core hardware accelerators~\cite{doi:10.1137/S1064827598345679,CPE:CPE2933}.
+In addition, in~\cite{Anzt:2017:BGE:3026937.3026940} we demonstrate the benefits of {leveraging} GJE 
+for block-Jacobi preconditioning on GPUs.
+When combined with partial pivoting, GJE is as stable as matrix inversion via the LU factorization. 
+At the same time, GJE avoids the workload imbalance that occurs in the LU-based approach 
+{due to computations with}
+triangular factors.
+
+The basic algorithm for matrix inversion via GJE consists of
+a loop that comprises a pair of vector scalings ({\sc scal}) and a rank-1
+update ({\sc ger}); see Figure~\ref{fig:gje}.
+The unblocked version of the GJE algorithm in this figure, based
+on Level-2 BLAS operations,
+generally yields a poor exploitation of the memory hierarchy on current processors.
+However, this formulation can
+deliver good performance when computing the inverses of small matrices,
+like {those that usually appear}
+in the context of block-Jacobi preconditioning. 
+Finally, the Level-2 BLAS version of GJE allows {the integration of} an implicit pivoting strategy,
+which dramatically reduces explicit data movements.
+
+
+\begin{figure}
+\begin{center}
+\begin{minipage}{\columnwidth}
+{\small
+\lstinputlisting[language=matlab,caption=,morekeywords={SpMV,ddot,daxpy,dscal}]{code/GJEI.m}
+}
+\end{minipage}
+\caption{Simplified loop-body of the basic GJE implementation in Matlab
+    notation using implicit pivoting.}
+\label{fig:gje2}
+\end{center}
+\end{figure}
+
+\subsection{GJE with implicit pivoting}\label{sec:implicit-pivoting}
+To ensure numerical stability, GJE needs to {include} a pivoting strategy.
+On parallel architectures, the row swaps required
+in the standard partial pivoting technique (Figure~\ref{fig:gje}, line~8)
+can be costly.
+This is particularly the case if the data is distributed row-wise
+among the processor cores.
+In this {scenario}, the two cores holding rows \texttt{k} and \texttt{ipiv}
+need to exchange their data, while the other cores remain idle.
+Although distributing the matrix column-wise resolves this problem,
+the load imbalance is then just shifted to the pivot selection (line~6).
+As a response, in~\cite{Anzt:2017:BGE:3026937.3026940}
+we {presented} an implicit pivoting procedure
+which avoids explicitly swapping data.
+Instead, it accumulates all swaps, and combines them
+when completing the GJE algorithm.
+The paradigm underlying implicit pivoting is to move the {workload to the thread owning the data}, instead of 
+keeping the workload fixed to the thread index and reshuffling the data.
+
+In {standard GJE with} explicit pivoting, the data required for operations 
+performed on each row at iteration \texttt{k} (lines~12--15)
+is located only in that particular row
+and the current pivot row \texttt{ipiv}
+(which was swapped with row \texttt{k} at the beginning of the iteration).
+The operation applied on the distinct rows only depends
+on whether or not a certain row is the current pivot row.
+{Concretely}, if a row is the current pivot (i.e., it lies on position \texttt{k})
+the operation involves diagonal scaling;
+otherwise, it requires the scaling of element \texttt{k} followed by an \texttt{AXPY}
+of the remaining elements.
+Hence, the actual order of the rows
+is not important during the application of the Gauss-Jordan transformations,
+and the swaps can be postponed until the algorithm is completed.
+This idea is illustrated in Figure~\ref{fig:gje2}.
+
+
+The selection of the pivot entry has to be modified when pivoting implicitly.
+In explicit pivoting, at iteration \texttt{k}, all previous pivots are located above the \texttt{k}-th entry of the diagonal,
+and the potential pivot rows for the current iteration lie in positions \texttt{k:m}.
+When using implicit pivoting, {none of the rows} have been swapped, so we need to keep 
+track of the previously chosen pivots.
+At step \texttt{k}, the next pivot is chosen among the set of rows
+that were not yet selected as pivots.
+In Figure~\ref{fig:gje2}, the potential pivots are the entries in rows {\tt i} with ``\texttt{p(i)} = 0''  in lines~6--9.
+
+
+Since implicit pivoting does not change the execution order of the 
+operations applied or the numerical values,
+this variant of pivoting preserves the numerical properties of the algorithm.
+
+\subsection{Batched GPU routines} \label{sec:batched}
+
+The qualifier ``batched'' identifies a procedure that applies the same operation to a large collection of data entities.
+In general, the subproblems (i.e., the data entities) are all small and independent, 
+asking for a parallel formulation that
+simultaneously performs the operation on several/all subproblems in order to
+yield a more efficient exploitation of the computational resources.
+Batched routines are especially attractive 
+{in order to reduce} 
+the overall kernel launch overhead on GPUs, as they replace a sequence of kernel calls with a single kernel invocation.
+In addition, if the data for the subproblems is conveniently stored in the GPU memory,
+a batched routine can orchestrate a more efficient (coalesced) memory access.
+
+In recent years, 
+the development of batched routines for linear algebra
+operations has received considerable interest
+because of their {application in}
+machine learning, astrophysics, quantum
+chemistry, hydrodynamics, and hyperspectral image processing, among others.
+Examples of batched 
+kernels for the dense BLAS appear in~\cite{7275187,Haidar:2015:BMC:2766466.2766470},
+and there exists a strong community effort on designing a interface standard for these routines~\cite{bblas}.
+Aside from block-Jacobi, the {adoption} of batched routines for efficient
+preconditioner generation has also
+been recently studied in the context of using approximate triangular solves for
+incomplete factorization preconditioning~\cite{scala2016,Anzt:2017:BGE:3026937.3026940}.
+

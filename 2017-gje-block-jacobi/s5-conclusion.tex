@@ -1,0 +1,17 @@
+\section{Concluding Remarks}
+\label{sec:s5-summary}
+In this paper, we presented an enhanced, variable-size batched matrix inversion routine for
+GPUs based on the GJE process. Our approach replaces
+explicit pivoting with a strategy that reassigns the workload instead of
+shuffling the data and relies heavily on CUDA's latest warp-local communication
+features. As a result, our matrix inversion kernel is more flexible and
+significantly outperforms its counterparts in the cuBLAS library.
+In the framework of block-Jacobi preconditioning, we combined the batched matrix
+inversion procedure with efficient routines for extracting the diagonal blocks
+from the sparse data structures (where the problem matrix is stored) and inserting
+the inverse blocks back into the preconditioner. We also addressed the efficient
+preconditioner application
+by developing a structure-aware batched kernel for the sparse matrix-vector
+product that accommodates variable-size matrix operands. Finally, we
+demonstrated that block Jacobi can be significantly more efficient than a scalar
+Jacobi when preconditioning iterative solvers.

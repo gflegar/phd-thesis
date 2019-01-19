@@ -1,0 +1,19 @@
+In this work, we address the efficient realization of
+block-Jacobi preconditioning on graphics processing units (GPUs). This task
+requires the solution of a collection of small and independent linear systems.
+To fully realize this implementation, we develop a variable-size batched matrix inversion
+kernel that uses Gauss-Jordan elimination (GJE) along with a variable-size
+batched matrix--vector multiplication kernel that transforms the linear systems'
+right-hand sides into the solution vectors. Our kernels make heavy use of the
+increased register count and the warp-local communication associated with newer GPU
+architectures. Moreover, in the matrix inversion, we employ an implicit pivoting
+strategy that migrates the workload (i.e., operations) to the place where the
+data resides
+instead of moving the data to the executing cores.
+We complement the matrix inversion with extraction and insertion strategies that
+allow the block-Jacobi preconditioner to be set up rapidly. The experiments on
+NVIDIA's K40 and P100 architectures reveal that our variable-size batched matrix inversion 
+routine outperforms the CUDA basic linear algebra subroutine (cuBLAS) library functions that provide the same
+(or even less) functionality.
+We also show that the preconditioner setup and preconditioner application cost
+can be somewhat offset by the faster convergence of the iterative solver.
