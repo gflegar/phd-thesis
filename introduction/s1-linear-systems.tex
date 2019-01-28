@@ -1,0 +1,298 @@
+\section{Linear Systems}
+
+This section presents a short overview of various methods used for solving
+linear systems. As there is already literature available providing extensive
+descriptions and theoretical analyses of the methods, this section only aims at
+outlining their general classification and introducing the reader with the main
+ideas used to develop them. For an introductory text on an undergraduate level,
+readers are referred to the book by Ipsen~\cite{Ipsen2009}, which describes the
+basic direct methods and provides the most important parts of their theoretical
+analysis. Demmel's graduate-level book~\cite{demmel} presents the same topics in
+more detail and also provides a significant amount of material on iterative
+methods. Finally, advanced material on the topic can be found in the following
+trio: Higham's book~\cite{higham} describes the error analysis of direct methods
+and iterative relaxation methods; Duff et al.~\cite{duff} provide an extensive
+text on sparse direct methods; and a detailed description of iterative
+methods is available in Saad's book~\cite{saad}.
+
+Solving a linear system consists of finding a vector $x \in \mathbb{F}^n$ such
+that $Ax = b$ for a known matrix $A \in \mathbb{F}^{n \times n}$ and vector $b
+\in \mathbb{F}^n$. Here, $\mathbb{F}$ is either the field of real
+($\mathbb{R}$), or the field of complex numbers ($\mathbb{C}$) and $n$ is a
+positive integer which determines the size of the system. If the system matrix
+is nonsingular, the unique solution is equal to $x = A^{-1}b$~\cite{demmel}.
+While a straightforward approach would be to compute the matrix inverse $A^{-1}$
+and apply it to $b$, this strategy suffers from numerical instability and
+needs a suboptimal amount of floating-point
+operations~\cite{demmel,Ipsen2009}. In practice, depending on the numerical
+properties of the system matrix, one can choose from several
+other methods that do not experience this problem. There are two main approaches
+used, resulting in a classification between direct and iterative
+methods~\cite{demmel}.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{lll}
+Name & Mathematical description & Supported matrix types \\
+\midrule
+LU factorization & 
+    $\begin{aligned}
+        &A = LU\\[-0.4em]
+        &L \text{ unit lower triangular}\\[-0.4em]
+        &U \text{ upper triangular}
+    \end{aligned}$ &
+general \\[1.5em]
+Cholesky factorization &
+    $\begin{aligned}
+        &A = LL*\\[-0.4em]
+        &L \text{ lower triangular}
+    \end{aligned}$ &
+symmetric positive definite \\[1em]
+LDL factorization &
+    $\begin{aligned}
+        &A = LDL*\\[-0.4em]
+        &L \text{ unit lower triangular}\\[-0.4em]
+        &D \text{ diagonal}
+    \end{aligned}$ &
+symmetric \\[1.5em]
+QR factorization &
+    $\begin{aligned}
+        &A = QR\\[-0.4em]
+        &Q \text{ unitary}\\[-0.4em]
+        &R \text{ upper triangular}
+    \end{aligned}$ &
+general 
+\end{tabular}
+\end{center}
+\caption{A table of common direct methods for the solution of linear systems.}
+\label{introduction:tab:direct-methods}
+\end{table}
+
+Direct methods exploit the fact that systems with matrices of some special
+structure are relatively easy to solve. For example, a system with a diagonal
+matrix ($A_{ij} = 0$ for $i \neq j$) can be solved by dividing the entries of
+$b$ with corresponding diagonal entries of $A$; an upper ($A_{ij} = 0$ for $i <
+j$) or lower triangular system ($A_{ij} = 0$ for $i > j$) is easily solved with
+forward or backward substitutions, respectively~\cite{demmel,Ipsen2009}; a
+unitary system ($A^* A = I$) is solved by multiplying the right hand side with
+$A^*$. The idea of direct methods is to factorize the original system matrix
+into a product of two or more such matrices:
+\begin{align}A &= F_1 \cdot \ldots \cdot F_k\end{align}
+and solve a series of systems:
+\begin{align}
+    F_1 x_1 &= b\\
+    F_2 x_2 &= x_1\\
+    &\vdots \nonumber \\
+    F_k x &= x_{k-1}.
+\end{align}
+The most popular direct methods are listed in
+Table~\ref{introduction:tab:direct-methods}. LU factorization is the most common
+form and can be used on all nonsingular matrices. The Cholesky factorization
+exists only for symmetric positive definite matrices~\cite{demmel}, while the
+LDL factorization relaxes this requirement to symmetric matrices, regardless of
+their definiteness. The QR factorization works for general matrices. It provides
+better error bounds than the LU factorization and can also be used to solve the
+least squares problem\cite{demmel}. On the other hand, it needs more operations
+than LU and requires the calculation of square roots. Most direct methods need
+to be augmented with a pivoting strategy to ensure the existence and numerical
+stability of the factorizations listed above, which includes permuting the rows
+and columns of the matrix during the factorization process.  Effectively, this
+results in the factorization being done on the permuted matrix $B = P A Q^T$.
+Assuming the matrix is stored in full, uncompressed form, all of these methods
+require $O(n^3)$ floating point operations to produce the factorization and
+$O(n^2)$ operations to solve the system for one right hand side. However, they
+have a different constant factor hidden underneath the big-$O$ notation.
+
+Iterative methods produce a sequence $x_0, x_1, x_2, \ldots$ of approximations
+of the solution $x$, starting from an initial guess $x_0$. The hope is that
+the approximation sequence converges towards $x$ and that the approximation is
+good enough after a reasonable amount of iterations. Theoretical analysis only
+guarantees convergence for some methods and for matrices with certain
+properties. However, iterative methods are still attractive, as they do converge
+for many classes of real-world problems, the number of iterations can be tuned
+to produce a solution of the desired quality, and, in a lot of cases, a
+reasonable quality solution can be obtained faster than with a direct
+methods~\cite{saad}.  Another advantage is simpler parallel implementation,
+better handling of matrix data directly from the (possibly unconventional)
+compressed storage format, and often significantly smaller memory footprint (see
+Section~\ref{introduction:sec:sparse}).
+
+\begin{table}
+\begin{center}
+\begin{tabular}{lll}
+Name & Splitting & Supported matrix types \\
+\midrule
+Richardson & 
+    $M = \frac{1}{\alpha}I$ &
+    general \\[1em]
+Jacobi &
+    $M = D$ &
+    general \\[1em]
+Gauss-Seidel &
+    $M = D - L$ &
+general \\[1em]
+SOR($\omega$) &
+    $M = \frac{1}{\omega}(D - \omega L)$ &
+general \\[1em]
+SSOR($\omega$) &
+    $M = \frac{1}{\omega(2 - \omega)}(D - \omega L)D^{-1}(D - \omega U)$ &
+symmetric \\[1em]
+\end{tabular}
+\end{center}
+\caption{A table of common direct methods for the solution of linear systems.
+Matrix $D$ is the diagonal, $-L$ the strict lower triangle and $-U$ the strict
+upper triangle of the system matrix $A$. $\alpha$ and $\omega$ are scalar
+values.}
+\label{introduction:tab:relaxation-methods}
+\end{table}
+
+Relaxation methods are the oldest and the simplest class of iterative methods.
+The idea is to split the system matrix $A$ into the sum of two matrices $A = M -
+N$, where $M$ is nonsingular and a system with matrix $M$ is relatively easy to
+solve. Then, the problem can be rewritten as
+\begin{align}
+Ax &= b\\
+(M - N)x &= b\\
+Mx &= Nx + b \\
+x &= M^{-1}Nx + M^{-1}b
+\end{align}
+yielding an iterative method via the recurrence relation
+\begin{equation}
+x_{k+1} = M^{-1}Nx_k + M^{-1}b.
+\end{equation}
+This class of methods converges for any right hand side $b$ and any initial
+guess $x_0$  if and only if the spectral radius of matrix $M^{-1}N$ is strictly
+less than $1$~\cite{demmel,saad}.
+Table~\ref{introduction:tab:relaxation-methods} lists the most common
+relaxation methods, together with matrix $M$, which defines the splitting.
+Thus, the properties required to fulfill the spectral radius condition
+differ among the methods, and depend on the properties of the system matrix
+and the choice of the open parameters $\alpha$ and
+$\omega$~\cite{barrettemplates}. All of these methods can be transformed into
+their blocked variant by replacing the diagonal $D$ with the block-diagonal, the
+strict lower triangle $-L$ with the strict lower block-triangle and the upper
+triangle $-U$ with the strict upper block-triangle of the system matrix $A$,
+which can significantly increase the convergence rate of the solver~\cite{saad}.
+Since each iteration consists of several matrix-vector products and vector
+operations, the complexity of the method is $O(n^2 m)$, where $m$ is the number
+of iterations required to achieve a good enough approximation. Thus, speedups
+over direct methods are possible if $m$ is significantly smaller than $n$.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+\\Initialize $x_0, r_0 := b-Ax_0, p_0 := r_0, \tau_0 := r_{0}^* r_{0}^{}$
+\\ $k := 0$                                                
+\\ {\bf while} not converged
+\\ ~~~ $q_{k+1}:=Ap_{k}$                        
+\\ ~~~ $\eta_k:=p_{k}^*q_{k+1}^{}$    
+\\ ~~~ $\alpha_k:=\tau_k/\eta_k$    
+\\ ~~~ $x_{k+1}:=x_k+\alpha_k p_{k}$           
+\\ ~~~ $r_{k+1}:=r_k-\alpha_k q_{k+1}$            
+\\ ~~~ $\tau_{k+1}:= r_{k+1}^* r_{k+1}^{}$  
+\\ ~~~ $\beta_{k+1}:=\tau_{k+1}/\tau_{k}$  
+\\ ~~~ $p_{k+1}:= r_{k+1} + \beta_{k+1} p_k$ 
+
+\\ ~~~ $k:=k+1$   
+\\ {\bf endwhile}  
+\\\hline
+\end{tabular}
+\end{center}
+\caption{A pseudocode of the Conjugate Gradient Krylov method.}
+\label{introduction:fig:cg}
+\end{figure}
+
+A relatively newer, and usually more effective class of iterative methods are
+methods based on Krylov subspaces. The motivation for these methods stems from
+the Cayley-Hamilton theorem, which states that every square matrix $A$ satisfies
+its own characteristic equation $k_A(\lambda) = 0$ (\ie $k_A(A) = 0$), where
+$k_A$ is the characteristic polynomial $k_A(\lambda) := \det(\lambda I - A) =
+\alpha_0 + \alpha_1 \lambda + \ldots + \alpha_n \lambda^n$ of matrix $A$.
+Multiplying the equation with the solution $x$ of the linear system results in a
+formula for obtaining it:
+\begin{align}
+    k_A(A)x &= 0\\
+    \alpha_0 x + \alpha_1 Ax + \ldots + \alpha_n A^n x &= 0\\
+    \alpha_0 x + \alpha_1 b + \ldots + \alpha_n A^{n-1} b &= 0\\
+    x &= -\frac{1}{\alpha_0}(\alpha_1 b + \ldots + \alpha_n A^{n-1}b),
+\end{align}
+where the last equation holds since $A$ is non singular, \ie $\alpha_0 = k_A(0)
+= \det(A) \neq 0$. Thus, the solution is in one of the Krylov subspaces
+$\mathcal{K}_{A, b}^m := \mspan\{b, Ab, \ldots, A^{m-1}b\}$, $m = 1, \ldots, n$.
+In practice, finding the coefficients $\alpha_i$ of the characteristic
+polynomial is far more difficult than solving the system. Instead, practical
+Krylov methods construct a series of subspaces $\mathcal{K}_{A,b}^m$ and find a
+projection (orthogonal or oblique) of the solution $x$ onto that subspace. By
+using a clever definition of the inner product, this projection can be
+obtained without knowing $x$ itself~\cite{demmel,saad}.
+
+If one of the Krylov subspaces is invariant for $A$, \ie $A \mathcal{K}_{A,
+b}^m \subseteq \mathcal{K}_{A, b}^m$, then the sequence folds onto itself
+($\mathcal{K}_{A, b}^{m + 1} = \mathcal{K}_{A, b}^m \cup A \mathcal{K}_{A, b}^m
+= \mathcal{K}_{A, b}^m$) and the exact solution is found after $m$ steps in
+$\mathcal{K}_{A, b}^m$. Finding an invariant subspace soon is the hope of Krylov
+subspace-based methods, since in that case, only $m$ multiplications with the
+system matrix are needed. Even if the sequence does not fold onto itself soon
+enough, the hope is that the orthogonal projection of the solution $x$ to the
+subspaces $\mathcal{K}_{A, b}^m$ is close enough to $x$, so that the method
+finds this solution. Similarly to relaxation methods, the complexity of Krylov
+methods is $O(n^2 m)$. Usually, the number of iterations $m$ needed is much
+smaller than required by relaxation methods, and, assuming exact arithmetic and
+no breakdowns in the orthogonalization process, $m$ is bounded by the size of
+the system $n$.  Another appealing property of Krylov subspace-based methods is
+the fact that the system matrix is used indirectly, as part of the Krylov
+subspace construction, and to define the inner product. This is especially
+appealing for a prospective software library designer, as the only operations
+where the system matrix is required is its application to a vector (\ie a
+matrix-vector product).  Thus, different matrix storage formats and
+corresponding matrix-vector product implementations can be easily swapped and
+used with the same implementation of the Krylov method.
+
+Figure~\ref{introduction:fig:cg} shows the pseudocode of the Conjugate Gradient
+(CG) Krylov method, suitable for symmetric positive definite matrices. The
+information about the current Krylov subspace is stored implicitly as part of
+the auxiliary vectors $p$, $q$ and $r$. The main components of the method can
+clearly be seen: the matrix-vector product used to construct the next vector in
+the subspace; and vector operations used to orthogonalize the subspace and
+construct the projection of $x$ onto that subspace. The convergence of the
+method depends on the spectral properties of the system matrix, with the method
+converging by a factor of $(\sqrt{\kappa_2(A)} - 1)/(\sqrt{\kappa_2(A)} + 1)$
+per iteration, where $\kappa_2(A)$ is the spectral condition number of
+$A$~\cite{barrettemplates,demmel,saad}. Other Krylov methods contain similar
+components, with some of them requiring an implementation of conjugate
+matrix-vector product ($y = A^*x$) as well. Theoretical convergence for many of
+them is not well understood, but it is believed that, just like with CG, it
+depends on the spectral properties of the system matrix. The pseudocode for
+those methods, as well as their derivation and theoretical analysis can be found
+in other literature~\cite{barrettemplates,demmel,saad}.
+
+The last iterative method discussed in this section is iterative refinement.
+This method is not a standalone method, but can be used to improve the accuracy
+of other methods. A coarse, less accurate method for solving $Ax = b$ produces a
+result $\tilde{x}_0 = x + e$, where $e$ is the error in the solution.  The error
+$e$ can be approximated by solving a new system $Ac = r_0$ using the coarse
+method, where $r_0 = b - A\tilde{x}_0$, obtaining $c = A^{-1}r_0 = A^{-1}b -
+\tilde{x}_0 = x - \tilde{x}_0 = -e$.  $c$ can be used to correct the solution
+$\tilde{x}_0$, since $x = \tilde{x}_0 + c$. However, as $c$ is only approximated
+using the coarse method, $\tilde{c} = c + e_c$ is obtained instead of $c$. Thus,
+the corrected solution is actually $\tilde{x}_1 = \tilde{x}_0 + \tilde{c} = x +
+e_c$. Nevertheless, as long as the residual $r_0$ and the upate $\tilde{x}_1$ is
+computed more accurately than the solution of the system, the new error $e_c$
+will be several orders of magnitude smaller than $e$~\cite{demmel,saad}. The
+process can be repeated iteratively to decrease the error further. Iterative
+refinement is usually used as a way to obtain a solution
+better than the working precision of the coarse method, either by 1) using a
+lower precision arithmetic in the coarse method to accelerate the solution
+process~\cite{higham-ir,anzt-ir}, or 2) by using non-IEEE compliant or software
+defined arithmetic for residual calculation and solution updates, resulting in a
+more accurate solution than possible using the standard floating point
+types~\cite{demmel}.
+
+For completeness, it is worth mentioning there are more advanced methods for
+solving linear systems, which yield significant performance improvements in some
+special cases, or even enable solving problems which are otherwise not solvable
+via standard techniques. Notably, these are the multigrid and domain
+decomposition methods. However, these methods are not in the scope of this
+thesis, so the interested reader is referred to other literature describing
+them~\cite{demmel,saad}.

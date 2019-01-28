@@ -110,3 +110,63 @@
     Title = {{{Ginkgo}}},
     Year = {2019}
 }
+
+
+@Book{Ipsen2009,
+  title     = {Numerical Matrix Analysis},
+  publisher = {Society for Industrial {\&} Applied Mathematics ({SIAM})},
+  year      = {2009},
+  author    = {Ilse C. F. Ipsen},
+  month     = {jan},
+  abstract  = {This self-contained textbook presents matrix analysis in the context of numerical computation with numerical conditioning of problems and numerical stability of algorithms at the forefront. Using a unique combination of numerical insight and mathematical rigor, it advances readers' understanding of two phenomena: sensitivity of linear systems and least squares problems, and numerical stability of algorithms.
+
+This book differs from other numerical linear algebra texts by offering
+
+• a systematic development of numerical conditioning,
+
+• a simplified concept of numerical stability in exact arithmetic,
+
+• simple derivations,
+
+• a high-level view of algorithms, and
+
+• results for complex matrices.
+
+The material is presented at a basic level, emphasizing ideas and intuition, and each chapter offers simple exercises for use in the classroom and more challenging exercises for student practice.},
+  doi       = {10.1137/1.9780898717686},
+  file      = {:nla/Ipsen2009.pdf:PDF},
+  keywords  = {numerical linear algebra; linear systems; least squares},
+  url       = {http://dx.doi.org/10.1137/1.9780898717686},
+}
+
+@article{higham-ir,
+  title={Accelerating the solution of linear systems by iterative refinement in three precisions},
+  author={Carson, Erin and Higham, Nicholas J},
+  journal={SIAM Journal on Scientific Computing},
+  volume={40},
+  number={2},
+  pages={A817--A847},
+  year={2018},
+  publisher={SIAM}
+}
+
+
+@InProceedings{anzt-ir,
+author="Anzt, Hartwig
+and Flegar, Goran
+and Novakovi{\'{c}}, Vedran
+and Quintana-Ort{\'i}, Enrique S.
+and Tom{\'a}s, Andr{\'e}s E.",
+editor="Yokota, Rio
+and Weiland, Mich{\`e}le
+and Shalf, John
+and Alam, Sadaf",
+title="Residual Replacement in Mixed-Precision Iterative Refinement for Sparse Linear Systems",
+booktitle="High Performance Computing",
+year="2018",
+publisher="Springer International Publishing",
+address="Cham",
+pages="554--561",
+abstract="We investigate the solution of sparse linear systems via iterative methods based on Krylov subspaces. Concretely, we combine the use of extended precision in the outer iterative refinement with a reduced precision in the inner Conjugate Gradient solver. This method is additionally enhanced with different residual replacement strategies that aim to avoid the pitfalls due to the divergence between the actual residual and the recurrence formula for this parameter computed during the iteration. Our experiments using a significant part of the SuiteSparse Matrix Collection illustrate the potential benefits of this technique from the point of view, for example, of energy and performance.",
+isbn="978-3-030-02465-9"
+}
