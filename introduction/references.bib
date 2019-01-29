@@ -152,21 +152,99 @@ The material is presented at a basic level, emphasizing ideas and intuition, and
 
 
 @InProceedings{anzt-ir,
-author="Anzt, Hartwig
-and Flegar, Goran
-and Novakovi{\'{c}}, Vedran
-and Quintana-Ort{\'i}, Enrique S.
-and Tom{\'a}s, Andr{\'e}s E.",
-editor="Yokota, Rio
-and Weiland, Mich{\`e}le
-and Shalf, John
-and Alam, Sadaf",
-title="Residual Replacement in Mixed-Precision Iterative Refinement for Sparse Linear Systems",
-booktitle="High Performance Computing",
-year="2018",
-publisher="Springer International Publishing",
-address="Cham",
-pages="554--561",
-abstract="We investigate the solution of sparse linear systems via iterative methods based on Krylov subspaces. Concretely, we combine the use of extended precision in the outer iterative refinement with a reduced precision in the inner Conjugate Gradient solver. This method is additionally enhanced with different residual replacement strategies that aim to avoid the pitfalls due to the divergence between the actual residual and the recurrence formula for this parameter computed during the iteration. Our experiments using a significant part of the SuiteSparse Matrix Collection illustrate the potential benefits of this technique from the point of view, for example, of energy and performance.",
-isbn="978-3-030-02465-9"
+    author="Anzt, Hartwig
+    and Flegar, Goran
+    and Novakovi{\'{c}}, Vedran
+    and Quintana-Ort{\'i}, Enrique S.
+    and Tom{\'a}s, Andr{\'e}s E.",
+    editor="Yokota, Rio
+    and Weiland, Mich{\`e}le
+    and Shalf, John
+    and Alam, Sadaf",
+    title="Residual Replacement in Mixed-Precision Iterative Refinement for Sparse Linear Systems",
+    booktitle="High Performance Computing",
+    year="2018",
+    publisher="Springer International Publishing",
+    address="Cham",
+    pages="554--561",
+    abstract="We investigate the solution of sparse linear systems via iterative methods based on Krylov subspaces. Concretely, we combine the use of extended precision in the outer iterative refinement with a reduced precision in the inner Conjugate Gradient solver. This method is additionally enhanced with different residual replacement strategies that aim to avoid the pitfalls due to the divergence between the actual residual and the recurrence formula for this parameter computed during the iteration. Our experiments using a significant part of the SuiteSparse Matrix Collection illustrate the potential benefits of this technique from the point of view, for example, of energy and performance.",
+    isbn="978-3-030-02465-9"
 }
+
+@InProceedings{csb,
+    author = {Bulu\c{c}, Aydin and Fineman, Jeremy T. and Frigo, Matteo and Gilbert, John R. and Leiserson, Charles E.},
+    title = {Parallel Sparse Matrix-vector and Matrix-transpose-vector Multiplication Using Compressed Sparse Blocks},
+    booktitle = {Proceedings of the Twenty-first Annual Symposium on Parallelism in Algorithms and Architectures},
+    series = {SPAA '09},
+    year = {2009},
+    isbn = {978-1-60558-606-9},
+    location = {Calgary, AB, Canada},
+    pages = {233--244},
+    numpages = {12},
+    url = {http://doi.acm.org/10.1145/1583991.1584053},
+    doi = {10.1145/1583991.1584053},
+    acmid = {1584053},
+    publisher = {ACM},
+    address = {New York, NY, USA},
+    keywords = {compressed sparse blocks, compressed sparse columns, compressed sparse rows, matrix transpose, matrix-vector multiplication, multithreaded algorithm, parallelism, span, sparse matrix, storage format, work},
+} 
+
+@TechReport{bell-garland,
+    author = {Nathan Bell and Michael Garland},
+    title = {Efficient Sparse Matrix-Vector Multiplication on {CUDA}},
+    institution = {NVIDIA Corporation},
+    year = {2008},
+    type = {NVIDIA Technical Report},
+    number = {NVR-2008-004},
+    month = dec
+}
+
+@Article{sell-c-sigma,
+    Aauthor = {Moritz Kreutzer and Georg Hager and Gerhard Wellein and Holger Fehske and Alan R. Bishop},
+    author = {Moritz Kreutzer and others},
+    title = {A Unified Sparse Matrix Data Format for Efficient General Sparse Matrix-Vector Multiplication on Modern Processors with Wide {SIMD} Units},
+    journal = {SIAM J. Scientific Computing},
+    volume = {36},
+    number = {5},
+    pages = {C401--C423},
+    year = {2014},
+}
+
+@techreport{sell-p,
+    author      = "Hartwig Anzt and Stanimire Tomov and Jack Dongarra",
+    title       = "Implementing a Sparse Matrix-Vector Product for the {SELL-C/SELL-C-$\sigma$} formats on {NVIDIA GPUs}",
+    number      = "UT-EECS-14-727",
+    institution = "The University of Tennessee at Knoxville",
+    year        = 2014
+}
+
+@InProceedings{ecker,
+  author    = {Jan Philipp Ecker and
+               Rudolf Berrendorf and
+               Florian Mannuss},
+  title     = {New Efficient General Sparse Matrix Formats for Parallel SpMV Operations},
+  booktitle = {Euro-Par 2017: Parallel Processing - 23rd International Conference
+               on Parallel and Distributed Computing, Santiago de Compostela, Spain,
+               August 28 - September 1, 2017, Proceedings},
+  pages     = {523--537},
+  year      = {2017},
+  url       = {https://doi.org/10.1007/978-3-319-64203-1\_38},
+  doi       = {10.1007/978-3-319-64203-1\_38},
+}
+
+@inproceedings{csr5,
+    Address = {New York, NY, USA},
+    Author = {Liu, Weifeng and Vinter, Brian},
+    Booktitle = {Proceedings of the 29th ACM on International Conference on Supercomputing},
+    Doi = {10.1145/2751205.2751209},
+    Isbn = {978-1-4503-3559-1},
+    Keywords = {cpu, csr, csr5, gpu, sparse matrices, spmv, storage formats, xeon phi},
+    Location = {Newport Beach, California, USA},
+    Pages = {339--350},
+    Publisher = {ACM},
+    Series = {ICS '15},
+    Title = {{CSR5}: An Efficient Storage Format for Cross-Platform Sparse Matrix-Vector Multiplication},
+    Url = {http://doi.acm.org/10.1145/2751205.2751209},
+    Year = {2015},
+}
+
