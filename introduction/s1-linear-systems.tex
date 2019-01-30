@@ -1,4 +1,5 @@
 \section{Linear Systems}
+\label{introduction:sec:linear-systems}
 
 This section presents a short overview of various methods used for solving
 linear systems. As there is already literature available providing extensive
@@ -158,7 +159,7 @@ x &= M^{-1}Nx + M^{-1}b
 \end{align}
 yielding an iterative method via the recurrence relation
 \begin{equation}
-x_{k+1} = M^{-1}Nx_k + M^{-1}b.
+    x_{k+1} = M^{-1}Nx_k + M^{-1}b. \label{introduction:eqn:relaxation}
 \end{equation}
 This class of methods converges for any right hand side $b$ and any initial
 guess $x_0$  if and only if the spectral radius of matrix $M^{-1}N$ is strictly

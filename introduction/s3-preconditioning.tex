@@ -1,0 +1,80 @@
+\section{Preconditioning}
+
+As outlined in Section~\ref{introduction:sec:linear-systems}, the convergence
+rate of Krylov methods is tied to a function of its spectrum. Thus, if the
+original system is transofrmed into a different system with the same solution,
+but better spectral properties, the method will converge in fewer iterations.
+This can be achieved by transforming the system into a \emph{preconditioned
+system} in one of the following ways:
+\begin{itemize}
+\item \emph{left preconditioning},
+\begin{equation}
+    M^{-1}Ax = M^{-1}b;
+\end{equation}
+\item \emph{right preconditioning},
+\begin{equation}
+    AM^{-1}y = b,
+\end{equation}
+where $Mx = y$;
+\item \emph{two-sided preconditioning},
+\begin{equation}
+    M_1^{-1}AM_2^{-1} y = M_1^{-1}b,
+\end{equation}
+where $M_2x = y$ and $M = M_1 M_2$.
+\end{itemize}
+
+To make sure the preconditioned system is easier to solve than the original one,
+the \emph{preconditioner} $M$ should be chosen in a way that $M^{-1}A$,
+$AM^{-1}$ or $M_1^{-1}AM_2^{-1}$ is better conditioned than $A$, or at least has
+fewer extreme eigenvalues. In addition, one needs to compute $M^{-1}b$ and a
+series of matrix-vector products $z = M^{-1}Ay$, so $M$ should be chosen in a
+way that makes computing $z = M^{-1}w$ easy. Unfortunately, these two
+requirements are mutually exclusive. The first one is optimized by setting
+$M = A$, resultng in perfectly conditioned system matrix $M^{-1}A = I$, but
+the opeartion $z = M^{-1}w = A^{-1}w$ is as difficult as the original problem.
+On the other hand, this operation is optimized by setting $M = I$, which does
+not yield any improvements of the spectral properties. Thus, an effective
+preconditioner balances the tradeoffs between the two extremes and provides
+moderate improvements of the spectrum, while keeping its structure simple enough
+for computing $z = M^{-1}w$ cheaply. Finding good preconditioners is an area of
+active research and, while there are no methods which would find perfect ones,
+there are several heuristics that generate a good preconditioners for certain
+types of problems.
+
+One category of heuristics is derived directly from relaxation
+methods~\cite{saad}. By setting $G := M^{-1}N$ and $f := M^{-1}b$, relaxation
+method equation~(\ref{introduction:eqn:relaxation}) can be rewritten as:
+\begin{equation}
+    x_{k+1} = Gx_{k} + f.
+\end{equation}
+This is in fact Richardson iteration (see
+Table~\ref{introduction:tab:relaxation-methods}) with parameter $\alpha = 1$ for
+the system:
+\begin{equation}
+    (I - G)x = f.
+\end{equation}
+Using the equalities $I - G = I - M^{-1}N = M^{-1}(M - N) = M^{-1}A$ and $f =
+M^{-1}b$, it can be rewritten as
+\begin{equation}
+    M^{-1}Ax = M^{-1}b.
+\end{equation}
+This shows that every relaxation method is just Richardson iteration on a
+preconditioned system, where the preconditioner $M$ is the same matrix that
+defines the splitting in Table~\ref{introduction:tab:relaxation-methods}. Thus,
+every matrix that defines a relaxation method can also be used as a
+preconditioner, defining the Jacobi, Gauss-Seidel, SOR($\omega$) and
+SSOR($\omega$) preconditioners and their blocked variants.
+
+Another class of preconditioners is obtained by using the ideas from sparse
+direct methods~\cite{saad}. Instead of performing the often expensive full
+factorization, one can limit the amount of fill-in to obtain an approximate
+factorization $A = F_1 \cdot \ldots \cdot F_k - R$, where $R$ is the residual of
+the approximation. The approximate factorization is then used as the
+preconditioner $M = F_1 \cdot \ldots \cdot F_k$. These ideas can be combined
+with various ways of controlling the fill-in of the factors and result in
+families of Incomplete LU (ILU) and Incomplete Cholesky (IC)
+preconditioners~\cite{saad, parilut}.
+
+Other preconditioning heuristics include methods for approximating the inverse
+$A^{-1}$, using a small number of iterations of another method, or using
+problem-specific knowledge directly to construct a suitable preconditioner.
