@@ -1,0 +1,85 @@
+\section{Numerical Methods in High Performance Computing}
+
+While previous sections mostly focused on numerical aspects of various methods
+for the solution of linear systems, this section briefly outlines additional
+considerations that have to be taken into account when designing high
+performance software for current hardware.
+
+The defining characteristic of today's systems is the discrepancy between
+processor and memory speed, with most systems being able to perform between 10
+and 100 operations for every byte fetched from memory. To resolve the issue,
+systems are designed with a hierarchy of increasingly smaller, faster, and more
+expensive memories placed between the main memory and the processor. The idea is
+to hide the slow main memory by placing often-accessed data into these faster
+memories, which is either done automatically by the hardware (\emph{cache}) or
+manually by the programmer (\emph{scratchpad memory}). Multiple memory and
+processor modules are connected together to form \emph{nodes}. The memory
+modules are often presented as a single unified memory. Nevertheless, depending
+on the node configuration, some parts of can have lower performance towards (\eg
+NUMA configurations and heterogeneous systems with
+Unified Memory enabled), or are only accessible by certain groups of processors
+(\eg heterogeneous systems with Unified Memory disabled). State-of-the-art
+processors can be roughly divided into two categories:
+\begin{itemize}
+\item \emph{general purpose processors}, which are installed in 1--4 groups (\ie
+\emph{sockets}) of 2--30 processors (\ie \emph{cores}) per node, with each one
+able to perform 8--32 operations (combined into vector instructions) in
+parallel; and
+\item \emph{accelerators}, which are installed in 0--16 groups (\eg \emph{GPUs})
+of 1--80 processors (\eg \emph{Streaming Multiprocessors}) per node, with each
+one able to perform 64--196 operations (combined into vector instructions) in
+parallel.
+\end{itemize}
+Compared to accelerators, general purpose processors usually operate on higher
+frequencies and expose less parallelism, but feature higher energy cost per
+operation ratio. As a result, new systems follow a trend where an increasingly
+larger proportion of total compute power is supplied by the accelerators, while
+the general purpose processors are used for managing I/O devices, networking,
+copying memory and orchestrating computation. As a final layer of the hierarchy,
+large systems are formed by connecting multiple nodes into a network (\ie
+\emph{cluster}). The largest systems contain between 1,000 and 100,000 nodes,
+% abci: 1,088
+% sierra: 4,320
+% summit: 4,608
+% daint: 5,272
+% supermuc: 6,480
+% tianhe: 16,000
+% titan: 18,688
+% trinity: 19,420
+% sunway: 40,960
+% sequoia: 98,304
+with the number converging towards the lower end, due to the current trend of
+reducing the total number of nodes by using more powerful ``\emph{fat}''
+nodes~\cite{top500}.
+
+Direct methods for dense systems offer a relatively straightforward mapping to
+modern hardware. The volume of data is a lower degree polynomial
+($O(n^2)$) than the amount of computation ($O(n^3)$) needed to perform the
+factorization, so there are plenty of opportunities for data reuse and effective
+utilization of caches and scratchpad memories. In addition, the regular
+structure of these problems means that the amount of computation needed to
+process each row, column or block of the system matrix is roughly constant, so
+the work can be easily distributed evenly among processors.
+
+On the other hand, direct and iterative methods for sparse systems suffer from
+more serious issues. The total data volume, $O(n_{nz})$, where $n_{nz}$ is
+the total number of nonzeros in the system, is usually significantly closer to
+the total amount of computation, which is $O(n_{nz} m)$ for iterative
+methods and ranges between $O(n_{nz})$ and $O(n^3)$ for direct methods,
+resulting in far less opportunities for data reuse. Iterative methods in
+particular proceed in a sequence of iterations that cannot be combined and each
+one requires the problem data in entirety. There are ways, however, to slightly
+alleviate the issue by processing multiple systems that have the same system
+matrix at the same time, or adding multiple vectors to the Krylov subspace in
+each iteration~\cite{ca-gmres}. Work distribution is another issue for both
+direct and iterative methods. This is a direct consequence of often imbalanced
+distribution of nonzeros in the system matrix, which hampers the development of
+efficient building blocks, such as the matrix-vector product and factorization
+algorithms. Especially difficult are the algorithms for triangular solves since,
+depending on the sparsity pattern of the matrix, they can exhibit virtually no
+parallelization potential~\cite{triangular-solves}. These methods are often the
+Achilles' heel of accelerator-focused systems, as load balancing and low
+parallelization potential present significant difficulties on highly-parallel
+hardware.  As a result of these issues, state-of-the art methods for sparse
+systems are limited by the memory bandwidth and only use a fraction of the
+processing power available in today's systems~\cite{top500}.

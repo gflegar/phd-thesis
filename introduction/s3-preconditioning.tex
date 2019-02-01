@@ -30,11 +30,11 @@ fewer extreme eigenvalues. In addition, one needs to compute $M^{-1}b$ and a
 series of matrix-vector products $z = M^{-1}Ay$, so $M$ should be chosen in a
 way that makes computing $z = M^{-1}w$ easy. Unfortunately, these two
 requirements are mutually exclusive. The first one is optimized by setting
-$M = A$, resultng in perfectly conditioned system matrix $M^{-1}A = I$, but
-the opeartion $z = M^{-1}w = A^{-1}w$ is as difficult as the original problem.
+$M = A$, resulting in perfectly conditioned system matrix $M^{-1}A = I$, but
+the operation $z = M^{-1}w = A^{-1}w$ is as difficult as the original problem.
 On the other hand, the second is optimized by setting $M = I$, which does
 not yield any improvements of the spectral properties. Thus, an effective
-preconditioner balances the tradeoffs between the two extremes and provides
+preconditioner balances the trade-offs between the two extremes and provides
 moderate improvements of the spectrum, while keeping its structure simple enough
 for computing $z = M^{-1}w$ cheaply. Finding good preconditioners is an area of
 active research and, while there are no methods which would find perfect ones,
