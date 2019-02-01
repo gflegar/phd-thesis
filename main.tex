@@ -33,6 +33,7 @@
 % Includes a chapter from a subfolder
 \newcommand\includechapter[2]{
     \chapter{#2}
+    \label{ch:#1}
     \begin{bibunit}[plain]
     \import*{#1/}{body}
     \putbib[#1/references]
@@ -43,12 +44,14 @@
 % Includes an unnamed chapter from a subfolder, and without a reference section
 \WithSuffix\newcommand\includechapter*[2]{
     \chapter*{#2}
+    \label{ch:#1}
     \import*{#1/}{body}
 }
 
 % includes a paper from a subfolder
 \newcommand\includepaper[4]{
     \chapter{#2}
+    \label{ch:#1}
     \begin{bibunit}[plain]
     \begin{quote}
         \textcolor{blue}{\footnotesize
@@ -201,10 +204,12 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
 \pagestyle{fancy}
 
 \part{Prologue}
+\label{pt:prologue}
 
 \includechapter{introduction}{Introduction}
 
 \part{Sparse Matrix Formats and Matrix-Vector Product}
+\label{pt:matrix-vector}
 
 \includepaper{2017-csr-spmv}
     {Balanced CSR Sparse Matrix-Vector Product on Graphics Processors}
@@ -228,6 +233,7 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
     DOI: 10.1145/3148226.3148230}
 
 \part{Preconditioning}
+\label{pt:preconditioning}
 
 \includepaper{2017-gje-block-jacobi}
     {Variable-Size Batched Gauss-Jordan Elimination for Block-Jacobi
@@ -252,6 +258,7 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
     DOI: 10.1109/ICPP.2017.18}
 
 \part{Towards Low Precision Methods}
+\label{pt:adaptive}
 
 \includepaper{2017-adaptive-block-jacobi}
     {Adaptive Precision in Block-Jacobi Preconditioning for Iterative Sparse
@@ -262,6 +269,7 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
     DOI: 10.1002/cpe.4460}
 
 \part{Epilogue}
+\label{pt:epilogue}
 
 \includechapter{conclusion}{Into the Great Unknown}
 

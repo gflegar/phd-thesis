@@ -1,0 +1,78 @@
+\section{This Work}
+
+With the shift towards fat, heterogeneous nodes, efficient accelerator-focused
+algorithms are becoming increasingly important. Significant improvement is
+especially possible on methods for sparse systems. The rest of this thesis deals
+with the category of iterative methods and mostly considers the Krylov method
+subcategory. Its goal is not to develop new methods, but to improve existing
+ones by accelerating their building blocks. Optimizations of vector operations
+are not discussed, since an abundance of recent research already dealt with this
+aspect~\cite{joaqin-thesis}. Instead, this work is focused towards algorithms
+for preconditioner and matrix-vector product computations. The hardware
+considered is not a full node, but a single accelerator processor group (\ie a
+single GPU) together with memory directly accessible to it. All lower levels of
+the hierarchy are considered, including individual processors and vector units
+and there are no assumptions about the availability of lower granularity
+operations. Thus, the algorithms presented here constitute the lowest
+granularity building blocks of applications which utilize the full system or
+simplified studies on the way towards larger building blocks. As such, they are
+crucial for the design of larger software, since any performance issues on a
+processor group level will be transferred to higher levels of the software.
+
+This work is designed as a collection of standalone articles. Each chapter
+constitutes one such article and can be read independently of the rest of the
+thesis. The first section of each chapter contains introductory remarks which
+establish the context of that chapter and provide references to related
+research. Thus, there is a fair amount of repetition in these sections, which
+means that readers interested in the entire thesis may want to skip them during
+the first read. The chapters are organized into thematic parts and generally
+increase in complexity towards the end of the thesis. The reason for this
+organization is to form a coherent story line, as opposed to presenting the
+chronological history of the research. Thus, some chapters may refer to work
+presented later in the text, but that information will not be necessary to
+understand the current chapter. The rest of this work is organized as follows:
+\begin{itemize}
+\item Part~\ref{pt:matrix-vector} deals with algorithms for the computation of
+sparse matrix-vector products. Special attention is given to irregular matrices
+and standard, well-established compression formats, since they constitute the
+case where current research is somewhat lacking. Chapter~\ref{ch:2017-csr-spmv}
+describes a load-balanced matrix-vector algorithm for the widely used CSR
+storage format, which achieves superior performance on irregular matrices
+compared to conventional algorithms. Chapter~\ref{ch:2017-coo-spmv} explores the
+potential of the historically slightly forgotten COO format and shows that it
+becomes relevant once more on modern accelerator hardware. Finally,
+Chapter~\ref{ch:2017-batched-spmv} describes various algorithms and storage
+formats in cases when the full problem is decomposed into smaller problems whose
+granularity fits a single processor (\ie Streaming Multiprocessor), instead of a
+processor group (\ie GPU).
+\item In Part~\ref{pt:preconditioning}, the attention is shifted towards
+preconditioning. The discussion is restricted to block-Jacobi preconditioners,
+which in itself already offer an abundance of possible algorithms.
+Chapter~\ref{ch:2017-gje-block-jacobi} describes an algorithm which uses
+explicit inversion techniques to construct the preconditioner. Its idea is to
+optimize the preconditioner application process by expressing it as a batched
+dense matrix-vector product, while allowing slightly longer preconditioner
+generation step and ignoring possible instabilities from the inversion. These
+issues are dealt with in Chapter~\ref{ch:2017-gh-block-jacobi}, which
+demonstrates that the instabilities do not occur in real-world problems and that
+the inversion-based preconditioner is superior to the numerically stable version
+for moderate to large number of outer solver iterations. In addition, it also
+explores the potential of another forgotten method for the solution of dense
+linear systems. In this case, however, the standard LU-factorization based
+method can be implemented in a superior way by replacing the conventional
+``lazy'' triangular solves with the ``eager'' variant, which is the topic of
+Chapter~\ref{ch:2017-lu-block-jacobi}.
+\item Part~\ref{pt:adaptive} takes the block-Jacobi preconditioning idea one
+step further by exploring the possibilities of low-precision storage. Its only
+chapter establishes a new research direction of adaptive precision
+preconditioning techniques by providing a theoretical analysis of the adaptive
+precision block-Jacobi preconditioner. It lays the groundwork for practical
+implementations and theoretical analysis of other preconditioners that
+automatically adapt their storage precision to the numerical properties of the
+problem.
+\item Part~\ref{pt:epilogue} provides a summary of avenues that remain open
+after this work. It proposes a novel sparse linear algebra library design
+motivated by experience gained from writing and using existing high performance
+software. It also presents current and future research that resulted, or is a
+natural extension of this thesis.
+\end{itemize}
