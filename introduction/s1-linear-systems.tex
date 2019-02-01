@@ -262,11 +262,11 @@ converging by a factor of $(\sqrt{\kappa_2(A)} - 1)/(\sqrt{\kappa_2(A)} + 1)$
 per iteration, where $\kappa_2(A)$ is the spectral condition number of
 $A$~\cite{barrettemplates,demmel,saad}. Other Krylov methods contain similar
 components, with some of them requiring an implementation of conjugate
-matrix-vector product ($y = A^*x$) as well. Theoretical convergence for many of
-them is not well understood, but it is believed that, just like with CG, it
-depends on the spectral properties of the system matrix. The pseudocode for
-those methods, as well as their derivation and theoretical analysis can be found
-in other literature~\cite{barrettemplates,demmel,saad}.
+matrix-vector product ($y = A^*x$) as well. Similarly to CG, their theoretical
+convergence can usually be bound by some polynomial of the system matrix'
+spectrum. The pseudocode for those methods, as well as their derivation and
+theoretical analysis can be found in other
+literature~\cite{barrettemplates,demmel,saad}.
 
 The last iterative method discussed in this section is iterative refinement.
 This method is not a standalone method, but can be used to improve the accuracy
