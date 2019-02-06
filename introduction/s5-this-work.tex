@@ -3,15 +3,15 @@
 With the shift towards fat, heterogeneous nodes, efficient accelerator-focused
 algorithms are becoming increasingly important. Significant improvement is
 especially possible on methods for sparse systems. The rest of this thesis deals
-with the category of iterative methods and mostly considers the Krylov method
-subcategory. Its goal is not to develop new methods, but to improve existing
+with the category of iterative methods, and mostly considers the Krylov method
+subcategory. Our goal is not to develop new methods, but to improve existing
 ones by accelerating their building blocks. Optimizations of vector operations
 are not discussed, since an abundance of recent research already dealt with this
 aspect~\cite{joaqin-thesis}. Instead, this work is focused towards algorithms
 for preconditioner and matrix-vector product computations. The hardware
 considered is not a full node, but a single accelerator processor group (\ie a
-single GPU) together with memory directly accessible to it. All lower levels of
-the hierarchy are considered, including individual processors and vector units
+single GPU) together with memory directly attached to it. All lower levels of
+the hierarchy are considered, including individual processors and vector units,
 and there are no assumptions about the availability of lower granularity
 operations. Thus, the algorithms presented here constitute the lowest
 granularity building blocks of applications which utilize the full system or
@@ -20,7 +20,7 @@ crucial for the design of larger software, since any performance issues on a
 processor group level will be transferred to higher levels of the software.
 
 This work is designed as a collection of standalone articles. Each chapter
-constitutes one such article and can be read independently of the rest of the
+constitutes of one such article and can be read independently of the rest of the
 thesis. The first section of each chapter contains introductory remarks which
 establish the context of that chapter and provide references to related
 research. Thus, there is a fair amount of repetition in these sections, which
@@ -39,7 +39,8 @@ case where current research is somewhat lacking. Chapter~\ref{ch:2017-csr-spmv}
 describes a load-balanced matrix-vector algorithm for the widely used CSR
 storage format, which achieves superior performance on irregular matrices
 compared to conventional algorithms. Chapter~\ref{ch:2017-coo-spmv} explores the
-potential of the historically slightly forgotten COO format and shows that it
+potential of the historically slightly \ha{??} \gf{Not sure if this refers only
+to ``slightly'' or something more?} forgotten COO format and shows that it
 becomes relevant once more on modern accelerator hardware. Finally,
 Chapter~\ref{ch:2017-batched-spmv} describes various algorithms and storage
 formats in cases when the full problem is decomposed into smaller problems whose
@@ -51,7 +52,7 @@ which in itself already offer an abundance of possible algorithms.
 Chapter~\ref{ch:2017-gje-block-jacobi} describes an algorithm which uses
 explicit inversion techniques to construct the preconditioner. Its idea is to
 optimize the preconditioner application process by expressing it as a batched
-dense matrix-vector product, while allowing slightly longer preconditioner
+dense matrix-vector product, while allowing for a slightly longer preconditioner
 generation step and ignoring possible instabilities from the inversion. These
 issues are dealt with in Chapter~\ref{ch:2017-gh-block-jacobi}, which
 demonstrates that the instabilities do not occur in real-world problems and that

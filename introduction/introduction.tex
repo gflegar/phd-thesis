@@ -1,50 +1,49 @@
 The solution of linear systems is one of the most fundamental problems in
 computer science, with application areas ranging from physical simulations to
-computer graphics, social network analysis and artificial
+computer graphics, social network analysis, and artificial
 intelligence~\cite{saad,de-boor}. It is also a component of many methods
 for higher order linear algebra problems, such as the eigenvalue
-problem~\cite{demmel,feast}. Such proliferation of the problem can be attributed
-to its well-understood theoretical foundations and the abundance of practical
-methods, making it an ideal building block and approximation tool for more
-complex applications\cite{demmel,higham}.
+problem~\cite{demmel,feast}. Major contributing factors to such a widespread of
+linear systems are their developed theoretical foundations, and the
+abundance of practical methods for their solution, making them an ideal building
+block and approximation tool for more complex applications~\cite{demmel,higham}.
 
-Despite its ubiquity, a wealth of research in linear systems is still ongoing.
-One reason is the sheer scale of the systems that need to be
-solved~\cite{exascale-report}, which either stems from the amount of data that
-has to be processed, or from the desire to better approximate a non-linear
-problem. As a result, data compression techniques and accompanying algorithms
-able to utilize this compressed data directly were developed to tackle
-systems with a high percentage of zero
-entries~\cite{saad,duff,barrettemplates}, or
-those featuring low-rank matrix blocks~\cite{hierarchical}.
+Despite their ubiquity, there are still significant efforts focusing on the
+development of efficient methods for linear systems. One reason is the sheer
+scale of the systems that need to be solved~\cite{exascale-report}, which either
+stems from the amount of data that has to be processed, or from the desire to
+better approximate a continuous equation. Luckily, a majority of such problems
+exhibit certain structural properties, \eg a high percentage of zero entries or
+low-rank matrix blocks, enabling the development of various data compression
+techniques and accompanying algorithms that utilize the compressed data
+directly~\cite{saad,duff,barrettemplates,hierarchical}.
 
 In addition to the special properties of the problem instance, another
-consideration in algorithm design are the architectural features of the
-computing platform that will be used to run it. Recently, as physical
-limitations undermined Moore's law and Dennard scaling, further hardware
-improvements have turned to non-conventional, special-purpose chip designs, such
-as Graphics Processing Units (GPU), Intel Xeon Phis and Field-programmable gate
-arrays (FPGA). Among the available alternatives, GPUs achieved the widest
-adoption, with 5 of the world's 10 most powerful systems featuring GPUs as the
-main contributor to their performance and energy efficiency~\cite{top500}.
+consideration in algorithm design are the architectural features of computing
+platforms that will be used to run it. Recently, as physical limitations
+undermined Dennard scaling, further hardware improvements have turned to
+non-conventional, special-purpose chip designs, such as Graphics Processing
+Units (GPU), Intel Xeon Phis and Field-programmable gate arrays (FPGA). Among
+the available alternatives, GPUs achieve the widest adoption, with 5 of the
+world's 10 most powerful systems featuring GPUs as the main contributor to their
+performance and energy efficiency~\cite{top500}.
 
-Due to the highly-parallel nature of many methods for the solution of linear
-systems, which is highly suitable for GPUs, the non-compressed dense case was
-quickly ported~\cite{magma}. On the other hand, the compressed, especially
-sparse variant, poses a much larger challenge since the appropriate algorithms
-are bound by memory bandwidth and the system matrices often feature highly
-irregular distribution of nonzero values. While there are libraries providing
-support for the basic methods~\cite{magma,vienna-cl,paralution,ginkgo}, more
-advanced algorithms are either not suitable for GPUs, not yet ported to GPUs, or
-only available as special-purpose implementations, part of a domain-specific
-software. New methods tailored specifically for GPUs are another area of current
-research.
+High levels of parallelism offered by the GPUs proved to be a good match for
+many methods for the solution of general systems, and a high-performance port was
+quickly developed~\cite{magma}. On the other hand, methods for compressed,
+especially sparse systems pose a greater challenge since the appropriate
+algorithms are bound by memory bandwidth, and the system matrices often feature
+highly irregular distribution of nonzero values. While there are libraries
+providing support for the basic
+methods~\cite{magma,vienna-cl,paralution,ginkgo}, more advanced algorithms are
+either not suitable for GPUs, not yet ported to GPUs, or only available as
+special-purpose implementations, part of a domain-specific software. New methods
+tailored specifically for GPUs are another area of current research.
 
-Considering the relative novelty combined with the wide-spread of the
-hardware, the resulting landscape offers a plethora of possible research
-directions. This thesis explores one of these direction: the study of Krylov
+Considering the relative novelty combined with the wide-spread usage of the
+GPU hardware, the resulting landscape offers a plethora of possible research
+directions. This thesis explores one of these directions: the study of Krylov
 subspace-based methods and related building blocks. The rest of this chapter
 introduces linear systems, sparse storage formats, Krylov methods,
-peconditioners and the limitations of current HPC hardware in more detail. The
-remaining chapters present the original contributions of the thesis and the
-lessons learned in the process.
+peconditioners and the limitations of current HPC hardware in more detail, while
+the remaining chapters present the original contributions of the thesis.

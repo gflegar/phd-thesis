@@ -12,14 +12,14 @@ systems are designed with a hierarchy of increasingly smaller, faster, and more
 expensive memories placed between the main memory and the processor. The idea is
 to hide the slow main memory by placing often-accessed data into these faster
 memories, which is either done automatically by the hardware (\emph{cache}) or
-manually by the programmer (\emph{scratchpad memory}). Multiple memory and
+manually by the programmer (\emph{scratchpad memory}). Multiple memory- and
 processor modules are connected together to form \emph{nodes}. The memory
 modules are often presented as a single unified memory. Nevertheless, depending
-on the node configuration, some parts of can have lower performance towards (\eg
-NUMA configurations and heterogeneous systems with
-Unified Memory enabled), or are only accessible by certain groups of processors
-(\eg heterogeneous systems with Unified Memory disabled). State-of-the-art
-processors can be roughly divided into two categories:
+on the node configuration, a group of processors can exhibit lower
+bandwidth towards some memory modules (\eg NUMA configurations and
+heterogeneous systems with Unified Memory enabled), or even have no access
+to them (\eg heterogeneous systems with Unified Memory disabled).
+State-of-the-art processors can roughly be divided into two categories:
 \begin{itemize}
 \item \emph{general purpose processors}, which are installed in 1--4 groups (\ie
 \emph{sockets}) of 2--30 processors (\ie \emph{cores}) per node, with each one
@@ -31,13 +31,20 @@ one able to perform 64--196 operations (combined into vector instructions) in
 parallel.
 \end{itemize}
 Compared to accelerators, general purpose processors usually operate on higher
-frequencies and expose less parallelism, but feature higher energy cost per
-operation ratio. As a result, new systems follow a trend where an increasingly
-larger proportion of total compute power is supplied by the accelerators, while
-the general purpose processors are used for managing I/O devices, networking,
-copying memory and orchestrating computation. As a final layer of the hierarchy,
-large systems are formed by connecting multiple nodes into a network (\ie
-\emph{cluster}). The largest systems contain between 1,000 and 100,000 nodes,
+frequencies and expose less parallelism \ha{also: less latency, more complex
+instruction set} \gf{Latency is a direct consequence of higher frequency. More
+complex instruction set is only true if you compare the combination of
+NVIDIA/AMD GPUs and x86 CPUs, but not in general, and is generally not
+something considered when designing the methods, so why bother discussing it?
+There are also other differences, like prefetching, but the point is not to give
+an exhaustive comparison of CPUs vs accelerators.}, but feature higher energy
+cost per operation ratio. As a result, new systems follow a trend where an
+increasingly larger proportion of total compute power is supplied by the
+accelerators, while the general purpose processors are used for managing I/O
+devices, networking, copying memory and orchestrating computation. As a final
+layer of the hierarchy, large systems are formed by connecting multiple nodes
+into a network (\ie \emph{cluster}). The largest systems contain between 1,000
+and 100,000 nodes,
 % abci: 1,088
 % sierra: 4,320
 % summit: 4,608
@@ -57,7 +64,7 @@ modern hardware. The volume of data is a lower degree polynomial
 ($O(n^2)$) than the amount of computation ($O(n^3)$) needed to perform the
 factorization, so there are plenty of opportunities for data reuse and effective
 utilization of caches and scratchpad memories. In addition, the regular
-structure of these problems means that the amount of computation needed to
+structure of these problems implies that the amount of computation needed to
 process each row, column or block of the system matrix is roughly constant, so
 the work can be easily distributed evenly among processors.
 
@@ -67,8 +74,8 @@ the total number of nonzeros in the system, is usually significantly closer to
 the total amount of computation, which is $O(n_{nz} m)$ for iterative
 methods and ranges between $O(n_{nz})$ and $O(n^3)$ for direct methods,
 resulting in far less opportunities for data reuse. Iterative methods in
-particular proceed in a sequence of iterations that cannot be combined and each
-one requires the problem data in entirety. There are ways, however, to slightly
+particular proceed in a sequence of iterations that cannot be combined, and each
+one requires the complete problem data. There are ways, however, to slightly
 alleviate the issue by processing multiple systems that have the same system
 matrix at the same time, or adding multiple vectors to the Krylov subspace in
 each iteration~\cite{ca-gmres}. Work distribution is another issue for both
