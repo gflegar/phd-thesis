@@ -2,14 +2,15 @@
 \label{introduction:sec:sparse}
 
 Many problems, such as finite element and finite difference
-discretizations~\cite{saad,duff}, or problems arising from graph applications
+discretizations~\cite{saad,duff} or problems arising from graph applications,
 result in system matrices where the majority of elements are zero with
 each row having only a few nonzero elements on average. Storing all these zeros
 in an uncompressed, dense matrix is wasteful both in terms of storage and
 computational cost, since the majority of the computations will be
 multiplications or additions with zero. Furthermore, some of these systems
 contain a very large number of unknowns (more than a million), so just storing
-the matrix in double precision would take more than 8 TB of memory.
+the matrix in double precision would exceed the memory capacity of a standard
+computer server.
 
 A common approach for dealing with such problems is to exploit the high fraction
 of zeros in the matrix by storing only the nonzero elements, thus significantly
@@ -47,16 +48,16 @@ storing sparse matrices so as to maximize cache efficiency. Another option is to
 compress each row individually, only adding additional information about the
 column index. The resulting data structure can then either be embedded into
 square matrices by adding dummy elements as padding and storing them in one of
-the dense matrix formats (usually in column-major order, \ie column-by-column),
+the dense matrix formats (usually in column-major order, that is column-by-column),
 or individual rows can be stored in sequence and augmented with pointers to the
 starting position of each row. This results in the so-called ELLPACK (ELL) and
 Compressed Sparse Row (CSR) formats, respectively. Alternatively, one could
 compress each column instead of each row, resulting in a column variant of
 ELLPACK and the Compressed Sparse Column (CSC) format~\cite{saad}. In addition
 to these basic formats, a number of advanced formats were developed to offer
-additional memory and computational savings with certain algorithms or on
-certain hardware. Common approaches include blocked versions of basic
-formats~\cite{csb, bsr}, their various
+additional memory and computational savings with certain algorithms,
+applications, or on certain hardware. Common approaches include blocked versions
+of basic formats~\cite{csb, bsr}, their various
 combinations~\cite{sell-p,sell-c-sigma,bell-garland}, and their unconventional
 enhancements~\cite{csr5, ecker}.
 
@@ -72,9 +73,9 @@ LU factorizations will contain a nonzero in all positions $(k, j)$ where $i
 $AB$ of matrices $A$ and $B$ --- which is a common building block of QR
 factorization algorithms~\cite{demmel} --- where $(AB)_{ij}$ is nonzero if there
 exists an index $k$ such that both $A_{ik}$ and $B_{kj}$ are nonzero.
-Consequentially, depending on the sparsity pattern of the matrix, its
+Consequently, depending on the sparsity pattern of the matrix, its
 factorization may have a significantly larger proportion of nonzero elements, as
-some positions which were zero in the original matrix become nonzero in the
+some positions that were zero in the original matrix become nonzero in the
 factorized form (fill-in positions). To alleviate the problem, sparse direct
 methods use various reordering (pivoting) strategies, such as the Reverse
 Cuthill McKee (RCM), Minimum Degree (MD) and Nested Dissection (ND) orderings,
@@ -101,33 +102,32 @@ and numeric fact., or just the factorizations), so I changed \textit{sparse
 factorization methods} to \textit{sparse direct methods}, which does include
 everything. It's definitely several phases, 4 or maybe less, and is not
 necessary to specify exactly what is being done to understand the thesis. If
-someone is interested in more details, they can look it up in Duff's book.
-}
+someone is interested in more details, they can look it up in Duff's book.}
+\eq{:-)}
 combined with specialized sparse storage formats that allow for the easy
 insertion of new elements to the data structure~\cite{saad, duff}.
 
 The situation is somewhat better in the case of iterative methods. Instead of
 factorizing the matrix, relaxation methods split the matrix into the sum of two
-matrices, which naturally preserves the sparsity patterns. In addition, the
-operation $y = M^{-1}Nx$ is usually calculated as a matrix-vector product $z =
-Nx$, followed by a solution of the linear system $My = z$, avoiding the need for
-inversions and matrix-matrix products which would destroy the sparsity pattern.
-Thus, the only operations required for relaxation methods are the matrix-vector
-products with sparse matrices, solutions of linear systems with sparse
-triangular or diagonal matrices, and the extraction of the upper and lower
-triangles and the diagonals of the matrix from the sparse data structure, which,
-at least for conventional storage formats, can usually be realized by augmenting
-the sparse structure with pointers to the diagonal elements. The only difficulty
-that occurs in both the relaxation methods, as well as the solution step of
-direct methods, is the parallelization of triangular system solves. While the
-operation is considered well-parallelizable in the dense case, some sparsity
-structures make the operation hard to parallelize, or even inherently
-sequential. An example of a matrix structure that offers no parallelism
-whatsoever is the bidiagonal structure, which has nonzero elements only on the
-main diagonal and the first diagonal below it. For such a matrix, each stage of
-the forward substitution contains only one operation. Furthermore, different
-stages cannot be parallelized, as each subsequent stage depends on the result of
-the previous one.
+matrices. In addition, the operation $y = M^{-1}Nx$ is usually calculated as a
+matrix-vector product $z = Nx$, followed by a solution of the linear system $My
+= z$, avoiding the need for inversions and matrix-matrix products which would
+destroy the sparsity pattern.  Thus, the only operations required for relaxation
+methods are the matrix-vector products with sparse matrices, solutions of linear
+systems with sparse triangular or diagonal matrices, and the extraction of the
+upper and lower triangles and the diagonals of the matrix from the sparse data
+structure, which, at least for conventional storage formats, can usually be
+realized by augmenting the sparse structure with pointers to the diagonal
+elements. The only difficulty that occurs in both the relaxation methods, as
+well as the solution step of direct methods, is the parallelization of
+triangular system solves. While the operation is considered well-parallelizable
+in the dense case, some sparsity structures make the operation hard to
+parallelize, or even inherently sequential. An example of a matrix structure
+that offers no parallelism whatsoever is the bidiagonal structure, which has
+nonzero elements only on the main diagonal and the first diagonal below it. For
+such a matrix, each stage of the forward substitution contains only one
+operation. Furthermore, different stages cannot be parallelized, as each
+subsequent stage depends on the result of the previous one.
 In contrast to direct and relaxation methods, Krylov methods present the
 ultimate solution when dealing with sparse matrices.  With the only requirement
 being the matrix-vector product --- and in some cases the conjugate
@@ -137,7 +137,7 @@ format does not allow for efficient conjugate matrix-vector product, it is often
 possible to explicitly store the conjugate transpose of the matrix in memory and
 use the same algorithm as for the regular matrix-vector product.
 
-In both, direct and iterative methods, coming up with a single storage format for
+In both direct and iterative methods, coming up with a single storage format for
 all operations is extremely difficult. This is especially the case for highly
 complicated and specialized formats, which are usually only designed to speed up
 the matrix-vector product. Other operations are either not possible to realize

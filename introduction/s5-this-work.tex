@@ -9,14 +9,14 @@ ones by accelerating their building blocks. Optimizations of vector operations
 are not discussed, since an abundance of recent research already dealt with this
 aspect~\cite{joaqin-thesis}. Instead, this work is focused towards algorithms
 for preconditioner and matrix-vector product computations. The hardware
-considered is not a full node, but a single accelerator processor group (\ie a
-single GPU) together with memory directly attached to it. All lower levels of
-the hierarchy are considered, including individual processors and vector units,
-and there are no assumptions about the availability of lower granularity
-operations. Thus, the algorithms presented here constitute the lowest
-granularity building blocks of applications which utilize the full system or
-simplified studies on the way towards larger building blocks. As such, they are
-crucial for the design of larger software, since any performance issues on a
+considered is not a full node, but a single accelerator processor group (that
+is, a single GPU) together with the memory directly attached to it. All lower
+levels of the hierarchy are considered, including individual processors and
+vector units, and there are no assumptions about the availability of lower
+granularity operations. Thus, the algorithms presented here constitute the
+lowest granularity building blocks of applications which utilize the full system
+or simplified studies on the way towards larger building blocks. As such, they
+are crucial for the design of larger software, since any performance issues on a
 processor group level will be transferred to higher levels of the software.
 
 This work is designed as a collection of standalone articles. Each chapter

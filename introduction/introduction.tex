@@ -1,7 +1,7 @@
 The solution of linear systems is one of the most fundamental problems in
 computer science, with application areas ranging from physical simulations to
 computer graphics, social network analysis, and artificial
-intelligence~\cite{saad,de-boor}. It is also a component of many methods
+intelligence~\cite{saad,de-boor}. It is also a key component of many methods
 for higher order linear algebra problems, such as the eigenvalue
 problem~\cite{demmel,feast}. Major contributing factors to such a widespread of
 linear systems are their developed theoretical foundations, and the
@@ -12,10 +12,12 @@ Despite their ubiquity, there are still significant efforts focusing on the
 development of efficient methods for linear systems. One reason is the sheer
 scale of the systems that need to be solved~\cite{exascale-report}, which either
 stems from the amount of data that has to be processed, or from the desire to
-better approximate a continuous equation. Luckily, a majority of such problems
-exhibit certain structural properties, \eg a high percentage of zero entries or
-low-rank matrix blocks, enabling the development of various data compression
-techniques and accompanying algorithms that utilize the compressed data
+better approximate a continuous equation. Fortunately, a majority of such
+problems exhibit certain structural properties, \eg, their system matrices
+contain a high percentage of zero entries (\textdef{sparse matrices}) or
+low-rank matrix blocks (\textdef{hierarchical matrices}), enabling the
+development of various data compression techniques and accompanying algorithms
+that leverage the compressed data
 directly~\cite{saad,duff,barrettemplates,hierarchical}.
 
 In addition to the special properties of the problem instance, another
@@ -23,18 +25,18 @@ consideration in algorithm design are the architectural features of computing
 platforms that will be used to run it. Recently, as physical limitations
 undermined Dennard scaling, further hardware improvements have turned to
 non-conventional, special-purpose chip designs, such as Graphics Processing
-Units (GPU), Intel Xeon Phis and Field-programmable gate arrays (FPGA). Among
+Units (GPUs), Intel Xeon Phis and Field-programmable gate arrays (FPGAs). Among
 the available alternatives, GPUs achieve the widest adoption, with 5 of the
 world's 10 most powerful systems featuring GPUs as the main contributor to their
 performance and energy efficiency~\cite{top500}.
 
-High levels of parallelism offered by the GPUs proved to be a good match for
-many methods for the solution of general systems, and a high-performance port was
-quickly developed~\cite{magma}. On the other hand, methods for compressed,
-especially sparse systems pose a greater challenge since the appropriate
-algorithms are bound by memory bandwidth, and the system matrices often feature
-highly irregular distribution of nonzero values. While there are libraries
-providing support for the basic
+High levels of hardware parallelism offered by the GPUs proved to be a good
+match for many methods for the solution of general systems, and a
+high-performance port was quickly developed~\cite{magma}. In contrast,
+methods for compressed, especially sparse systems pose a greater challenge since
+the appropriate algorithms are bound by memory bandwidth, and the system
+matrices often feature highly irregular distribution of nonzero values. While
+there are libraries providing support for the basic
 methods~\cite{magma,vienna-cl,paralution,ginkgo}, more advanced algorithms are
 either not suitable for GPUs, not yet ported to GPUs, or only available as
 special-purpose implementations, part of a domain-specific software. New methods
