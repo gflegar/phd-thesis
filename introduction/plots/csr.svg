@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="296.98001mm"
-   height="60.347912mm"
-   viewBox="0 0 296.98 60.347912"
+   width="350mm"
+   height="70mm"
+   viewBox="0 0 349.99999 70"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 5da689c313, 2019-01-14"
@@ -56,9 +56,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.63902916"
-     inkscape:cx="259.05814"
-     inkscape:cy="-186.83386"
+     inkscape:zoom="1"
+     inkscape:cx="531.74575"
+     inkscape:cy="86.906645"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -95,7 +95,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-0.02229571,-86.601975)">
+     transform="translate(-0.02229571,-76.949887)">
     <g
        id="g5578"
        style="opacity:0.98999999"
@@ -1370,5 +1370,65 @@
        inkscape:connector-curvature="0"
        inkscape:transform-center-x="116.15375"
        inkscape:transform-center-y="-1.632137" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.11773586px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="312.14609"
+       y="104.99854"
+       id="text1036"><tspan
+         sodipodi:role="line"
+         id="tspan1034"
+         x="312.14609"
+         y="104.99854"
+         style="stroke-width:0.26458332px">values</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.11773586px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="320.1777"
+       y="134.53758"
+       id="text1040"><tspan
+         sodipodi:role="line"
+         id="tspan1038"
+         x="320.1777"
+         y="134.53758"
+         style="stroke-width:0.26458332px">row pointers</tspan><tspan
+         sodipodi:role="line"
+         x="320.1777"
+         y="142.18475"
+         style="stroke-width:0.26458332px"
+         id="tspan1042" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.11773586px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="323.94119"
+       y="119.85421"
+       id="text1046"><tspan
+         sodipodi:role="line"
+         id="tspan1044"
+         x="323.94119"
+         y="119.85421"
+         style="stroke-width:0.26458332px">column indexes</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.11773634px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="87.17028"
+       y="83.784416"
+       id="text1036-3"><tspan
+         sodipodi:role="line"
+         id="tspan1034-6"
+         x="87.17028"
+         y="83.784416"
+         style="stroke-width:0.26458332px">values</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.11773634px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="141.0257"
+       y="83.784416"
+       id="text1046-7"><tspan
+         sodipodi:role="line"
+         id="tspan1044-5"
+         x="141.0257"
+         y="83.784416"
+         style="stroke-width:0.26458332px">column indexes</tspan></text>
   </g>
 </svg>
