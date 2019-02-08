@@ -1,4 +1,67 @@
 \section{Conclusions and Open Research Directions}
 
-This work focused on GPU acceleration of the building blocks for the
-iterative solution of linear systems. 
+This work focused on GPU acceleration of components for the iterative solution
+of linear systems, and showed that significant performance improvements on
+modern hardware can be obtained even with basic, well-studied building
+blocks.
+
+Part~\ref{pt:matrix-vector} began the discussion by focusing on the most time
+consuming and difficult to parallelize operation: the sparse matrix-vector
+product. Even though a variety of advanced sparse matrix formats and
+accompanying matrix-vector product algorithms were recently proposed,
+Chapter~\ref{ch:2017-csr-spmv} showed that most of them exhibit corner cases
+where they consume significantly more memory than the standard formats, or
+achieve far lower matrix-vector product performance than standard
+implementations. Furthermore, the majority of existing software packages relies
+on one of the standard formats to realize high performance implementations of
+other operations, and as means of managing software complexity and developer
+burden. Thus, while application-specific formats can undoubtedly outperform the
+conventional ones, they should only be developed in case the potential
+improvements over the formats provided by the underlying general-purpose library
+(accounting for the necessary format conversions required for interfacing with
+other parts of the library) outweigh their development cost.
+
+Chapter~\ref{ch:2017-csr-spmv} focused on reducing the improvement potential ---
+and the need to invest resources in the development of application-specific
+formats --- by optimizing the corner cases of the most widely used CSR format.
+These optimizations are enabled by advancements in accelerator technology, which
+recently started offering full support for atomic operations, and effectively
+deal with the issue of imbalanced sparsity patterns.  While the new algorithm
+cannot compete with the standard variant on regular sparsity patterns, the
+ultimate matrix-vector product algorithm can be composed by coupling the two
+algorithms with a simple heuristic that predicts the winner.
+
+Chapter~\ref{ch:2017-coo-spmv} continued the development of the sparse
+matrix-vector product by identifying the COO format as an alternative
+general-purpose format for GPUs. Similarly to the improved CSR algorithm, the
+new algorithm for COO is highly efficient and does not suffer from extremely
+unfavorable sparsity patterns. However, its higher minimum and average
+performance make it a better default choice than CSR. Ultimately, reasonable
+use-cases can be found for both options: the improved CSR algorithm can be used
+in conjunction with software that uses CSR historically or because the
+efficiency of other operations depends on CSR, while COO can be adopted as the
+default choice for new software whose performance does not depend on CSR.
+
+With most sparse matrix-vector product algorithms are focused on large
+problems that utilize the entire GPU (processor group),
+Chapter~\ref{ch:2017-batched-spmv} explored the underdeveloped case of smaller
+problems suitable for individual streaming multiprocessors (single processors).
+It showed that this case can be implemented more efficiently by slightly
+modifying standard algorithms to make better use of the available memory
+hierarchy.
+
+New findings presented here can be used in the development of more specialized
+matrix formats. For example, the ideas from the COO algorithm are currently
+being used for the development of an improved hybrid matrix
+format~\cite{hybrid}. The success of these synchronization-free load-balanced
+algorithms on a single GPU should also prove useful for the development of
+sparse matrix-vector product algorithms that utilize computational resources of
+the entire node in unison, as synchronization and load-balancing penalties
+become more pronounced on higher levels of the hardware hierarchy. Finally, the
+simple heuristic used to select between the two CSR algorithms is also a small
+contribution to research in automatic sparse matrix format selection. This
+research area focuses on selecting the best format based on the properties of
+the matrix, by using certain policies (often based on machine learning
+algorithms) to decide among several available
+formats~\cite{clspmv,gpu-selection}, or even assemble a matrix-vector product
+implementation from a pool of potential optimizations~\cite{elafrou}.
