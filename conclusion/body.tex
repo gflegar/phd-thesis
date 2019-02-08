@@ -27,7 +27,43 @@ response to ``a Krylov solver is not a linear operator'' comment.
 TODO: The Ginkgo library implementing the things discussed above. Open and
 modern development practices.
 
-\section{Conclusions and Open Research Directions}
+\input{conclusion}
+
+Sparse matrix formats:
+\begin{itemize}
+    \item memory and performance issues with specialized formats
+    \item improvement of the standard format via an alternative algorithm
+    \item automatic kernel selection based on properties of the problem
+    \item fine-grained SpMV
+    \item further developments w/ TNU
+    \item machine learning at Athens
+    \item full-node SpMV
+\end{itemize}
+
+Preconditioners:
+\begin{itemize}
+    \item simple, highly parallel precondiitoners
+    \item low-level parallelism - shuffles, register usage
+    \item implicit pivoting
+    \item vectorizable algorithms
+    \item LU is still superior to GH
+    \item current work on ILU preconditioners
+    \item work on batch blas and problems with it
+    \item full-node preconditioning
+\end{itemize}
+
+Adaptive precision:
+\begin{itemize}
+    \item reduce precision in a ``smart'' way, without compromising
+          preconditioner quality
+    \item practical implementation in Ginkgo
+    \item future work on adaptive precision SOR and (block) ILU preconditioners
+    \item other uses of adaptive precision - modular storage, IR, Jacobi
+    \item low-precision compute - FloatX
+\end{itemize}
+
 TODO: Adaptive precision algorithms, advanced preconditioners (ILU, threshold
 ILU), multi-GPU algorithms, heterogeneous algorithms, distributed algorithms,
 eigensolvers, extending the library design to incorporate these features.
+
+
