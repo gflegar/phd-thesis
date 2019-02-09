@@ -42,7 +42,7 @@ in conjunction with software that uses CSR historically or because the
 efficiency of other operations depends on CSR, while COO can be adopted as the
 default choice for new software whose performance does not depend on CSR.
 
-With most sparse matrix-vector product algorithms are focused on large
+While most sparse matrix-vector product algorithms are focused on large
 problems that utilize the entire GPU (processor group),
 Chapter~\ref{ch:2017-batched-spmv} explored the underdeveloped case of smaller
 problems suitable for individual streaming multiprocessors (single processors).
@@ -50,9 +50,9 @@ It showed that this case can be implemented more efficiently by slightly
 modifying standard algorithms to make better use of the available memory
 hierarchy.
 
-New findings presented here can be used in the development of more specialized
-matrix formats. For example, the ideas from the COO algorithm are currently
-being used for the development of an improved hybrid matrix
+New findings presented in this part  can be used in the development of more
+specialized matrix formats. For example, the ideas from the COO algorithm are
+currently being used for the development of an improved hybrid matrix
 format~\cite{hybrid}. The success of these synchronization-free load-balanced
 algorithms on a single GPU should also prove useful for the development of
 sparse matrix-vector product algorithms that utilize computational resources of
@@ -65,3 +65,74 @@ the matrix, by using certain policies (often based on machine learning
 algorithms) to decide among several available
 formats~\cite{clspmv,gpu-selection}, or even assemble a matrix-vector product
 implementation from a pool of potential optimizations~\cite{elafrou}.
+
+Part~\ref{pt:preconditioning} explored the potential of block-Jacobi
+preconditioning on highly parallel GPU hardware. Even though this relatively
+simple preconditioner usually features lower convergence rate improvement than
+the more widely used ILU-based preconditioners, this part of the thesis showed
+that problems with inherent block structure can greatly benefit from it. The
+effectiveness of block-Jacobi can be attributed to its inherent parallelism, as
+each block can be processed independently. The first step towards a high
+performance implementation consists of mapping the blocks to the appropriate
+level of the hardware hierarchy. By assigning each block to a single vector
+unit, taking advantage of increased register counts and warp shuffle
+instructions available on recent hardware, and replacing conventional pivoting
+strategies with implicit pivoting, the resulting algorithms are able to
+outperform equivalent functionality available in vendor libraries. First such
+algorithm, the block-Jacobi preconditioner based on Gauss-Jordan elimination,
+was presented in Chapter~\ref{ch:2017-gje-block-jacobi}. The algorithm inverts
+the diaginal blocks during preconditioner generation, which means that the
+application stage can be realized as a sequence of highly parallel dense
+matrix-vector products.
+
+However, as discussed in Section~\ref{introduction:sec:linear-systems}, the
+solution of a linear system via matrix inversion can result in numerical
+instability. Chapter~\ref{ch:2017-gh-block-jacobi} addressed these concerns by
+showing that in practice, there is no difference in preconditioner quality
+when using inversion-based, as opposed to factorization-based approach. It also
+revisited the unconventional Gauss-Huard method for the solution of linear
+systems, and revealed that this method can be superior to the inversion-based
+algorithm if only few iterations of the Krylov solver are needed. Finally,
+Chapter~\ref{ch:2017-lu-block-jacobi} compared the Gauss-Huard solver
+with the standard LU factorization algorithm, and showed that, provided the
+conventional ``lazy'' triangular solve algorithm is replaced with the ``eager''
+variant, LU factorization can outperform Gauss-Huard decomposition.
+
+The contributions presented in this part constitute only a small sample of
+recent developments in preconditioning techniques. Some of these developments
+include new highly parallel methods for solving triangular
+systems~\cite{triangular-solve, isai, triangular-iterative}, and parallel
+generation of threshold ILU preconditioners~\cite{ilut, ilut-gpu}. As a direct
+extension of the block-Jacobi preconditioner presented here, future research can
+explore the effectiveness of other preconditioners based on relaxation methods.
+
+All algorithms presented in this part are also related to a broader topic of
+``batched'' routines, which apply the same operation on a sequence of small
+problems. While there are recent proposals for a standardized batched BLAS
+interface~\cite{batched-blas}, it is still unclear if this effort will result in
+wider adoption, as there are major issues with the current proposal. One such
+issue concerns the data format used to store the blocks. Since distinct
+architectures and applications require specific storage schemes (\eg, one
+parameter batch is shared, another stored as a contiguous sequence, or scattered
+throughout the memory), covering all the options leads to an exponential number
+of interface functions with an unmanageable amount of parameters. Another issue
+arises from the implicit synchronization between two consecutive batched routine
+calls. While there are no dependencies between distinct problems in the batch,
+the entire batch is still synchronized, as each batched call is essentially a
+(parallel) loop over all problem instances. While this can be partially
+alleviated by implementing the routines in terms of a set of jobs submitted to a
+job scheduling system, relying on the existence of such a system is not always
+an option. For example, this is the case for block-Jacobi preconditioning
+presented in this work, where the ``batch'' of problems is distributed on the
+GPU --- where scheduling systems are not commonly used --- and there is
+additional code needed for preprocessing and postprocessing of the problem data
+as part of the same GPU kernel. Ultimately, the pragmatic solution might be to
+depart from the idea of ``batched'' routines, and instead build libraries that
+provide BLAS-like functionality for various levels of the hardware hierarchy.
+Essentially, the responsibility of building the outer parallel loop would be
+left to the user, while the need for complicated parameter lists would be
+removed, the number of interface variations greatly reduced, and implicit
+synchronizaitons of unrelated problems avoided. While such libraries are still
+uncommon, NVIDIA has recently taken a step towards this direction with its
+CUTLASS~\cite{cutlass} library, which provides matrix-matrix multiply
+implementations (GEMM) for various levels of the GPU hierarchy.

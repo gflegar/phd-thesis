@@ -1,31 +1,108 @@
 @inproceedings{clspmv,
-  title={{clSpMV}: A cross-platform {OpenCL} {SpMV} framework on {GPUs}},
-  author={Su, Bor-Yiing and Keutzer, Kurt},
-  booktitle={Proceedings of the 26th ACM international conference on Supercomputing},
-  pages={353--364},
-  year={2012},
-  organization={ACM}
+    title={{clSpMV}: A cross-platform {OpenCL} {SpMV} framework on {GPUs}},
+    author={Su, Bor-Yiing and Keutzer, Kurt},
+    booktitle={Proceedings of the 26th ACM international conference on Supercomputing},
+    pages={353--364},
+    year={2012},
+    organization={ACM}
 }
 
 
 @article{gpu-selection,
-  title={A performance modeling and optimization analysis tool for sparse
+    title={A performance modeling and optimization analysis tool for sparse
          matrix-vector multiplication on {GPUs}},
-  author={Guo, Ping and Wang, Liqiang and Chen, Po},
-  journal={IEEE Transactions on Parallel and Distributed Systems},
-  volume={25},
-  number={5},
-  pages={1112--1123},
-  year={2014},
-  publisher={IEEE}
+    author={Guo, Ping and Wang, Liqiang and Chen, Po},
+    journal={IEEE Transactions on Parallel and Distributed Systems},
+    volume={25},
+    number={5},
+    pages={1112--1123},
+    year={2014},
+    publisher={IEEE}
 }
 
 
 @inproceedings{elafrou,
-  title={Performance Analysis and Optimization of Sparse Matrix-Vector Multiplication on Modern Multi-and Many-Core Processors},
-  author={Elafrou, Athena and Goumas, Georgios and Koziris, Nectarios},
-  booktitle={Parallel Processing (ICPP), 2017 46th International Conference on},
-  pages={292--301},
-  year={2017},
-  organization={IEEE}
+    title={Performance Analysis and Optimization of Sparse Matrix-Vector Multiplication on Modern Multi-and Many-Core Processors},
+    author={Elafrou, Athena and Goumas, Georgios and Koziris, Nectarios},
+    booktitle={Parallel Processing (ICPP), 2017 46th International Conference on},
+    pages={292--301},
+    year={2017},
+    organization={IEEE}
+}
+
+@misc{hybrid,
+    title={Hybrid paper --- need bibliographic details},
+    author={Mike Tsai and Yen-Chen Chen and Hartwig Anzt and Goran Flegar and
+            Jack Dongarra},
+    note={submitted}
+}
+
+@inproceedings{triangular-solve,
+    title={A synchronization-free algorithm for parallel sparse triangular solves},
+    author={Liu, Weifeng and Li, Ang and Hogg, Jonathan and Duff, Iain S and Vinter, Brian},
+    booktitle={European Conference on Parallel Processing},
+    pages={617--630},
+    year={2016},
+    organization={Springer}
+}
+
+@article{isai,
+    title={Incomplete sparse approximate inverses for parallel preconditioning},
+    author={Anzt, Hartwig and Huckle, Thomas K and Br{\"a}ckle, J{\"u}rgen and Dongarra, Jack},
+    journal={Parallel Computing},
+    volume={71},
+    pages={1--22},
+    year={2018},
+    publisher={Elsevier}
+}
+
+@inproceedings{triangular-iterative,
+    title={Iterative sparse triangular solves for preconditioning},
+    author={Anzt, Hartwig and Chow, Edmond and Dongarra, Jack},
+    booktitle={European Conference on Parallel Processing},
+    pages={650--661},
+    year={2015},
+    organization={Springer}
+}
+
+@article{ilut,
+    title={{ParILUT}---A New Parallel Threshold {ILU} Factorization},
+    author={Anzt, Hartwig and Chow, Edmond and Dongarra, Jack},
+    journal={SIAM Journal on Scientific Computing},
+    volume={40},
+    number={4},
+    pages={C503--C519},
+    year={2018},
+    publisher={SIAM}
+}
+
+@inproceedings{ilut-gpu,
+    title={A Parallel Threshold {ILU} for {GPUs}},
+    author={Hartwig Anzt and Tobias Ribizel and Goran Flegar and Edmond Chow and
+            Jack Dongarra},
+    booktitle={2019 IEEE International Parallel and Distributed Processing
+               Symposium (IPDPS)},
+    note={accepted}
+}
+
+@techreport{batched-blas,
+    title={A proposed {API} for batched basic linear algebra subprograms},
+    author={Dongarra, Jack and Duff, Iain and Gates, Mark and Haidar, Azzam and
+          Hammarling, Sven and Higham, Nicholas J and Hogg, Jonathon and
+          Valero-Lara, Pedro and Relton, Samuel D and Tomov, Stanimire},
+    year={2016}
+}
+
+@misc{ginkgo,
+    Howpublished = {\url{https://ginkgo-project.github.io}},
+    Key = {Ginkgo},
+    Title = {{{Ginkgo}}},
+    Year = {2019}
+}
+
+@misc{cutlass,
+    Howpublished = {\url{https://github.com/NVIDIA/cutlass}},
+    Key = {CUTLASS},
+    Title = {{CUTLASS}},
+    Year = {2019}
 }
