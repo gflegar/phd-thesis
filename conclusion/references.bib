@@ -106,3 +106,98 @@
     Title = {{CUTLASS}},
     Year = {2019}
 }
+
+
+@article{higham-ir,
+    title={Accelerating the solution of linear systems by iterative refinement in three precisions},
+    author={Carson, Erin and Higham, Nicholas J},
+    journal={SIAM Journal on Scientific Computing},
+    volume={40},
+    number={2},
+    pages={A817--A847},
+    year={2018},
+    publisher={SIAM}
+}
+
+@inproceedings{anzt2015adaptive,
+    title={Adaptive precision solvers for sparse linear systems},
+    author={Anzt, Hartwig and Dongarra, Jack and Quintana-Ort{\'\i}, Enrique S},
+    booktitle={Proceedings of the 3rd International Workshop on Energy Efficient Supercomputing},
+    pages={2},
+    year={2015},
+    organization={ACM}
+}
+
+@article{adaptive-jacobi-gpu,
+    title={Customized-Precision Block-Jacobi Preconditioning for Krylov
+           Iterative Solvers on Data-Parallel Manycore Processors},
+    author={Goran Flegar and Terry Cojean and Hartwig Anzt and Enrique S.
+            Quintana-Ort\'i},
+    journal={ACM Transactions on Mathematical Software},
+    note={submitted}
+}
+
+
+@article{floatx,
+    title={{FloatX}: A {C++} library for customized floating-point arithmetic},
+    author={Goran Flegar and Florian Scheidegger and Vedran Novakovi\'c and
+            Giovani Mariani and Andr\'es E. Tom\'as and A. Cristiano I. Malossi
+            and Enrique S. Quintana-Ort\'i},
+    journal={ACM Transactions on Mathematical Software},
+    note={submitted}
+}
+
+@InProceedings{anzt-ir,
+    author="Anzt, Hartwig
+    and Flegar, Goran
+    and Novakovi{\'{c}}, Vedran
+    and Quintana-Ort{\'i}, Enrique S.
+    and Tom{\'a}s, Andr{\'e}s E.",
+    editor="Yokota, Rio
+    and Weiland, Mich{\`e}le
+    and Shalf, John
+    and Alam, Sadaf",
+    title="Residual Replacement in Mixed-Precision Iterative Refinement for Sparse Linear Systems",
+    booktitle="High Performance Computing",
+    year="2018",
+    publisher="Springer International Publishing",
+    address="Cham",
+    pages="554--561",
+    abstract="We investigate the solution of sparse linear systems via iterative methods based on Krylov subspaces. Concretely, we combine the use of extended precision in the outer iterative refinement with a reduced precision in the inner Conjugate Gradient solver. This method is additionally enhanced with different residual replacement strategies that aim to avoid the pitfalls due to the divergence between the actual residual and the recurrence formula for this parameter computed during the iteration. Our experiments using a significant part of the SuiteSparse Matrix Collection illustrate the potential benefits of this technique from the point of view, for example, of energy and performance.",
+    isbn="978-3-030-02465-9"
+}
+
+@inproceedings{jacobi,
+  title={Adaptive precision solvers for sparse linear systems},
+  author={Anzt, Hartwig and Dongarra, Jack and Quintana-Ort{\'\i}, Enrique S},
+  booktitle={Proceedings of the 3rd International Workshop on Energy Efficient Supercomputing},
+  pages={2},
+  year={2015},
+  organization={ACM}
+}
+
+@inproceedings{jacobi-modular,
+  title={A Modular Precision Format for Decoupling Arithmetic Format and Storage Format},
+  author={Gr{\"u}tzmacher, Thomas and Anzt, Hartwig},
+  booktitle={European Conference on Parallel Processing},
+  pages={434--443},
+  year={2018},
+  organization={Springer}
+}
+
+@inproceedings{pagerank,
+  title={Need bibliographical info for PageRank paper},
+  author={Gr{\"u}tzmacher, Thomas and Anzt, Hartwig},
+  booktitle={European Conference on Parallel Processing},
+  pages={434--443},
+  year={2018},
+  organization={Springer}
+}
+
+@article{flexfloat,
+  title={{FlexFloat}: A Software Library for Transprecision Computing},
+  author={Tagliavini, Giuseppe and Marongiu, Andrea and Benini, Luca},
+  journal={IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems},
+  year={2018},
+  publisher={IEEE}
+}

@@ -136,3 +136,48 @@ synchronizaitons of unrelated problems avoided. While such libraries are still
 uncommon, NVIDIA has recently taken a step towards this direction with its
 CUTLASS~\cite{cutlass} library, which provides matrix-matrix multiply
 implementations (GEMM) for various levels of the GPU hierarchy.
+
+As a result of recent trends in HPC and the emergence of hardware support for
+low-precision computing, Part~\ref{pt:adaptive} evaluated the potential of these
+techniques in combination with preconditioning.
+Chapter~\ref{ch:2017-adaptive-block-jacobi} analysed the theoretical aspects and
+the effect on convergence rate when lower precision storage is used in the
+block-Jacobi preconditioner. The success of the technique used is based on
+several observations: 1) since preconditioner application is a memory bandwidth
+bound operation, performance improvements are possible by reducing the precision
+of data stored in memory, and not the precision of computations; 2) a
+preconditioner is already an approximation of the original system matrix, so the
+storage accuracy does not need to be higher than the accuracy of the
+approximation; and 3) storage accuracy cannot be reduced blindly, but has to be
+carefully tuned to the numerical properties of the problem. Practical
+experiments showed that the combination of these techniques successfully reduces
+total storage while preserving preconditioner quality, and, according to a
+theoretical energy model, can reduce energy consumption of the complete Krylov
+solver. While theoretical analysis alone does not guarantee the feasibility of
+practical implementations, new research has demonstrated the effectiveness of
+adaptive block-Jacobi preconditioning~\cite{adaptive-jacobi-gpu}, and produced a
+first GPU implementation of this preconditioner, which is now available in the
+Ginkgo library~\cite{ginkgo}.
+
+As the adaptive precision block-Jacobi represents a pioneering idea in
+preconditioner design, it may be possible to enhance other preconditioner using
+similar techniques. Adaptive block-Jacobi preconditioning itself may also be
+improved further by using non-conventional storage formats instead of the
+standard IEEE floating point types~\cite{adaptive-jacobi-gpu}. In the bigger
+picture of iterative methods, adaptive block-Jacobi preconditioning is only a
+single example of recent research in low-precision methods. In addition to the
+well-known iterative refinement~\cite{higham-ir}, other examples include the
+adaptive versions of the Jacobi and PageRank relaxation
+methods~\cite{jacobi,jacobi-modular,pagerank} and the development of the modular
+precision storage format, which enables efficient access to the same array of
+floating point values in multiple
+precisions~\cite{jacobi-modular,pagerank,anzt-ir}. Orthogonal to
+developments in unconventional storage formats, the potential of performing
+computations in such formats is also being explored. While this research rarely
+results in performance improvements on conventional hardware, it has the
+potential to influence the design of future hardware by demonstrating
+its effectiveness on simulated systems~\cite{floatx, flexfloat}.
+
+% With the end of Dennard scaling, and potential failure of Moore's law in the
+% near future, current HPC landscape is experiencing disrupting changes. This
+% work is a product of these changes, and demonstrates that 
