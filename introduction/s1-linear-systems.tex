@@ -86,7 +86,7 @@ Systems that do not belong to one of these categories are handled by
 factorizing the original system matrix into a product of two or more matrices
 that do:
 \begin{align}
-    A &= F_1 \cdot \ldots \cdot F_i \cdot \ldots \cdot F_k,
+    A &= F_1 \cdot F_2 \cdot \ldots \cdot F_k,
 \end{align}
 where $F_i$ is diagonal, triangular or unitary, for $i = 1,2, \ldots, k$, and
 solving a series of simple systems:
@@ -134,7 +134,7 @@ factorization and $O(n^2)$ flops to solve the system for one right-hand side
 know it, but where do you state it?}
 \gf{? I didn't mention any triangular systems here...}
 However, they have different constant factors hidden underneath the big-$O$
-notation.
+notation~\cite{big-o}.
 
 Iterative methods, in contrast, produce a sequence $x_0, x_1, x_2, \ldots$ of
 approximations to the solution $x$, starting from an initial guess $x_0$. The

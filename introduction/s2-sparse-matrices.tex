@@ -2,15 +2,15 @@
 \label{introduction:sec:sparse}
 
 Many problems, such as finite element and finite difference
-discretizations~\cite{saad,duff} or problems arising from graph applications,
-result in system matrices where the majority of elements are zero with
-each row having only a few nonzero elements on average. Storing all these zeros
-in an uncompressed, dense matrix is wasteful both in terms of storage and
-computational cost, since the majority of the computations will be
-multiplications or additions with zero. Furthermore, some of these systems
-contain a very large number of unknowns (more than a million), so just storing
-the matrix in double precision would exceed the memory capacity of a standard
-computer server.
+discretizations~\cite{saad,duff} or problems arising from graph
+applications~\cite{kepner}, result in system matrices where the majority of
+elements are zero with each row having only a few nonzero elements on average.
+Storing all these zeros in an uncompressed, dense matrix is wasteful both in
+terms of storage and computational cost, since the majority of the computations
+will be multiplications or additions with zero. Furthermore, some of these
+systems contain a very large number of unknowns (more than a million), so just
+storing the matrix in double precision would exceed the memory capacity of a
+standard computer server.
 
 A common approach for dealing with such problems is to exploit the high fraction
 of zeros in the matrix by storing only the nonzero elements, thus significantly
