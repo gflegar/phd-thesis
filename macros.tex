@@ -3,9 +3,13 @@
 \newcommand{\ie}{\textit{i.e.}\xspace}
 \DeclareMathOperator{\mspan}{span}
 \newcommand{\textdef}[1]{\emph{#1}\xspace}
-\newcommand{\ha}[1]{\textcolor{red}{\textbf{HA:} #1}\xspace}
-\newcommand{\gf}[1]{\textcolor{blue}{\textbf{GF:} #1}\xspace}
-\newcommand{\eq}[1]{\textcolor{green}{\textbf{EQ:} #1}\xspace}
+\makeatletter
+\newcommand{\misc@comment}[3]{\textcolor{#1}{\textbf{#2:} #3}\xspace}
+\newcommand{\ha}[1]{\misc@comment{red}{HA}{#1}}
+\newcommand{\gf}[1]{\misc@comment{blue}{GF}{#1}}
+\newcommand{\eq}[1]{\misc@comment{green}{EQ}{#1}}
+\newcommand{\nocoments}{\renewcommand{\misc@comment}[3]{}}
+\makeatother
 
 % rom 2017-csr-spmv
 \newcommand{\R}{\mathbb{R}}
