@@ -27,16 +27,64 @@ While there are various high performance libraries that try to address these
 issues~\cite{magma,vienna-cl,paralution}, they usually lack at least one of the
 points mentioned above, or are somewhat difficult to use. This section proposes
 one possible theoretical design aimed at solving these issues and briefly
-describes a new library that is based on this design.
+describes a new library that is based on it.
 
 \subsection{Matrices}
-TODO: Derivation of the matrix application linear operator $L_A$.
+
+The ultimate tool of reducing complexity in both mathematics and software
+engineering is abstraction. By hiding all the unnecessary details of a
+mathematical or software object, and only representing it as a concept with
+certain operations that behave according to some rules, every concrete object
+that defines these operations and follows the same rules as the concept can be
+handled in exactly the same way. In the context of Krylov methods, matrices are
+used only as part of the matrix-vector product operation $y = Ax$. In rare
+cases, the (conjugate) transpose (\textdef{adjoint matrix}) $A^*$ is also needed
+as part of the (conjugate) transpose matrix-vector multiply operation $y =
+A^*x$. For a fixed matrix $A$, the key properties of the matrix-vector product
+are additivity ($A(x+y) = Ax + Ay$) and homogeneity ($A(\alpha x) = \alpha Ax$).
+Thus, matrix-vector multiplication with a fixed matrix $A$ is a linear operator
+$L_A : \mathbb{F}^n \rightarrow \mathbb{F}^m$ which acts on a vector as
+multiplication with $A$ ($L_Ax := Ax$). For every matrix $A$ the operator $L_A$
+is unique, and, conversely, for any linear operator $L$ there exists a matrix
+$A$ such that $L = L_A$~\cite{la}. Assuming that the dot product $x^*y$ is used
+as the inner product of the unitary spaces induced by vector spaces $F^n$ and
+$F^m$, the adjoint operator of $L_A$ is exactly the operator assigned to $A^*$,
+\ie $L_A^* = L_{A^*}^{}$~\cite{la}. Thus, since the mapping $A \mapsto L_A$ is a
+one-to-one correspondence between matrices and linear operators that preserves
+all interesting operations and properties, a software library can reduce the
+complexity of dealing with matrices and their various storage formats by using
+the linear operator abstraction wherever a matrix is needed.
 
 \subsection{Linear Systems}
-TODO: Derivation of the linear system solver operator $S_A$.
+
+Interestingly, solving a linear system is another example of an operation
+that satisfies both the additivity and homogeneity properties. For a fixed
+nonsingular matrix $A$ and two right hand sides $b$ and $c$, if $x$
+and $y$ are solutions of the systems $Ax = b$ and $Ay = c$, then $z := x + y$ is
+the solution of the system $Az = b + c$ and $w := \alpha x$ is the solution of
+the system $Aw = \alpha b$. Thus, the operator $S_A : \mathbb{F}^n \rightarrow
+\mathbb{F}^n$ that for a fixed system matrix $A$ and any input vector $b$
+produces the solution $x$ of the linear system $Ax = b$ is a linear operator.
+The operator $S_A$ is unique. Consider two operators $S_A$ and $\widetilde{S_A}$
+that map any vector $b$ to the solution $x$ of the system $Ax = b$.
+Such operators satisfy the equalities $A(S_Ab) = A(\widetilde{S_A}b) = b$. Since
+$A$ is invertible, multiplying the equalities with $A^{-1}$ yields $S_Ab =
+\widetilde{S_A}b = A^{-1}b = L_{A^{-1}}b, \ \forall b \in \mathbb{F}^n$, or
+equivalently $S_A = \widetilde{S_A} = L_{A^{-1}}$. In the remainder of this
+text we refer to the unique linear operator $S_A$ as the \textdef{solver
+operator} for $A$. Since $S_A^* = L_{A^{-1}}^* = L_{(A^{-1})^*} = L_{(A^*)^{-1}}
+= S_{A^*}$, the solver operator also behaves well with respect to the other
+operation that is interesting for Krylov method libraries. This analysis shows
+that the solution of a linear system with matrix $A$ can also be abstracted as
+the application of the solver operator $S_A$. Finally, since matrices are
+already abstracted as operators $L_A$, it is useful to define a higher-order
+operator $\Sigma$, which maps a linear operator $L_A$ to the solver operator for
+$A$, \ie, $\Sigma : L_A \mapsto S_A$. Using this operator, the solution of a
+linear system can be expressed as $x = \Sigma(L_A)b$.
 
 \subsection{Preconditioners}
 TODO: Derivation of the preconditioner linear operator $P^\Pi_A$.
+
 \subsection{Linear Operators --- Towards a Generic Interface for Sparse
             Computations}
 TODO: The linear operator and linear operator factory abstractions as the basis
