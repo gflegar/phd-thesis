@@ -124,11 +124,15 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
-\newtheorem{defi}{\textit{\textbf{Definition}}}[chapter]
-\newtheorem{prop}{\textit{\textbf{Proposition}}}[chapter]
-\newtheorem{coro}{\textit{\textbf{Corollary}}}[chapter]
-\newtheorem{lema}{\textit{\textbf{Lema}}}[chapter]
-\newtheorem{theo}{\textit{\textbf{Theorem}}}[chapter]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\theoremstyle{plain}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{lema}[definition]{Lema}
+\newtheorem{theorem}[definition]{Theorem}
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
 
 % Listings
 \usepackage{listings}

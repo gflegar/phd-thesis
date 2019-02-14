@@ -30,6 +30,7 @@ one possible theoretical design aimed at solving these issues and briefly
 describes a new library that is based on it.
 
 \subsection{Matrices}
+\label{conclusion:ssec:matrices}
 
 The ultimate tool of reducing complexity in both mathematics and software
 engineering is abstraction. By hiding all the unnecessary details of a
@@ -38,24 +39,136 @@ certain operations that behave according to some rules, every concrete object
 that defines these operations and follows the same rules as the concept can be
 handled in exactly the same way. In the context of Krylov methods, matrices are
 used only as part of the matrix-vector product operation $y = Ax$. In rare
-cases, the (conjugate) transpose (\textdef{adjoint matrix}) $A^*$ is also needed
-as part of the (conjugate) transpose matrix-vector multiply operation $y =
+cases, the conjugate transpose matrix (\textdef{adjoint matrix}) $A^*$ is also
+needed as part of the conjugate transpose matrix-vector product operation $y =
 A^*x$. For a fixed matrix $A$, the key properties of the matrix-vector product
 are additivity ($A(x+y) = Ax + Ay$) and homogeneity ($A(\alpha x) = \alpha Ax$).
-Thus, matrix-vector multiplication with a fixed matrix $A$ is a linear operator
-$L_A : \mathbb{F}^n \rightarrow \mathbb{F}^m$ which acts on a vector as
-multiplication with $A$ ($L_Ax := Ax$). For every matrix $A$ the operator $L_A$
-is unique, and, conversely, for any linear operator $L$ there exists a matrix
-$A$ such that $L = L_A$~\cite{la}. Assuming that the dot product $x^*y$ is used
-as the inner product of the unitary spaces induced by vector spaces $F^n$ and
-$F^m$, the adjoint operator of $L_A$ is exactly the operator assigned to $A^*$,
-\ie $L_A^* = L_{A^*}^{}$~\cite{la}. Thus, since the mapping $A \mapsto L_A$ is a
-one-to-one correspondence between matrices and linear operators that preserves
-all interesting operations and properties, a software library can reduce the
-complexity of dealing with matrices and their various storage formats by using
-the linear operator abstraction wherever a matrix is needed.
+Focusing only on these properties allows us to define an abstraction that can
+hide the details about the coefficients and the storage scheme of the matrix.
+
+\begin{theorem}
+\label{conclusion:thm:matrix-linop}
+For any matrix $A \in \mathbb{F}^{m \times n}$, let $L_A : \mathbb{F}^n
+\rightarrow \mathbb{F}^m$ be the operator defined by $L_Ax := Ax$, $x \in
+\mathbb{F}^n$. The following holds:
+\begin{enumerate}
+\item $L_A$ is a linear operator, \ie $L_A(\alpha x + \beta y) = \alpha L_A x +
+\beta L_A y$, for any $\alpha,\beta \in \mathbb{F}$ and $x, y \in \mathbb{F}^n$.
+\item $L_A$ is unique, \ie, if $L_A \neq L_B$ then $A \neq B$, for any $A, B
+\in \mathbb{F}^{m \times n}$.
+\item The mapping $A \mapsto L_A$ is injective, \ie, if $L_A = L_B$ then $A
+= B$, for any $A, B \in \mathbb{F}^{m \times n}$.
+\item The mapping $A \mapsto L_A$ is surjective onto the set of linear operators
+\begin{align}
+\mathcal{L}(\mathbb{F}^n,\mathbb{F}^m) := \lbrace L : \mathbb{F}^n \rightarrow
+\mathbb{F}^m \ \vert \ L(\alpha x + \beta y) = \alpha Lx + \beta Ly, \ \forall
+\alpha, \beta \in \mathbb{F}, \forall x, y \in \mathbb{F}^n \rbrace,
+\end{align}
+\ie, for every $L \in \mathcal{L}(\mathbb{F}^n,\mathbb{F}^m)$ there is a
+matrix $A \in \mathbb{F}^{m \times n}$ such that $L = L_A$.
+\end{enumerate}
+Thus, $A \mapsto L_A$ defines a one-to-one correspondence between the set of
+matrices $\mathbb{F}^{m \times n}$ and linear operators
+$\mathcal{L}(\mathbb{F}^n, \mathbb{F}^m)$.
+\end{theorem}
+\begin{proof}~\\
+\begin{enumerate}
+\item This is a trivial consequence of the definition of $L_A$: $L_A(\alpha x +
+\beta y) = A(\alpha x + \beta y) = \alpha Ax + \beta Ay = \alpha L_Ax + \beta
+L_Ay$.
+\item If $L_A \neq L_B$, then there exists a vector $x$ such that $Ax = L_Ax
+\neq L_B x = Bx$, which implies that $(A - B)x \neq 0$. This is only possible if
+$A - B \neq 0$, \ie $A \neq B$.
+\item For $i = 1,2, \ldots, n$, let $a_i$ and $b_i$ denote the $i$-th column of
+matrices $A$ and $B$, respectively, and let $e_i \in \mathbb{F}^n$ be the $i$-th
+vector of the standard basis for $\mathbb{F}^n$, \ie, the $i$-th component of
+$e_i$ is $1$, while its every other component is $0$. Then, $a_i = Ae_i = L_Ae_i
+= L_B e_i = Be_i = b_i$, for every column $i$, which implies $A = B$.
+\item For any linear operator $L \in \mathcal{L}(\mathbb{F}^n, \mathbb{F}^m)$ we
+construct the matrix $A \in \mathbb{F}^{m \times n}$ by defining its $i$-th
+column as $a_i := Le_i$. Then, for any vector $x = [ x_1, x_2, \ldots, x_n ]^T 
+\in \mathbb{F}^n$, the following holds:
+\begin{align}
+L_Ax &= Ax = A(\sum_{i=1}^n x_i e_i) j = \sum_{i=1}^n x_i Ae_i \nonumber \\
+     &= \sum_{i=1}^n x_i a_i = \sum_{i=1}^n x_i Le_i
+      = L(\sum_{i=1}^n x_i e_i) \label{conclusion:eqn:surjection} \\
+     &= Lx, \nonumber
+\end{align}
+generating the equality $L_A = L$.
+\end{enumerate}
+\end{proof}
+
+\begin{definition}
+For any matrix $A \in \mathbb{F}^{m \times n}$, the unique linear operator $L_A
+\in \mathcal{L}(\mathbb{F}^n, \mathbb{F}^m)$ defined by $L_Ax := Ax$ for $x \in
+\mathbb{F}^n$ is called the \textdef{matrix product operator} with respect
+to $A$.
+\end{definition}
+
+Theorem~\ref{conclusion:thm:matrix-linop} shows that every matrix can be
+uniquely represented by its matrix product operator, and that a specific matrix
+can be reconstructed given its linear operator representation. However, to
+effectively replace matrices with linear operators, the structure of algebraic
+operations defined on matrices has to be mimicked by linear operators.
+
+\begin{definition}
+Let $L \in \mathcal{L}(\mathbb{F}^n, \mathbb{F}^m)$ be any linear operator and
+let $(\cdot, \cdot)_m : \mathbb{F}^m \times \mathbb{F}^m \rightarrow
+\mathbb{F}$ and $(\cdot, \cdot)_n : \mathbb{F}^n \times \mathbb{F}^n
+\rightarrow \mathbb{F}$ be two inner products on vector spaces $\mathbb{F}^m$
+and $\mathbb{F}^n$, respectively. Any linear operator $K \in
+\mathcal{L}(\mathbb{F}^m, \mathbb{F}^n)$ that satisfies
+\begin{align}
+    (Lx, y)_m = (x, Ky)_n \label{conclusion:eqn:adjoint}
+\end{align}
+for every $x \in \mathbb{F}^n$ and $y \in \mathbb{F}^m$ is called the
+\textdef{adjoint operator} of $L$ with respect to inner products $(\cdot,
+\cdot)_m$ and $(\cdot, \cdot)_n$, and is denoted by $L^*$.
+\end{definition}
+
+\begin{theorem}
+\label{conclusion:thm:adjoint}
+For any matrix $A \in \mathbb{F}^{m \times n}$, the adjoint operator $L_A^*$ of
+the matrix product operator $L_A$ with respect to inner products $(x, y)_m :=
+x^*y, \ \forall x,y \in \mathbb{F}^m$ and $(w, z)_n := w^*z, \ \forall w, z \in
+\mathbb{F}^n$ is unique, and $L_A^* = L_{A^*}^{}$.
+\end{theorem}
+
+\begin{proof}
+Let $K$ be any adjoint operator for $L_A$. Then, applying
+Equation~(\ref{conclusion:eqn:adjoint}) on $e_i \in \mathbb{F}^n$ and $e_j \in
+\mathbb{F}^m$ yields:
+\begin{align}
+    (Ke_j)_i &= e_i^*Ke_j^{} = (e_i, Ke_j)_n = (L_Ae_i, e_j)_m \nonumber \\
+             &= (Ae_i,  e_j)_m = (a_i, e_j)_m =a_i^*e_j^{} = \overline{a_{ji}}
+             \\
+             &= (A^*)_{ij} \nonumber
+\end{align}
+The equality $K = L_{A^*}$ is obtained by applying
+Equation~(\ref{conclusion:eqn:surjection}) to $L_{A^*}$ and $K$.
+\end{proof}
+
+\begin{corollary}
+The mapping $A \mapsto L_A$ is a one-to-one correspondence between the set of
+matrices $F^{m \times n}$ and linear operators $\mathcal{L}(\mathbb{F}^n,
+\mathbb{F}^m)$ that preserves the algebraic structure of the matrix-vector
+multiplication and conjugate transpose operations, that is:
+\begin{enumerate}
+\item Matrix-vector multiplication is equivalent to the application of the
+matrix product operator: $Ax = L_Ax$, for $x \in \mathbb{F}^n$.
+\item Conjugate transpose matrix-vector multiplication is equivalent to the
+application of the matrix product operator's adjoint: $A^*x = L_A^*x$, for $x
+\in \mathbb{F}^n$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Relation 1 is true by the definition of operator $L_A$. Relation 2 is a direct
+consequence of Relation 1 and Theorem~\ref{conclusion:thm:adjoint}.
+\end{proof}
 
 \subsection{Linear Systems}
+\label{conclusion:ssec:systems}
 
 Interestingly, solving a linear system is another example of an operation
 that satisfies both the additivity and homogeneity properties. For a fixed
@@ -74,13 +187,19 @@ equivalently $S_A = \widetilde{S_A} = L_{A^{-1}}$. In the remainder of this
 text we refer to the unique linear operator $S_A$ as the \textdef{solver
 operator} for $A$. Since $S_A^* = L_{A^{-1}}^* = L_{(A^{-1})^*} = L_{(A^*)^{-1}}
 = S_{A^*}$, the solver operator also behaves well with respect to the other
-operation that is interesting for Krylov method libraries. This analysis shows
-that the solution of a linear system with matrix $A$ can also be abstracted as
-the application of the solver operator $S_A$. Finally, since matrices are
-already abstracted as operators $L_A$, it is useful to define a higher-order
-operator $\Sigma$, which maps a linear operator $L_A$ to the solver operator for
-$A$, \ie, $\Sigma : L_A \mapsto S_A$. Using this operator, the solution of a
-linear system can be expressed as $x = \Sigma(L_A)b$.
+operation that is interesting for Krylov method libraries. Furthermore, for any
+two nonsingular matrices $A$ and $B$, if $A \neq B$, then $S_A = L_{A^{-1}} \neq
+L_{B^{-1}} = S_B$. Finally, any nonsingluar operator $S$ is the solver operator
+for linear systems with the matrix $A^{-1}$, where $A$ is the matrix in the
+equality $S = L_A$ from Section~\ref{conclusion:ssec:matrices}.
+Thus, since there is a one-to-one correspondence between linear systems with a
+fixed matrix $A$ and nonsingular linear operators, the solution of a linear
+system with matrix $A$ can also be abstracted as the application of the solver
+operator $S_A$. Finally, since matrices are already abstracted as operators
+$L_A$, it is useful to define a higher-order operator $\Sigma$, which maps a
+linear operator $L_A$ to the solver operator for $A$, \ie, $\Sigma : L_A \mapsto
+S_A$. Using this operator, the solution of a linear system can be expressed as
+$x = \Sigma(L_A)b$.
 
 \subsection{Preconditioners}
 TODO: Derivation of the preconditioner linear operator $P^\Pi_A$.
