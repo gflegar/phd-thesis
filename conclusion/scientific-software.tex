@@ -49,7 +49,7 @@ hide the details about the coefficients and the storage scheme of the matrix.
 \begin{theorem}
 \label{conclusion:thm:matrix-linop}
 For any matrix $A \in \mathbb{F}^{m \times n}$, let $L_A : \mathbb{F}^n
-\rightarrow \mathbb{F}^m$ be the operator defined by $L_Ax := Ax$, $x \in
+\rightarrow \mathbb{F}^m$ be an operator that satisfies $L_Ax = Ax$, $x \in
 \mathbb{F}^n$. The following holds:
 \begin{enumerate}
 \item $L_A$ is a linear operator, \ie $L_A(\alpha x + \beta y) = \alpha L_A x +
@@ -112,16 +112,16 @@ effectively replace matrices with linear operators, the structure of algebraic
 operations defined on matrices has to be mimicked by linear operators.
 
 \begin{definition}
-Let $L \in \mathcal{L}(\mathbb{F}^n, \mathbb{F}^m)$ be any linear operator and
+Let $L \in \mathcal{L}(\mathbb{F}^n, \mathbb{F}^m)$ be a linear operator and
 let $(\cdot, \cdot)_m : \mathbb{F}^m \times \mathbb{F}^m \rightarrow
 \mathbb{F}$ and $(\cdot, \cdot)_n : \mathbb{F}^n \times \mathbb{F}^n
-\rightarrow \mathbb{F}$ be two inner products on vector spaces $\mathbb{F}^m$
-and $\mathbb{F}^n$, respectively. Any linear operator $K \in
+\rightarrow \mathbb{F}$ be any two inner products~\cite{la} on vector spaces
+$\mathbb{F}^m$ and $\mathbb{F}^n$, respectively. A linear operator $K \in
 \mathcal{L}(\mathbb{F}^m, \mathbb{F}^n)$ that satisfies
 \begin{align}
     (Lx, y)_m = (x, Ky)_n \label{conclusion:eqn:adjoint}
 \end{align}
-for every $x \in \mathbb{F}^n$ and $y \in \mathbb{F}^m$ is called the
+for every $x \in \mathbb{F}^n$ and $y \in \mathbb{F}^m$ is called an
 \textdef{adjoint operator} of $L$ with respect to inner products $(\cdot,
 \cdot)_m$ and $(\cdot, \cdot)_n$, and is denoted by $L^*$.
 \end{definition}
@@ -149,7 +149,7 @@ Equation~(\ref{conclusion:eqn:surjection}) to $L_{A^*}$ and $K$.
 \end{proof}
 
 \begin{corollary}
-The mapping $A \mapsto L_A$ is a one-to-one correspondence between the set of
+The mapping $A \mapsto L_A$ is an isomorphism between the set of
 matrices $F^{m \times n}$ and linear operators $\mathcal{L}(\mathbb{F}^n,
 \mathbb{F}^m)$ that preserves the algebraic structure of the matrix-vector
 multiplication and conjugate transpose operations, that is:
@@ -170,36 +170,129 @@ consequence of Relation 1 and Theorem~\ref{conclusion:thm:adjoint}.
 \subsection{Linear Systems}
 \label{conclusion:ssec:systems}
 
-Interestingly, solving a linear system is another example of an operation
-that satisfies both the additivity and homogeneity properties. For a fixed
-nonsingular matrix $A$ and two right hand sides $b$ and $c$, if $x$
-and $y$ are solutions of the systems $Ax = b$ and $Ay = c$, then $z := x + y$ is
-the solution of the system $Az = b + c$ and $w := \alpha x$ is the solution of
-the system $Aw = \alpha b$. Thus, the operator $S_A : \mathbb{F}^n \rightarrow
-\mathbb{F}^n$ that for a fixed system matrix $A$ and any input vector $b$
-produces the solution $x$ of the linear system $Ax = b$ is a linear operator.
-The operator $S_A$ is unique. Consider two operators $S_A$ and $\widetilde{S_A}$
-that map any vector $b$ to the solution $x$ of the system $Ax = b$.
-Such operators satisfy the equalities $A(S_Ab) = A(\widetilde{S_A}b) = b$. Since
-$A$ is invertible, multiplying the equalities with $A^{-1}$ yields $S_Ab =
-\widetilde{S_A}b = A^{-1}b = L_{A^{-1}}b, \ \forall b \in \mathbb{F}^n$, or
-equivalently $S_A = \widetilde{S_A} = L_{A^{-1}}$. In the remainder of this
-text we refer to the unique linear operator $S_A$ as the \textdef{solver
-operator} for $A$. Since $S_A^* = L_{A^{-1}}^* = L_{(A^{-1})^*} = L_{(A^*)^{-1}}
-= S_{A^*}$, the solver operator also behaves well with respect to the other
-operation that is interesting for Krylov method libraries. Furthermore, for any
-two nonsingular matrices $A$ and $B$, if $A \neq B$, then $S_A = L_{A^{-1}} \neq
-L_{B^{-1}} = S_B$. Finally, any nonsingluar operator $S$ is the solver operator
-for linear systems with the matrix $A^{-1}$, where $A$ is the matrix in the
-equality $S = L_A$ from Section~\ref{conclusion:ssec:matrices}.
-Thus, since there is a one-to-one correspondence between linear systems with a
-fixed matrix $A$ and nonsingular linear operators, the solution of a linear
-system with matrix $A$ can also be abstracted as the application of the solver
-operator $S_A$. Finally, since matrices are already abstracted as operators
-$L_A$, it is useful to define a higher-order operator $\Sigma$, which maps a
-linear operator $L_A$ to the solver operator for $A$, \ie, $\Sigma : L_A \mapsto
-S_A$. Using this operator, the solution of a linear system can be expressed as
-$x = \Sigma(L_A)b$.
+Another operation that a Krylov solver-focused library has to implement is,
+obviously, the solution of a linear system. Interestingly, this operation
+satisfies the same additivity and homogeneity properties as the matrix-vector
+multiplication.
+
+\begin{definition}
+\label{conclusion:def:solver-linop}
+For any nonsingular matrix $A \in GL_n(\mathbb{F}) := \lbrace M \in \mathbb{F}^n
+\ \vert \ \det(M) \neq 0 \rbrace$, let $S_A : \mathbb{F}^n \rightarrow
+\mathbb{F}^n$ be an operator that satisfies $A(S_Ab) = b$, for $b \in
+\mathbb{F}^n$. That is, the operator $S_A$ maps any vector $b$ into the solution
+of the linear system with the system matrix $A$ and the right hand side $b$.
+Such operator is called a \textdef{solver operator} with respect to $A$.
+\end{definition}
+
+\begin{theorem}
+\label{conclusion:thm:solver-linop}
+For any $A \in GL_n(\mathbb{F})$:
+\begin{enumerate}
+\item $S_A$ is a linear operator, \ie $S_A(\alpha x + \beta y) = \alpha S_A x +
+\beta S_A y$, for any $\alpha,\beta \in \mathbb{F}$ and $x, y \in \mathbb{F}^n$.
+\item $S_A$ is invertible and $S_A^{-1} = L_A^{}$.
+\item $S_A$ is unique, \ie, if $S_A \neq S_B$ then $A \neq B$, for any $A, B
+\in GL_n(\mathbb{F})$.
+\item The mapping $A \mapsto S_A$ is injective, \ie, if $S_A = S_B$ then $A
+= B$, for any $A, B \in GL_n(\mathbb{F})$.
+\item The mapping $A \mapsto S_A$ is surjective onto the set
+\begin{align}
+\aut(\mathbb{F}^n) := \lbrace L \in \mathcal{L}(\mathbb{F}^n, \mathbb{F}^n) \
+\vert \ L \text{ is invertible} \rbrace
+\end{align}
+\ie, for every $L \in \aut(\mathbb{F}^n)$ there is a matrix $A \in
+GL_n(\mathbb{F})$ such that $L = S_A$.
+\item The mapping $\Sigma : \aut(\mathbb{F}^n) \rightarrow \aut(\mathbb{F}^n)$,
+$\Sigma(L_A) := S_A$ is a one-to-one correspondence on the set of invertible
+linear operators.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}~\\
+\begin{enumerate}
+\item Due to the equality $A(\alpha S_A x + \beta S_A y) = \alpha A S_A x +
+\beta A S_A y = \alpha x + \beta y$, $\alpha S_A x + \beta S_A y$ is the
+unique solution of the system $Aw = \alpha x + \beta y$. Using
+Definition~\ref{conclusion:def:solver-linop} it follows that $S_A(\alpha x +
+\beta y) = \alpha S_A x + \beta S_A y$.
+\item Since $L_A S_A x = A S_A x = x$ for $x \in \mathbb{F}^n$, $L_A$ is the
+inverse for $S_A$.
+\item If $S_A \neq S_B$ then there exists $x \in \mathbb{F}^n$ such that $S_A x
+\neq S_B x$. Since $A$ is nonsingular, multiplying the inequality with $A$
+results in $A S_B x \neq x$. This means that $A \neq B$, as otherwise $x = A S_A
+x = A S_B \neq x$.
+\item $S_A = S_B$ implies that for each column $a_j$ of $A$, $A S_B a_j = A S_A
+a_j = a_j$. Since $e_j$ is the unique solution to $Ax = a_j$ this means that
+$S_B a_j = e_j$. Multiplying the final equality by $B$ yields $b_j = B e_j = B
+S_B a_j = a_j$, resulting in $A = B$.
+\item Every $L \in \aut(\mathbb{F}^n)$ has an inverse linear operator $L^{-1}$.
+For $L$ and $L^{-1}$ denote by $B$ and $A$ the matrices for which $L = L_B$ and
+$L^{-1} = L_A$. Since $ABx = L_A L_B x = L^{-1}Lx = x$ for every
+$x \in \mathbb{F}^n$, it follows that $AB = I$ and $\det(A)\det(B) = \det(AB) =
+\det(I) = 1$. Thus, $\det(A) \neq 0$ and $A \in GL_n(\mathbb{F})$. Since $A(Lx)
+= L_A(Lx) = L^{-1}(Lx) = x$ for $x \in \mathbb{F}^n$, $L$ is the solver operator
+for $A$, \ie $L = S_A$.
+\item The matrix $B$ from the previous point is also nonsingular since
+$\det(A)\det(B) = 1$ implies $\det(B) \neq 0$. This means that the restriction
+of the injective mapping $A \mapsto L_A$ to the set $GL_n(\mathbb{F})$ is also
+surjective onto the set $\aut(\mathbb{F}^n)$. Thus, it establishes a one-to-one
+correspondence between the sets $GL_n(\mathbb{F})$ and $\aut(\mathbb{F}^n)$.
+The mapping $\Sigma$ is a composition of two bijective mappings $L_A
+\mapsto A$ and $A \mapsto S_A$, so it is itself a one-to-one correspondence.
+\end{enumerate}
+\end{proof}
+
+Theorem~\ref{conclusion:thm:solver-linop} shows that there is a correspondence
+between a set of linear systems with a fixed nonsingular matrix (which can be
+represented as a class of linear systems generated by that matrix) and
+invertible operators.  In addition, since
+Theorem~\ref{conclusion:thm:matrix-linop} established a link between matrices
+and linear operators, the matrix can be replaced by its corresponding linear
+operator, resulting in a well-defined permutation $\Sigma$ on linear operators,
+which maps a linear operator $L$ to a linear operator that represents the
+solution of a system generated by $L$.
+
+\begin{definition}
+\label{conclusion:def:solver-factory}
+The higher-order permutation $\Sigma : \aut(\mathbb{F}^n) \rightarrow
+\aut(\mathbb{F}^n)$ defined with $\Sigma(L_A) := S_A$, for $L_A \in
+\aut(\mathbb{F}^n)$ is called the \textdef{solver factory} on
+$\aut(\mathbb{F}^n)$.
+\end{definition}
+
+The final piece of the puzzle required to replace the concept of linear systems
+with linear operators when designing the library is showing that the algebraic
+structure of operations on linear systems is preserved when transforming them
+into linear operators.
+
+\begin{corollary}
+\label{conclusion:cor:solver-linop}
+Let $\Psi : (Ax = \cdot) \mapsto L_A$ be the mapping between linear systems wit
+a fixed matrix $A$ and matrix product operators with respect to $A$ (this is a
+bijection due to Theorem~\ref{conclusion:thm:matrix-linop}).
+Then, the mapping $\Sigma \circ \Psi$ is an isomorphism between the set of
+linear systems with a fixed matrix $A \in GL_n(\mathbb{F})$ and invertible
+linear operators $\aut(\mathbb{F}^n)$ that preserves the algebraic structure of
+the conjugate transpose operation and the operation of solving a linear system,
+that is:
+\begin{enumerate}
+\item Solving a linear system with a fixed matrix $A$ is equivalent to the
+application of the solver operator $S_A$: $Ax = b$ if and only if $x = S_Ab$,
+for $x, b \in \mathbb{F}^n$.
+\item Solving a linear system with the conjugate transpose of a matrix $A$ is
+equivalent to the application of the solver operator's adjoint $S_A^*$:
+$A^*x = b$ if and only if $x = S_A^*b$, for $x, b \in \mathbb{F}^n$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Claim 1 is true by construction of $S_A$. From
+Theorem~\ref{conclusion:thm:solver-linop}, $S_A = (S_A^{-1})^{-1} = (L_A)^{-1} =
+L_{A^{-1}}$, which implies $S_A^* = L_{A^{-1}}^* = L_{(A^{-1})^*} =
+L_{(A^*)^{-1}} = L_{A^*}^{-1} = (S_{A^*}^{-1})^{-1} = S_{A^*}$. Claim 2 is then
+obtained by substituting $A$ with $A^*$ in Claim 1 and using $S_{A^*} = S_A^*$.
+\end{proof}
 
 \subsection{Preconditioners}
 TODO: Derivation of the preconditioner linear operator $P^\Pi_A$.
