@@ -149,6 +149,7 @@ Equation~(\ref{conclusion:eqn:surjection}) to $L_{A^*}$ and $K$.
 \end{proof}
 
 \begin{corollary}
+\label{conclusion:cor:matrix-linop}
 The mapping $A \mapsto L_A$ is an isomorphism between the set of
 matrices $F^{m \times n}$ and linear operators $\mathcal{L}(\mathbb{F}^n,
 \mathbb{F}^m)$ that preserves the algebraic structure of the matrix-vector
@@ -295,7 +296,37 @@ obtained by substituting $A$ with $A^*$ in Claim 1 and using $S_{A^*} = S_A^*$.
 \end{proof}
 
 \subsection{Preconditioners}
-TODO: Derivation of the preconditioner linear operator $P^\Pi_A$.
+
+Preconditioning (replacing the original linear system $Ax = b$ with a
+preconditioned system $M^{-1}Ax = M^{-1}b$, where $M$ is some approximation of
+$A$) is the final component of the iterative solution of linear systems. While
+the preconditioner $M$ is usually represented by a matrix, the only operations
+where the preconditioner appears are its application to a vector $y = M^{-1}x$,
+and sometimes the application of its conjugate transpose to a vector $Y =
+(M^{-1})^*x$. The preconditioner matrix $M$ is associated to the original system
+matrix $A$ via the method $\Pi$ that was used to generate the preconditioner
+from $A$. A preconditoner has to be a nonsingular matrix in order to preserve
+the uniqueness of the linear system's solution. These considerations motivate
+the following definition:
+
+\begin{definition}
+\label{conclusion:def:precond-linop}
+Any mapping $\Pi : \aut(\mathbb{F}^n) \rightarrow \aut(\mathbb{F}^n)$ is called
+a \textdef{preconditioner factory}. For any operator $L_A \in
+\aut(\mathbb{F}^n)$ (or equivalently, matrix $A \in GL_n(\mathbb{F})$) the
+linear operator $P_A^\Pi := \Pi(L_A)$ is called the \textdef{preconditioner
+operator} with respect to the operator $L_A$ (or equivalently, $A$) and the
+preconditioner factory $\Pi$.  The unique matrix $M \in GL_n(\mathbb{F})$ such
+that $P_A^\Pi = L_{M^{-1}}$ is called the \textdef{preconditioner matrix} with
+respect to $A$ and $\Pi$.
+\end{definition}
+
+An isomorphism $M \mapsto P_A^\Pi$ between precondtioner matrices and
+precondtioner operators that preserves the algebraic structure of preconditoner
+application and conjugate transpose preconditioner application is established
+via Corollary~\ref{conclusion:cor:matrix-linop}. Thus, precondtioners easily
+join the family of linear algebra operations that can be represented as linear
+operators.
 
 \subsection{Linear Operators --- Towards a Generic Interface for Sparse
             Computations}
