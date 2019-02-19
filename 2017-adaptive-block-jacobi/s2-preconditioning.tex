@@ -20,7 +20,7 @@ and the preconditioner application (at each iteration). The
 remaining operations are scalar computations or simple vector kernels like
 the dot product (\dotp) and \axpy-type vector updates~\cite{barrettemplates}.
 
-\begin{figure}[thb]
+\begin{figure}[t]
 {\small
 \begin{center}
 \begin{tabular}{|l|}
@@ -47,7 +47,9 @@ the dot product (\dotp) and \axpy-type vector updates~\cite{barrettemplates}.
 \end{tabular}
 \end{center}
 }
-\caption{Mathematical formulation of the PCG method. Here, $\tau_{\max}$ is
+\caption
+[Mathematical formulation of the PCG method]
+{Mathematical formulation of the PCG method. Here, $\tau_{\max}$ is
 the relative residual stopping criterion.}
 \label{2017-adaptive-block-jacobi:fig:pcg}
 \end{figure}
@@ -127,14 +129,16 @@ iterative method can handle a flexible (non-constant)
 preconditioner~\cite{notay}, which is needed when applying a preconditioner in
 reduced precision.
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{minipage}{\columnwidth}
 {\small
 \lstinputlisting[language=matlab,caption=,keywords={while,end}]{code/pcg.m}
 }
 \end{minipage}
-\caption{Algorithmic formulation (in MATLAB) of the PCG method.
+\caption
+[Algorithmic formulation (in MATLAB) of the PCG method]
+{Algorithmic formulation (in MATLAB) of the PCG method.
 For a problem of size $n$ containing $n_z$ nonzero elements in the system matrix
 stored in CSR format, ignoring the preconditioner application, each PCG
 iteration requires $(14n+n_z)\cdot\fpd+(n_z+n)\cdot\inti$ memory transactions.}
@@ -142,14 +146,16 @@ iteration requires $(14n+n_z)\cdot\fpd+(n_z+n)\cdot\inti$ memory transactions.}
 \end{center}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{minipage}{\columnwidth}
 {\small
 \lstinputlisting[language=matlab,caption=,keywords={while,end}]{code/fcg.m}
 }
 \end{minipage}
-\caption{Algorithmic formulation (in MATLAB) of the FCG method.
+\caption
+[Algorithmic formulation (in MATLAB) of the FCG method]
+{Algorithmic formulation (in MATLAB) of the FCG method.
 For a problem of size $n$ containing $n_z$ nonzero elements in the system matrix
 stored in CSR format, ignoring the preconditioner application, each FCG
 iteration requires $(21n+n_z)\cdot\fpd+(n_z+n)\cdot\inti$ memory transactions.}

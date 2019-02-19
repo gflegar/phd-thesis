@@ -52,7 +52,7 @@ shared memory and number of threads, is allocated to each problem in the batch.
 We recognize this can result in workload imbalance in-between the distinct problems.
 However, optimizing the resource allocation to the characteristics of the distinct matrices in the batch remains outside the scope of this work.
 
-\begin{figure*}
+\begin{figure}[t]
 \begin{minipage}{\textwidth}
 \lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
 parallel,private}]{codes/coo.c}
@@ -69,9 +69,11 @@ parallel,private}]{codes/csr_i.c}
 \lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
 parallel,private}]{codes/ell.c}
 \end{minipage}
-\caption{Sequential C implementations of basic \spmv algorithms.}
+\caption
+[Sequential C implementations of basic \spmv algorithms]
+{Sequential C implementations of basic \spmv algorithms.}
 \label{2017-batched-spmv:fig:spmv}
-\end{figure*}
+\end{figure}
 
 \subsection{COO}
 The first listing 
@@ -193,3 +195,48 @@ vector locations in global memory.
 Conversely to the standard ELL kernel, the values of the input vector are read from shared memory,
 and the thread block size is adjusted to the matrix size such that each thread block handles
 one problem of the matrix batch.
+
+\begin{figure}[t]
+\begin{center}
+\begin{tabular}{ccc}
+\hline
+{\sc cage8} & {\sc can\_838} & {\sc dwt\_992}\\
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/cage8_GFLOPs}
+&
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/can_838_GFLOPs}
+&
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/dwt_992_GFLOPs}
+\\
+\hline
+{\sc ex25} & {\sc ex27} & {\sc gr\_30\_30}\\
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/ex2_GFLOPs}
+&
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/ex27_GFLOPs}
+&
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/gr_30_30_GFLOPs}
+\\
+\hline
+{\sc mcfe} & {\sc msc} & {\sc nos3}\\
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/mcfe_GFLOPs}
+&
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/msc00726_GFLOPs}
+&
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/nos3_GFLOPs}
+\\
+\hline
+{\sc Si2} & {\sc rotor2} & {\sc west0989}\\
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/Si2_GFLOPs}
+&
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/rotor2_GFLOPs}
+&
+\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/west0989_GFLOPs}
+
+\end{tabular}
+\end{center}
+\caption
+[Performance of \spmv routines for homogeneous batches]
+{Performance of the standard and the flexible batched \spmv routines 
+for homogeneous batches.}
+\label{2017-batched-spmv:fig:selectperf}
+\end{figure}
+

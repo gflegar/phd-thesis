@@ -13,21 +13,21 @@ The trade-off for this comes in the form of an increased number
 of integer operations and the introduction of potential race conditions,
 which may result in slightly lower performance on regular sparsity patterns.
 
+\subsection{General idea}
+
 \begin{figure}[t]
 \begin{minipage}{\columnwidth}
 \lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
 parallel,private}]{codes/spmv_i.c}
 \end{minipage}
-\vspace*{-2ex}
-    \caption{A (sequential) C implementation of the \bcsr algorithm.
+\caption[A (sequential) C implementation of the \bcsr algorithm]
+    {A (sequential) C implementation of the \bcsr algorithm.
         In a parallel implementation each thread needs to
         efficiently determine its starting value of the \texttt{row} variable.
         This is discussed in Section~\ref{2017-csr-spmv:sec:kernel}, ``Determining the first
         row of each segment''.}
 \label{2017-csr-spmv:fig:spmvi}
 \end{figure}
-
-\subsection{General idea}
 
 In order to distribute the arrays \val and \colidx, both of size $n_z$,
 evenly among $T$ threads,

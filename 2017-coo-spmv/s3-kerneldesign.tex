@@ -1,6 +1,16 @@
 \section{Design of the \coo \spmv GPU kernel}
 \label{2017-coo-spmv:s3-kernel}
 
+\begin{figure}[t]
+\begin{minipage}{\columnwidth}
+\lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
+parallel,private}]{codes/coo.c}
+\end{minipage}
+\caption
+[\coo \spmv kernel design]
+{\coo \spmv kernel design.}
+\label{2017-coo-spmv:fig:spmv}
+\end{figure}
 
 The specific \spmv operation we target in this paper is $y := A\cdot x + y$, 
 for $A\in\mathbb{R}^{m\times n}$, $x\in\mathbb{R}^n$, $y\in\mathbb{R}^m$.

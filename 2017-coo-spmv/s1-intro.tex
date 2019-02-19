@@ -32,15 +32,6 @@ inevitably result in heavy load imbalance.
 Furthermore, unstructured sparsity patterns often promote 
 random memory access to the vector values.
 
-\begin{figure}
-\begin{minipage}{\columnwidth}
-\lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
-parallel,private}]{codes/coo.c}
-\end{minipage}
-\caption{\coo \spmv kernel design.}
-\label{2017-coo-spmv:fig:spmv}
-\end{figure}
-
 In this paper we present
 a GPU implementation 
 of the sparse matrix-vector product (Section~\ref{2017-coo-spmv:s3-kernel})

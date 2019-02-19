@@ -1,6 +1,21 @@
 \section{CSR-Based Formats and Algorithms for \spmv}
 \label{2017-csr-spmv:sec:spmv}
 
+\begin{figure}[t]
+\begin{tabular}{c}
+\begin{minipage}{\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{plots/csr_format}
+\end{center}
+\end{minipage}
+\end{tabular}
+\caption
+[Data layouts for sparse matrices]
+{Data layouts
+for an $8 \times 8$ sparse matrix with $n_z$=9 nonzero entries.}
+\label{2017-csr-spmv:fig:spmv}
+\end{figure}
+
 
 CSR represents a sparse matrix $A \in \R^{m \times n}$ in compact form
 using three arrays:
@@ -12,19 +27,6 @@ see Figure~\ref{2017-csr-spmv:fig:spmv}.
 Storing the sparse matrix $A$ in CSR format thus requires ${\cal S}_{CSR} = n_z(s_v+s_i)+(m+1)s_i$ bytes, where
 $s_v$ and $s_i$ respectively denote the number of bytes occupied 
 by each value and integer index.
-
-\begin{figure}[t]
-\begin{tabular}{c}
-\begin{minipage}{\textwidth}
-\begin{center}
-\includegraphics[width=\textwidth]{plots/csr_format}
-\end{center}
-\end{minipage}
-\end{tabular}
-\caption{Data layouts
-for an $8 \times 8$ sparse matrix with $n_z$=9 nonzero entries.}
-\label{2017-csr-spmv:fig:spmv}
-\end{figure}
 
 In~\cite{Bell:SpMV:NVIDIA:2008}, Bell and Garland (BG) explored the performance
 of different sparse formats and implementations of \spmv for throughput-oriented GPUs from NVIDIA.
@@ -58,6 +60,21 @@ results in an almost perfectly balanced distribution
 of the workload for both BG CSR kernels,
 but yields a significant waste of resources for CSR-v.
 
+\begin{figure}[t]
+\begin{center}
+\begin{tabular}{cc}
+\includegraphics[width=0.48\textwidth]{plots/pattern.pdf} &
+\includegraphics[width=0.48\textwidth]{plots/motivation.pdf}
+\end{tabular}
+\end{center}
+\caption
+    [Sparsity pattern and memory consumption of \textsc{Freescale/transient}]
+    {Left: sparsity pattern for \textsc{Freescale/transient}.
+    Right: execution time (blue) and memory consumption (red) on a GTX1080
+    using different \spmv kernels.}
+\label{2017-csr-spmv:fig:motivation}
+\end{figure}
+
 Figure~\ref{2017-csr-spmv:fig:motivation} provides a motivating example for our work.
 The left-hand side plot there shows the sparsity pattern for matrix
 {\sc Freescale/transient} from the SuiteSparse Matrix Collection.%
@@ -90,18 +107,4 @@ from considerably higher memory consumption than other implementations.
 CSR-I is the best performing algorithm in this case,
 achieving slightly better performance than HYB,
 while maintaining the storage efficiency of CSR.
-
-\begin{figure}[t]
-\begin{center}
-\begin{tabular}{cc}
-\includegraphics[width=0.48\textwidth]{plots/pattern.pdf} &
-\includegraphics[width=0.48\textwidth]{plots/motivation.pdf}
-\end{tabular}
-\end{center}
-\vspace*{-2ex}
-    \caption{Left: sparsity pattern for {\sc Freescale/transient}.
-    Right: execution time (blue) and memory consumption (red) on a GTX1080
-    using different \spmv kernels.}
-\label{2017-csr-spmv:fig:motivation}
-\end{figure}
 

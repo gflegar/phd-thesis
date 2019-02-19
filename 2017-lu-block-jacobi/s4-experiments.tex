@@ -1,5 +1,49 @@
+\begin{figure}[t]
+\begin{center}
+\begin{tabular}{ll}
+Block size 16 & Block size 32\\
+\hline
+Single-precision\\
+\includegraphics[width=.45\columnwidth]{plots/sgebjp_setup__lu_gje_gh_16.pdf}
+&
+\includegraphics[width=.45\columnwidth]{plots/sgebjp_setup__lu_gje_gh_32.pdf}\\
+\hline
+Double-precision\\
+\includegraphics[width=.45\columnwidth]{plots/dgebjp_setup__lu_gje_gh_16.pdf}
+&
+\includegraphics[width=.45\columnwidth]{plots/dgebjp_setup__lu_gje_gh_32.pdf}
+\end{tabular}
+\end{center}
+\caption
+[Performance of batched factorization routines depending on the batch size]
+{%
+Performance of batched factorization routines depending on the batch size.}
+\label{2017-lu-block-jacobi:fig:performance}
+\end{figure}
+
+
 \section{Numerical Experiments}
 \label{2017-lu-block-jacobi:sec:experiments}
+
+\begin{figure}[t]
+\begin{center}
+\begin{tabular}{ll}
+\hline
+Single-precision & Double-precision\\
+\includegraphics[width=.45\columnwidth]{plots/incsize_single.pdf}
+&
+\includegraphics[width=.45\columnwidth]{plots/incsize_double.pdf}\\
+\end{tabular}
+\end{center}
+\caption
+[Performance of batched factorization routines depending on the size of the
+matrices]
+{%
+Performance of batched factorization routines depending on the size of the matrices.
+The batch size is fixed to 40,000 systems.
+}
+\label{2017-lu-block-jacobi:fig:performanceincsize}
+\end{figure}
 
 In this section we evaluate the performance of the batched LU factorization and triangular solve kernels tuned for small-size
 problems
@@ -51,45 +95,6 @@ MAGMA-sparse was also leveraged to provide a testing environment, the block-patt
 Since the complete algorithm is executed on the GPU, the details of the CPU are
 not relevant.
 
-\begin{figure*}
-\begin{center}
-\begin{tabular}{ll}
-Block size 16 & Block size 32\\
-\hline
-Single-precision\\
-\includegraphics[width=.45\columnwidth]{plots/sgebjp_setup__lu_gje_gh_16.pdf}
-&
-\includegraphics[width=.45\columnwidth]{plots/sgebjp_setup__lu_gje_gh_32.pdf}\\
-\hline
-Double-precision\\
-\includegraphics[width=.45\columnwidth]{plots/dgebjp_setup__lu_gje_gh_16.pdf}
-&
-\includegraphics[width=.45\columnwidth]{plots/dgebjp_setup__lu_gje_gh_32.pdf}
-\end{tabular}
-\end{center}
-\caption{%
-Performance of batched factorization routines depending on the batch size.}
-\label{2017-lu-block-jacobi:fig:performance}
-\end{figure*}
-
-
-\begin{figure*}
-\begin{center}
-\begin{tabular}{ll}
-\hline
-Single-precision & Double-precision\\
-\includegraphics[width=.45\columnwidth]{plots/incsize_single.pdf}
-&
-\includegraphics[width=.45\columnwidth]{plots/incsize_double.pdf}\\
-\end{tabular}
-\end{center}
-\caption{%
-Performance of batched factorization routines depending on the size of the matrices.
-The batch size is fixed to 40,000 systems.
-}
-\label{2017-lu-block-jacobi:fig:performanceincsize}
-\end{figure*}
-
 \subsection{Performance of batched factorization routines}
 
 Figure~\ref{2017-lu-block-jacobi:fig:performance} compares the performance of the four
@@ -136,7 +141,7 @@ Although we do not tune for specific sizes by handling multiple problems per war
 the small-size LU outperforms the cuBLAS LU for almost all sizes.
 
 
-\begin{figure*}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{ll}
 Block size 16 & Block size 32\\
@@ -152,14 +157,16 @@ Double-precision\\
 \includegraphics[width=.45\columnwidth]{plots/trsv_dgebjp_setup__lu_gje_gh_32.pdf}
 \end{tabular}
 \end{center}
-\caption{%
+\caption
+[Performance of batched triangular solve routines depending on the batch size]
+{%
 Performance of batched triangular solve routines depending on the batch size.
 }
 \label{2017-lu-block-jacobi:fig:performancetrsv}
-\end{figure*}
+\end{figure}
 
 
-\begin{figure*}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{ll}
 \hline
@@ -169,13 +176,15 @@ Single-precision & Double-precision\\
 \includegraphics[width=.45\columnwidth]{plots/trsv_incsize_double.pdf}\\
 \end{tabular}
 \end{center}
-\caption{%
+\caption
+[Performance of batched triangular solve routines depending on the size of the
+matrices]
+{%
 Performance of batched triangular solve routines depending on the size of the matrices.
 The batch size is fixed to 40,000 systems.
 }
 \label{2017-lu-block-jacobi:fig:performancetrsvincsize}
-\end{figure*}
-
+\end{figure}
 
 
 \subsection{Performance of batched triangular solves}
@@ -209,13 +218,15 @@ nonetheless, this option achieves only a fraction of the performance of our smal
 
 
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{c}
-\includegraphics[width=.45\columnwidth]{plots/iteration_distribution_LU_GH_new}\\
+\includegraphics[width=.6\columnwidth]{plots/iteration_distribution_LU_GH_new}\\
 \end{tabular}
 \end{center}
-\caption{
+\caption
+[IDR(4) convergence using block-Jacobi preconditioning based on LU or GH]
+{
 IDR(4) convergence using block-Jacobi preconditioning based on LU factorization or GH-factorization: 
 Iteration overhead in \% if LU provides the better preconditioner (left of center) or GH does (right of center).
 }
@@ -291,13 +302,16 @@ with respect to both iteration count and time-to-solution.
 
 
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{c}
-\includegraphics[width=.95\columnwidth]{plots/new_runtime_comparison_bs32}\\
+\includegraphics[width=.6\columnwidth]{plots/new_runtime_comparison_bs32}\\
 \end{tabular}
 \end{center}
-\caption{
+\caption
+[Execution time
+for IDR(4) enhanced with block-Jacobi preconditioning based on LU or GH]
+{
 Total execution time (setup+solve) 
 for IDR(4) enhanced with block-Jacobi preconditioning based on either LU or GH factorization.
 The size of the distinct diagonal blocks is are adapted to the system matrix via supervariable 

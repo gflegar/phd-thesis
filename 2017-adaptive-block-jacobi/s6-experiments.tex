@@ -1,7 +1,65 @@
 \section{Experimental Analysis}
 \label{2017-adaptive-block-jacobi:sec:experiments}
 
-\begin{table}
+
+\subsection{Experimental framework}
+
+In this section, we assess the potential benefits of the \apbj preconditioner
+with a collection of experiments performed in GNU Octave version 3.8.1.
+We implement the PCG method according
+to~\cite{doi:10.1137/S1064827597323415} (Figure~\ref{2017-adaptive-block-jacobi:fig:codepcg}) with an
+integrated block-Jacobi preconditioner that performs an explicit inversion of
+the diagonal blocks. We apply supervariable agglomeration to optimize the block
+diagonal structure of the block-Jacobi preconditioner for the specific
+problems used here~\cite{jenniferscott}. This procedure aims to identify and 
+capture the
+block structure of the matrix in the Jacobi blocks of the preconditioner, 
+thereby
+accumulating multiple blocks into a larger superstructure with the upper bound
+of the blocksize set to 24.
+
+For the evaluation, we consider a subset comprised of 63~SPD test problems 
+of small to moderate dimension from the SuiteSparse matrix 
+collection~\cite{ufmc}. 
+We list the matrices along with some key characteristics in 
+Table~\ref{2017-adaptive-block-jacobi:tab:matrices}.
+
+In the adaptive precision preconditioner, we use the evaluation strategy shown
+in Figures~\ref{2017-adaptive-block-jacobi:fig:control-flow} and~\ref{2017-adaptive-block-jacobi:fig:adaptive} to determine
+the precision at which the individual diagonal blocks should be stored. 
+According to the heuristics presented in Section~\ref{2017-adaptive-block-jacobi:sec:erroranalysis}, we set
+$\tau_h^L:= 0$, 
+$\tau_h^U = \tau_s^L:=1.0e+2$, 
+$\tau_s^U := 1.0e+6$; 
+and $\tau_{\kappa}:=1.0e-3 /u_d$; see
+also~(\ref{2017-adaptive-block-jacobi:eqn:thresholds}). Specifying an upper block size bound of 24 in the
+supervariable agglomeration, we show in Figure~\ref{2017-adaptive-block-jacobi:fig:blockcondnums} the 
+condition number distribution of the blocks for each test
+matrix. These condition numbers are one of the metrics considered when 
+selecting the storage format in the \apbj preconditioner.
+
+Using Octave, we emulate the procedure for truncation of \fpd values to reduced 
+precision
+formats ({\tt \small force\_reduction} shown in Figure~\ref{2017-adaptive-block-jacobi:fig:adaptive})
+as follows. First, we transform the full precision value to a text
+string and then truncate that string to keep only the two most significant 
+decimal digits for \fph and the seven most significant decimal digits for \fps.
+This is a rough approximation of the precision level that can be maintained 
+with the bits dedicated to the mantissa in the {\sc ieee} standards for 
+\fph/\fps. 
+To emulate overflow, we set values
+exceeding the data range of the low precision format to the largest
+representable number in the target format, $R_{\max}$, which is 
+$R_{\max}=65,504$ for \fph 
+and $R_{\max}=3.40e+38$ for \fps. We preserve the sign in this truncation
+process. To emulate underflow, values  that are smaller than the
+minimum value that can represented in the low precision format, $R_{\min}$, 
+are set to zero, which is $R_{\min}=6.10e-5$ for \fph and $R_{\min}=1.17e-38$ 
+for \fps.
+We stop the PCG iterations once the relative residual has dropped below the
+threshold $\tau_{\max}:=1.0e-9$. We allow for, at most, 5,000 PCG iterations.
+
+\begin{table}[p]
 \begin{center}
 \scriptsize
 \begin{tabular}{rlrrr||rrrr}
@@ -92,7 +150,10 @@ iterations}\\
  \hline
 \end{tabular}
 \end{center}
-\caption{Left:~Test matrices along with key properties. Right:~Iteration count 
+\caption
+[Matrix properties and iteration counts of PCG with the
+preconditioner stored in various precisions]
+{Left:~Test matrices along with key properties. Right:~Iteration count 
 of 
 the PCG method with the preconditioner stored in double, single, half, or 
 adaptive precision.
@@ -101,34 +162,12 @@ relative residual threshold $\tau_{\max}=1.0e-9$ after 5,000 iterations.}
 \label{2017-adaptive-block-jacobi:tab:matrices}
 \end{table}
 
-
-
-\subsection{Experimental framework}
-
-In this section, we assess the potential benefits of the \apbj preconditioner
-with a collection of experiments performed in GNU Octave version 3.8.1.
-We implement the PCG method according
-to~\cite{doi:10.1137/S1064827597323415} (Figure~\ref{2017-adaptive-block-jacobi:fig:codepcg}) with an
-integrated block-Jacobi preconditioner that performs an explicit inversion of
-the diagonal blocks. We apply supervariable agglomeration to optimize the block
-diagonal structure of the block-Jacobi preconditioner for the specific
-problems used here~\cite{jenniferscott}. This procedure aims to identify and 
-capture the
-block structure of the matrix in the Jacobi blocks of the preconditioner, 
-thereby
-accumulating multiple blocks into a larger superstructure with the upper bound
-of the blocksize set to 24.
-
-For the evaluation, we consider a subset comprised of 63~SPD test problems 
-of small to moderate dimension from the SuiteSparse matrix 
-collection~\cite{ufmc}. 
-We list the matrices along with some key characteristics in 
-Table~\ref{2017-adaptive-block-jacobi:tab:matrices}.
-
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \includegraphics[width=\textwidth]{plots/boxplot_log_cond}
-\caption{Boxplot for the distribution of the condition numbers 
+\caption
+[Boxplot for the distribution of the condition numbers]
+{Boxplot for the distribution of the condition numbers 
          of the diagonal blocks ($\kappa_1(D_i)$) using supervariable 
          agglomeration with the block size set to 24. For each matrix, the blue 
          central box shows where most of the condition numbers are located, the 
@@ -136,41 +175,6 @@ Table~\ref{2017-adaptive-block-jacobi:tab:matrices}.
 \label{2017-adaptive-block-jacobi:fig:blockcondnums}
 \end{center}
 \end{figure}
-
-In the adaptive precision preconditioner, we use the evaluation strategy shown
-in Figures~\ref{2017-adaptive-block-jacobi:fig:control-flow} and~\ref{2017-adaptive-block-jacobi:fig:adaptive} to determine
-the precision at which the individual diagonal blocks should be stored. 
-According to the heuristics presented in Section~\ref{2017-adaptive-block-jacobi:sec:erroranalysis}, we set
-$\tau_h^L:= 0$, 
-$\tau_h^U = \tau_s^L:=1.0e+2$, 
-$\tau_s^U := 1.0e+6$; 
-and $\tau_{\kappa}:=1.0e-3 /u_d$; see
-also~(\ref{2017-adaptive-block-jacobi:eqn:thresholds}). Specifying an upper block size bound of 24 in the
-supervariable agglomeration, we show in Figure~\ref{2017-adaptive-block-jacobi:fig:blockcondnums} the 
-condition number distribution of the blocks for each test
-matrix. These condition numbers are one of the metrics considered when 
-selecting the storage format in the \apbj preconditioner.
-
-Using Octave, we emulate the procedure for truncation of \fpd values to reduced 
-precision
-formats ({\tt \small force\_reduction} shown in Figure~\ref{2017-adaptive-block-jacobi:fig:adaptive})
-as follows. First, we transform the full precision value to a text
-string and then truncate that string to keep only the two most significant 
-decimal digits for \fph and the seven most significant decimal digits for \fps.
-This is a rough approximation of the precision level that can be maintained 
-with the bits dedicated to the mantissa in the {\sc ieee} standards for 
-\fph/\fps. 
-To emulate overflow, we set values
-exceeding the data range of the low precision format to the largest
-representable number in the target format, $R_{\max}$, which is 
-$R_{\max}=65,504$ for \fph 
-and $R_{\max}=3.40e+38$ for \fps. We preserve the sign in this truncation
-process. To emulate underflow, values  that are smaller than the
-minimum value that can represented in the low precision format, $R_{\min}$, 
-are set to zero, which is $R_{\min}=6.10e-5$ for \fph and $R_{\min}=1.17e-38$ 
-for \fps.
-We stop the PCG iterations once the relative residual has dropped below the
-threshold $\tau_{\max}:=1.0e-9$. We allow for, at most, 5,000 PCG iterations.
 
 \subsection{Reduced precision preconditioning}
 
@@ -204,26 +208,6 @@ preconditioner and the convergence rate of the \fpd solver.
 Figure~\ref{2017-adaptive-block-jacobi:fig:blockinfo} shows that most of the time the adaptively
 chosen precision is single or half precision, with relatively few instances
 o of double.
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=\textwidth]{plots/blockinfo_adapt}
-\caption{Details on the adaptive precision block-Jacobi. Breakdown of the 
-diagonal blocks stored in \fpd, \fps, or \fph.}
-\label{2017-adaptive-block-jacobi:fig:blockinfo}
-\end{center}
-\end{figure}
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=\textwidth]{plots/fcg_energy_rel_adapt}
-\caption{Energy efficiency analysis of the PCG with block-Jacobi preconditioning
-	using different floating point formats for storing the preconditioner. The
-	energy cost of all methods is normalized to the energy cost of the standard
-	implementation using \fpd for storing the block-Jacobi preconditioner.}
-\label{2017-adaptive-block-jacobi:fig:energyanalysis}
-\end{center}
-\end{figure}
 
 \subsection{Energy model}
 
@@ -274,6 +258,30 @@ block-Jacobi preconditioner. Further, we also consider variants that store
 the preconditioner entirely in \fps or \fph and a more sophisticated
 strategy that adapts the format of the distinct preconditioner blocks to the
 data.
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=\textwidth]{plots/blockinfo_adapt}
+\caption
+[Breakdown of the diagonal blocks stored in \fpd, \fps, or \fph.]
+{Details on the adaptive precision block-Jacobi. Breakdown of the 
+diagonal blocks stored in \fpd, \fps, or \fph.}
+\label{2017-adaptive-block-jacobi:fig:blockinfo}
+\end{center}
+\end{figure}
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=\textwidth]{plots/fcg_energy_rel_adapt}
+\caption
+[Energy efficiency of PCG with block-Jacobi using various precisions]
+{Energy efficiency analysis of the PCG with block-Jacobi preconditioning
+	using different floating point formats for storing the preconditioner. The
+	energy cost of all methods is normalized to the energy cost of the standard
+	implementation using \fpd for storing the block-Jacobi preconditioner.}
+\label{2017-adaptive-block-jacobi:fig:energyanalysis}
+\end{center}
+\end{figure}
 
 For the \apbj approach, we visualize  the use of \fpd, \fps, and \fph for 
 storing the diagonal blocks (Figure~\ref{2017-adaptive-block-jacobi:fig:blockinfo}). Comparing this 

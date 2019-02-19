@@ -54,18 +54,33 @@ Our experiments reveal that the optimal load is $l$=64
 for both the K40 and GTX1080 architectures
 and this setting is used for all experiments in this section.
 
-\begin{figure}[t]
+\begin{figure}[p]
 \begin{tabular}{cc}
     \includegraphics[width=0.48\textwidth]{plots/storage_consumption.pdf}
     \includegraphics[width=0.48\textwidth]{plots/storage_overhead.pdf} &
 \end{tabular}
-\vspace*{-2ex}
-    \caption{Storage consumption 
+\caption[Storage consumption 
+    of different sparse matrix formats
+    and overhead compared to CSR]
+    {Storage consumption 
     of different sparse matrix formats (left)
     and overhead compared to CSR for these formats (right).
     The data is shown for 100 selected matrices from SMC,
     assuming $s_v$=8 (double precision) and $s_i$=4.}
 \label{2017-csr-spmv:fig:storage}
+\end{figure}
+
+\begin{figure}[p]
+\begin{tabular}{c}
+\includegraphics[width=0.48\textwidth]{plots/range_K40_single.pdf}
+\includegraphics[width=0.48\textwidth]{plots/range_K40_double.pdf}\\
+\includegraphics[width=0.48\textwidth]{plots/range_GTX1080_single.pdf}
+\includegraphics[width=0.48\textwidth]{plots/range_GTX1080_double.pdf}
+\end{tabular}
+\caption[GFLOPS distribution of \spmv implementations]
+    {GFLOPS distribution of \spmv implementations on K40 (top)
+    and GTX1080 (bottom), using SP and DP arithmetic (left and right, respectively).}
+\label{2017-csr-spmv:fig:distribution}
 \end{figure}
 
 We determine the storage requirements for the CSR, ELLPACK and ELLR-T formats
@@ -111,15 +126,15 @@ not being biassed to any particular format.
 
 \begin{figure}[t]
 \begin{tabular}{c}
-\includegraphics[width=0.48\textwidth]{plots/range_K40_single.pdf}
-\includegraphics[width=0.48\textwidth]{plots/range_K40_double.pdf}\\
-\includegraphics[width=0.48\textwidth]{plots/range_GTX1080_single.pdf}
-\includegraphics[width=0.48\textwidth]{plots/range_GTX1080_double.pdf}
+\includegraphics[width=0.48\textwidth]{plots/performance_K40_single.pdf}
+\includegraphics[width=0.48\textwidth]{plots/performance_K40_double.pdf}\\
+\includegraphics[width=0.48\textwidth]{plots/performance_GTX1080_single.pdf}
+\includegraphics[width=0.48\textwidth]{plots/performance_GTX1080_double.pdf}
 \end{tabular}
-\vspace*{-2ex}
-\caption{GFLOPS distribution of \spmv implementations on K40 (top)
+\caption[Comparison of \spmv implementations]
+    {Comparison of \spmv implementations on K40 (top)
     and GTX1080 (bottom), using SP and DP arithmetic (left and right, respectively).}
-\label{2017-csr-spmv:fig:distribution}
+\label{2017-csr-spmv:fig:performance}
 \end{figure}
 
 \subsection{Memory consumption}
@@ -145,19 +160,6 @@ Since the focus of this work is on \spmv algorithms
 for general matrices,
 possibly with an irregular nonzero distribution,
 we omit ELLPACK and ELLR-T from the following experiments.
-
-\begin{figure}[t]
-\begin{tabular}{c}
-\includegraphics[width=0.48\textwidth]{plots/performance_K40_single.pdf}
-\includegraphics[width=0.48\textwidth]{plots/performance_K40_double.pdf}\\
-\includegraphics[width=0.48\textwidth]{plots/performance_GTX1080_single.pdf}
-\includegraphics[width=0.48\textwidth]{plots/performance_GTX1080_double.pdf}
-\end{tabular}
-\vspace*{-2ex}
-\caption{Comparison of \spmv implementations on K40 (top)
-    and GTX1080 (bottom), using SP and DP arithmetic (left and right, respectively).}
-\label{2017-csr-spmv:fig:performance}
-\end{figure}
 
 \subsection{Global comparison}
 
@@ -202,8 +204,10 @@ with the first transfer of the matrix data to the GPU memory.
 \includegraphics[width=0.48\textwidth]{plots/speedup_GTX1080_single.pdf}
 \includegraphics[width=0.48\textwidth]{plots/speedup_GTX1080_double.pdf}
 \end{tabular}
-\vspace*{-2ex}
-\caption{Comparison between CSR and \bcsr implementations of \spmv on K40 (top) and GTX1080 (bottom), using SP and DP arithmetic (left and right, respectively).}
+\caption[Comparison between CSR and \bcsr implementations]
+    {Comparison between CSR and \bcsr implementations of \spmv on K40 (top) and
+    GTX1080 (bottom), using SP and DP arithmetic (left and right,
+    respectively).}
 \label{2017-csr-spmv:fig:bcsr}
 \end{figure}
 
@@ -238,8 +242,10 @@ This is explained by the lack of hardware support for DP atomic updates in this 
 \includegraphics[width=0.48\textwidth]{plots/std_speedup_GTX1080_single.pdf} &
 \includegraphics[width=0.48\textwidth]{plots/std_speedup_GTX1080_double.pdf}
 \end{tabular}
-\vspace*{-2ex}
-\caption{Relationship between $s[n_{zr}]/E[n_{zr}]$ ($x$-axis)
+\caption
+    [{Relationship between $s[n_{zr}]/E[n_{zr}]$
+    and speed-up/slow-down of \bcsr over CSR}]
+    {Relationship between $s[n_{zr}]/E[n_{zr}]$ ($x$-axis)
     and speed-up/slow-down of \bcsr over CSR ($y$-axis)
     on K40 (top) and GTX1080 (bottom)
     using SP and DP arithmetic (left and right, respectively).}

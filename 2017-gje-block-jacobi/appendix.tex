@@ -1,6 +1,117 @@
 \begin{landscape}
-\begin{table}
-\tiny
+
+\begin{figure}
+\begin{center}
+{\scriptsize
+\begin{tabular}{c|cccccc}
+& \textbf{Jacobi(1)}&\textbf{Jacobi(8)}&\textbf{Jacobi(12)}&\textbf{Jacobi(16)}&\textbf{Jacobi(24)}&\textbf{Jacobi(32)}\\
+\hline
+\parbox[t]{2mm}{\multirow{1}{*}{\rotatebox[origin=r]{90}{\textbf{
+    Jacobi(32)\hspace*{1.08cm}
+    Jacobi(24)\hspace*{1.08cm}
+    Jacobi(16)\hspace*{1.08cm}
+    Jacobi(12)\hspace*{1.08cm}
+    Jacobi(8)\hspace*{1.2cm}
+    Jacobi(1)\hspace*{.5cm}}}}
+}
+\\
+
+&
+ \includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(1).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(8).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(12).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(16).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(24).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(32).pdf}
+\\
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(1).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(8).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(12).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(16).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(24).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(32).pdf}
+\\
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(1).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(8).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(12).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(16).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(24).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(32).pdf}
+\\
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(1).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(8).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(12).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(16).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(24).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(32).pdf}
+\\
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(1).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(8).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(12).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(16).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(24).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(32).pdf}
+\\
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(1).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(8).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(12).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(16).pdf}
+&
+\includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(24).pdf}
+&
+ \includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(32).pdf}
+\\
+\end{tabular}
+}
+\end{center}
+\caption
+[Detailed comparison of IDR(4) enhanced with block-Jacobi
+using different block sizes]
+{
+Detailed comparison of IDR(4) enhanced with block Jacobi
+using different block sizes.
+}
+\label{2017-gje-block-jacobi:fig:solverperformance-detailed}
+\end{figure}
+
+\end{landscape}
+\begin{landscape}
+\begin{table}[p]
+\scriptsize
+\centering
 \begin{tabular}{lrrr||rr|rr|rr|rr|rr|rr}
 \hline
 \hline
@@ -164,8 +275,13 @@
 \hline
 \end{tabular}
 
-\caption{Iterations and execution time of IDR(4) enhanced with scalar Jacobi preconditioning or block-Jacobi preconditioning.\newline
-The runtime combines the preconditioner setup time and the iterative solver execution time.}
+\captionsetup{width=\textwidth}
+\caption
+[Iterations and execution time of IDR(4) enhanced with GJE-based block-Jacobi]
+{Iterations and execution time of IDR(4) enhanced with scalar Jacobi
+preconditioning or block-Jacobi preconditioning.
+The runtime combines the preconditioner setup time and the iterative solver execution time.
+}
 \label{2017-gje-block-jacobi:tab:idr4comparison}
 \end{table}
 

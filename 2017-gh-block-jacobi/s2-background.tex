@@ -80,12 +80,14 @@ in the classical LU interpretation,
 we use this term to distinguish the operations on the system matrix (in the preconditioner setup phase)
 from those on the right-hand side vector (in the preconditioner application).
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{minipage}{0.80\columnwidth}
 \lstinputlisting[language=matlab,morekeywords={SpMV,ddot,daxpy,dscal}]{code/GH3.m}
 \end{minipage}
-\caption{Simplified loop-body of the basic GH implementation in Matlab notation.}
+\caption
+[Basic GH implementation in Matlab notation]
+{Simplified loop-body of the basic GH implementation in Matlab notation.}
 \label{2017-gh-block-jacobi:fig:gh}
 \end{center}
 \end{figure}

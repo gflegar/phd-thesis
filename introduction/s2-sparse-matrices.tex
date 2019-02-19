@@ -19,26 +19,26 @@ matrix are implemented to directly use the compressed data, computational
 savings can be obtained by skipping the operations involving zero elements
 which are not stored.
 
-\begin{figure}
-\begin{subfigure}{\columnwidth}
+\begin{figure}[t]
 \begin{center}
-\includegraphics[width=.8\columnwidth]{plots/coo}
-\end{center}
+\begin{minipage}{0.9\columnwidth}
+\begin{subfigure}{\columnwidth}
+\includegraphics[width=\columnwidth]{plots/coo}
 \caption{Coordinate format (COO)}
 \end{subfigure} \\[2em]
 \begin{subfigure}{\columnwidth}
-\begin{center}
-\includegraphics[width=.8\columnwidth]{plots/ell}
-\end{center}
+\includegraphics[width=\columnwidth]{plots/ell}
 \caption{ELLPACK format (ELL)}
 \end{subfigure} \\[2em]
 \begin{subfigure}{\columnwidth}
-\begin{center}
-\includegraphics[width=.8\columnwidth]{plots/csr}
-\end{center}
+\includegraphics[width=\columnwidth]{plots/csr}
 \caption{Compressed Sparse Row format (CSR)}
 \end{subfigure}
-\caption{Derivation of common sparse matrix storage formats.}
+\end{minipage}
+\end{center}
+\caption
+[Derivation of common sparse matrix storage formats]
+{Derivation of common sparse matrix storage formats.}
 \label{introduction:fig:sparse-formats}
 \end{figure}
 
@@ -54,16 +54,16 @@ storing sparse matrices so as to maximize cache efficiency. Another option is to
 compress each row individually, only adding additional information about the
 column index. The resulting data structure can then either be embedded into
 square matrices by adding dummy elements as padding and storing them in one of
-the dense matrix formats (usually in column-major order, that is column-by-column),
-or individual rows can be stored in sequence and augmented with pointers to the
-starting position of each row. This results in the so-called ELLPACK (ELL) and
-Compressed Sparse Row (CSR) formats, respectively. Alternatively, one could
-compress each column instead of each row, resulting in a column variant of
-ELLPACK and the Compressed Sparse Column (CSC) format~\cite{saad}. In addition
-to these basic formats, a number of advanced formats were developed to offer
-additional memory and computational savings with certain algorithms,
-applications, or on certain hardware. Common approaches include blocked versions
-of basic formats~\cite{csb, bsr}, their various
+the dense matrix formats (usually in column-major order, that is
+column-by-column), or individual rows can be stored in sequence and augmented
+with pointers to the starting position of each row. This results in the
+so-called ELLPACK (ELL) and Compressed Sparse Row (CSR) formats, respectively.
+Alternatively, one could compress each column instead of each row, resulting in
+a column variant of ELLPACK and the Compressed Sparse Column (CSC)
+format~\cite{saad}. In addition to these basic formats, a number of advanced
+formats were developed to offer additional memory and computational savings with
+certain algorithms, applications, or on certain hardware. Common approaches
+include blocked versions of basic formats~\cite{csb, bsr}, their various
 combinations~\cite{sell-p,sell-c-sigma,bell-garland}, and their unconventional
 enhancements~\cite{csr5, ecker}.
 

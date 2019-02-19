@@ -77,50 +77,8 @@ library~\cite{parco2017}.
 MAGMA-sparse was also used as experiment ecosystem, and provided
 the standard \spmv reference implementations. 
 
-\begin{figure*}[thb!]
-\begin{center}
-\begin{tabular}{ccc}
-\hline
-{\sc cage8} & {\sc can\_838} & {\sc dwt\_992}\\
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/cage8_GFLOPs}
-&
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/can_838_GFLOPs}
-&
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/dwt_992_GFLOPs}
-\\
-\hline
-{\sc ex25} & {\sc ex27} & {\sc gr\_30\_30}\\
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/ex2_GFLOPs}
-&
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/ex27_GFLOPs}
-&
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/gr_30_30_GFLOPs}
-\\
-\hline
-{\sc mcfe} & {\sc msc} & {\sc nos3}\\
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/mcfe_GFLOPs}
-&
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/msc00726_GFLOPs}
-&
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/nos3_GFLOPs}
-\\
-\hline
-{\sc Si2} & {\sc rotor2} & {\sc west0989}\\
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/Si2_GFLOPs}
-&
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/rotor2_GFLOPs}
-&
-\includegraphics[width=.30\columnwidth]{plots/single_matrices/GFLOPS/west0989_GFLOPs}
 
-\end{tabular}
-\end{center}
-\caption{Performance of the standard and the flexible batched \spmv routines 
-for homogeneous batches.}
-\label{2017-batched-spmv:fig:selectperf}
-\end{figure*}
-
-
-\begin{figure*}
+\begin{figure}[t]
 	\begin{center}
 		\begin{tabular}{cc}
 			\includegraphics[width=.45\columnwidth]{plots/INCDENSITY_GFLOPS}
@@ -128,16 +86,18 @@ for homogeneous batches.}
 			\includegraphics[width=.458\columnwidth]{plots/INC_GFLOPS}\\
 		\end{tabular}
 	\end{center}
-	\caption{Performance of the standard and flexible batched CSR-based \spmv 
+	\caption
+    [Performance of CSR-based \spmv routines for a homogeneous batch]
+    {Performance of the standard and flexible batched CSR-based \spmv 
 		routines for a homogeneous batch consisting of 1000 square matrices of 
 		order 
 		1024 with controlled density and nonzero distribution. 
 		The nonzeros are either distributed equally among the rows (left) or 
 		accumulated in few rows (right).}
 	\label{2017-batched-spmv:fig:incdensity}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[t]
 	\begin{center}
 		\begin{tabular}{r}
 			\includegraphics[width=0.9\columnwidth]{plots/SPARSE_GFLOPS}\\
@@ -145,14 +105,16 @@ for homogeneous batches.}
                 {plots/nnz_distribution_new}
 		\end{tabular}
 	\end{center}
-	\caption{
-		Performance of the flexible batched \spmv routines for all matrices in 
+	\caption
+    [Performance of the flexible batched \spmv routines for all matrices in the
+    test benchmark]
+    {Performance of the flexible batched \spmv routines for all matrices in 
 		the test 
 		benchmark
 		ordered in increasing nonzero-per-row ratio.
 	}
 	\label{2017-batched-spmv:fig:allmatricesperf}
-\end{figure*}
+\end{figure}
 
 
 \subsection{Experimental results}
@@ -193,7 +155,7 @@ of the cases, the \coo kernel
 is the second-best choice in all remaining cases where a different format is 
 superior.
 
-\begin{figure*}
+\begin{figure}[t]
 	\begin{center}
 		\begin{tabular}{cc}
 			\includegraphics[width=.45\columnwidth]{plots/RND_UNITSIZE_GFLOPS}
@@ -201,14 +163,17 @@ superior.
 			\includegraphics[width=.45\columnwidth]{plots/RND_UNITSIZE_BW}\\
 		\end{tabular}
 	\end{center}
-	\caption{Performance (left) and sustained memory bandwidth (right) of the 
+	\caption
+    [Performance and memory bandwidth of \spmv for a heterogeneous batch using
+    selected matrices]
+    {Performance (left) and sustained memory bandwidth (right) of the 
 		flexible batched \spmv routines
 		applied to a heterogeneous batch consisting of a random compilation of 
 		the 
 		matrices analyzed in Figure~\ref{2017-batched-spmv:fig:selectperf}.
 	}
 	\label{2017-batched-spmv:fig:similarsize}
-\end{figure*}
+\end{figure}
 
 Next, we focus on the CSR format, for which we developed four kernels that 
 differ in how they balance the workload.
@@ -263,7 +228,7 @@ unbalanced nonzero distributions, it yields low performance.
 
 
 
-\begin{figure*}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{cc}
 \includegraphics[width=.45\columnwidth]{plots/RND_GFLOPS}
@@ -271,13 +236,16 @@ unbalanced nonzero distributions, it yields low performance.
 \includegraphics[width=.45\columnwidth]{plots/RND_BW}\\
 \end{tabular}
 \end{center}
-\caption{Performance (left) and sustained memory bandwidth (right) of the 
+\caption
+[Performance and memory bandwidth of \spmv for a heterogeneous batch using all
+matrices]
+{Performance (left) and sustained memory bandwidth (right) of the 
 flexible batched \spmv routines
 applied to a heterogeneous batch consisting of a random compilation of all the 
 matrices in the test benchmark.
 }
 \label{2017-batched-spmv:fig:allsize}
-\end{figure*}
+\end{figure}
 
 
 

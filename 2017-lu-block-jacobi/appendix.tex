@@ -1,6 +1,7 @@
 \begin{landscape}
 \begin{table}
 \scriptsize
+\centering
 
 \begin{tabular}{lrrr||rr|rr|rr|rr|rr|rr}
 \hline
@@ -61,7 +62,11 @@
 \hline
 \end{tabular}
 
-\caption{Iterations and execution time of IDR(4) enhanced with scalar Jacobi preconditioning or block-Jacobi preconditioning.\newline
+\captionsetup{width=\textwidth}
+\caption
+[Iterations and execution time of IDR(4) enhanced with LU-based block-Jacobi]
+{Iterations and execution time of IDR(4) enhanced with scalar Jacobi
+    preconditioning or block-Jacobi preconditioning.
 The runtime combines the preconditioner setup time and the iterative solver execution time.}
 \label{2017-lu-block-jacobi:tab:idr4comparison}
 \end{table}

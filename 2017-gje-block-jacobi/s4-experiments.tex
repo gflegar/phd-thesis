@@ -53,7 +53,7 @@ testing environment, the block-pattern generation, and the sparse solvers used
 in our experiments. All computations use double-precision arithmetic---the
 standard in linear algebra.
 
-\begin{figure*}
+\begin{figure}[t]
 \begin{center}
 {\scriptsize
 \begin{tabular}{cc}
@@ -69,14 +69,17 @@ K40 & P100\\
 \end{tabular}
 }
 \end{center}
-\caption{
+\caption
+[Performance comparison of batched matrix inversion routines for various batch
+sizes]
+{
 Performance comparison of batched matrix inversion routines for various batch sizes. 
 Top row shows matrices of size 32 $\times$ 32 and the bottom row shows matrices of size 16 $\times$ 16.
 }
 \label{2017-gje-block-jacobi:fig:bgje-mpw-performance}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[t]
 \begin{center}
 {\scriptsize
 \begin{tabular}{cc}
@@ -87,11 +90,13 @@ K40 & P100\\
 \end{tabular}
 }
 \end{center}
-\caption{%
-Performance comparison of batched matrix inversion routines
+\caption
+[Performance comparison of batched matrix inversion routines
+for various matrix sizes]
+{Performance comparison of batched matrix inversion routines
     for various matrix sizes.}
 \label{2017-gje-block-jacobi:fig:bgje-mpw-fixed-batch}
-\end{figure*}
+\end{figure}
 
 \subsection{Batched matrix inversion}
 
@@ -186,7 +191,7 @@ performed by the size-specific kernels, the kernel-specific resource
 requirements impact the number of warps that are active per multiprocessor and,
 ultimately, the kernel-specific performance.
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 {\scriptsize
 \begin{tabular}{c}
@@ -194,8 +199,10 @@ ultimately, the kernel-specific performance.
 \end{tabular}
 }
 \end{center}
-\caption{
-Performance improvement from reducing the shared memory size in the 
+\caption
+[Performance improvement from reducing the shared memory size in the generation
+step]
+{Performance improvement from reducing the shared memory size in the 
 block-Jacobi generation using shared extraction/insertion.
 }
 \label{2017-gje-block-jacobi:fig:reducedshared}
@@ -232,7 +239,7 @@ thread blocks a multiprocessor can schedule in parallel.}
 
 
 
-\begin{figure*}
+\begin{figure}[t]
 \begin{center}
 {\scriptsize
 \begin{tabular}{cccc}
@@ -247,14 +254,14 @@ Arrow structure & Tridiagonal structure & Random block struct. & Laplace structu
 \end{tabular}
 }
 \end{center}
-\caption{%
-Sparsity plots of test matrices used to evaluate the diagonal block extraction.%
-}
+\caption
+[Sparsity plots of test matrices used to evaluate the diagonal block extraction]
+{Sparsity plots of test matrices used to evaluate the diagonal block extraction.}
 \label{2017-gje-block-jacobi:fig:sparsityplots}
-\end{figure*}
+\end{figure}
 
 
-\begin{figure*}
+\begin{figure}[p]
 \begin{center}
 {\scriptsize
 \begin{tabular}{cc}
@@ -282,12 +289,14 @@ K40 & P100\\
 \end{tabular}
 }
 \end{center}
-\caption{
-Block-Jacobi generation time for increasing block sizes and nonzero distributions
+\caption
+[Block-Jacobi generation time for increasing block sizes and various nonzero
+distributions]
+{Block-Jacobi generation time for increasing block sizes and nonzero distributions
 from top to bottom: arrow, tridiagonal, random block and Laplace.
 }
 \label{2017-gje-block-jacobi:fig:block-jacobi-runtime}
-\end{figure*}
+\end{figure}
 
 Because the performance of the extraction strategies depends on the structure of the
 problem matrix, we consider four nonzero distributions that are characteristic
@@ -301,7 +310,7 @@ random block-diagonal matrix structure with nonzeros only in the
 diagonal blocks. The Laplace structure arises from the five-point
 stencil discretization of the Laplace equation.
 
-\begin{figure*}
+\begin{figure}[t]
 \begin{center}
 {\scriptsize
 \begin{tabular}{cc}
@@ -320,13 +329,16 @@ Block size 24 & Block size 32\\
 \end{tabular}
 }
 \end{center}
-\caption{
+\caption
+[Block-Jacobi generation time for matrices taken from the SuiteSparse matrix
+collection]
+{
 Block-Jacobi generation time on NVIDIA P100
 for a set of matrices taken from the SuiteSparse sparse matrix collection and varied 
 block sizes: 4, 8, 12, 16, 24 and 32.
 }
 \label{2017-gje-block-jacobi:fig:block-jacobi-suitsparse}
-\end{figure*}
+\end{figure}
 
 
 In Figure~\ref{2017-gje-block-jacobi:fig:block-jacobi-runtime}, we report the total execution time of
@@ -362,7 +374,7 @@ reflect the block structure of the problem matrix~\cite{chow-scott-2016}. We
 again identify {\sc shared-mpw} as the overall winner.
 
 
-\begin{figure*}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{cc}
 K40 & P100\\
@@ -371,14 +383,17 @@ K40 & P100\\
 \includegraphics[width=.46\columnwidth]{plots/bjp_apply_bs_d_P100.pdf}
 \end{tabular}
 \end{center}
-\caption{
+\caption
+[Performance comparison of the generic and the \textsc{gemv}-based
+preconditioner application]
+{
 Performance comparison of the block-Jacobi preconditioner application.
 {\sc spmv} is the generic sparse matrix-vector product routine
 from~\cite{Anzt:2017:BGE:3026937.3026940}.
 {\sc sa-spmv} is the specialized batched {\sc gemv}--based kernel developed as part of this work.  
 }
 \label{2017-gje-block-jacobi:fig:precappl}
-\end{figure*}
+\end{figure}[t]
 
 
 \subsection{Block-Jacobi application}
@@ -398,18 +413,21 @@ architecture, and around 80~gigaFLOPS on the P100 architecture. Local performanc
 can be identified for block sizes 8 and 16.
 
 \subsection{Convergence in the context of an iterative solver}
-\begin{figure*}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{c}
 \includegraphics[width=.46\columnwidth]{plots/solverperformance_bs.pdf}
 \end{tabular}
 \end{center}
-\caption{
+\caption
+[IDR(4) convergence and performance comparison for different preconditioner
+block sizes]
+{
 IDR(4) convergence and performance comparison for different block sizes used in the block-Jacobi preconditioner. 
 The problem matrices are listed along with key characteristics in Table~\ref{2017-gje-block-jacobi:tab:idr4comparison}.
 }
 \label{2017-gje-block-jacobi:fig:solverperformance}
-\end{figure*}
+\end{figure}
 
 Table~\ref{2017-gje-block-jacobi:tab:idr4comparison} in the appendix details the convergence rate and
 execution time of an IDR(4) iterative solver~\cite{idr1} enhanced with either a
@@ -469,110 +487,3 @@ routines we developed
 provide an efficient approach to generating and applying a block-Jacobi
 preconditioner.
 
-\begin{landscape}
-
-\begin{figure}
-\begin{center}
-{\scriptsize
-\begin{tabular}{c|cccccc}
-& \textbf{Jacobi(1)}&\textbf{Jacobi(8)}&\textbf{Jacobi(12)}&\textbf{Jacobi(16)}&\textbf{Jacobi(24)}&\textbf{Jacobi(32)}\\
-\hline
-\parbox[t]{2mm}{\multirow{1}{*}{\rotatebox[origin=r]{90}{\textbf{
-    Jacobi(32)\hspace*{1.08cm}
-    Jacobi(24)\hspace*{1.08cm}
-    Jacobi(16)\hspace*{1.08cm}
-    Jacobi(12)\hspace*{1.08cm}
-    Jacobi(8)\hspace*{1.2cm}
-    Jacobi(1)\hspace*{.5cm}}}}
-}
-\\
-
-&
- \includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(1).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(8).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(12).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(16).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(24).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(32).pdf}
-\\
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(1).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(8).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(12).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(16).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(24).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(32).pdf}
-\\
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(1).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(8).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(12).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(16).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(24).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(32).pdf}
-\\
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(1).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(8).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(12).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(16).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(24).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(32).pdf}
-\\
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(1).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(8).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(12).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(16).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(24).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(32).pdf}
-\\
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(1).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(8).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(12).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(16).pdf}
-&
-\includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(24).pdf}
-&
- \includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(32).pdf}
-\\
-\end{tabular}
-}
-\end{center}
-\caption{
-Detailed comparison of IDR(4) enhanced with block Jacobi
-using different block sizes.
-}
-\label{2017-gje-block-jacobi:fig:solverperformance-detailed}
-\end{figure}
-
-\end{landscape}

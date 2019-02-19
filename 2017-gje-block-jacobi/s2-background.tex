@@ -59,14 +59,16 @@ the inversion of matrix $D$ can become a bottleneck.
 On parallel architectures, it is possible to exploit the pairwise independence of the diagonal blocks in $D$
 by generating their individual inverses in parallel.
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{minipage}{\columnwidth}
 {\small
 \lstinputlisting[language=matlab,caption=,morekeywords={SpMV,ddot,daxpy,dscal}]{code/GJE.m}
 }
 \end{minipage}
-\caption{Simplified loop-body of the basic GJE implementation in Matlab
+\caption
+[Basic GJE implementation in Matlab notation using standard pivoting]
+{Simplified loop-body of the basic GJE implementation in Matlab
     notation using standard pivoting.}
 \label{2017-gje-block-jacobi:fig:gje}
 \end{center}
@@ -97,14 +99,16 @@ Finally, the Level-2 BLAS version of GJE allows {the integration of} an implicit
 which dramatically reduces explicit data movements.
 
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{minipage}{\columnwidth}
 {\small
 \lstinputlisting[language=matlab,caption=,morekeywords={SpMV,ddot,daxpy,dscal}]{code/GJEI.m}
 }
 \end{minipage}
-\caption{Simplified loop-body of the basic GJE implementation in Matlab
+\caption
+[Basic GJE implementation in Matlab notation using implicit pivoting]
+{Simplified loop-body of the basic GJE implementation in Matlab
     notation using implicit pivoting.}
 \label{2017-gje-block-jacobi:fig:gje2}
 \end{center}

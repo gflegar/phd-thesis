@@ -7,6 +7,23 @@ We emphasize that the implementations are part of the same software stack,
 and that the kernel implementations are similar in design, and received the same level of tuning. 
 This ensures a fair comparison and conclusions with fair credibility. 
 
+\begin{figure}[t]
+\begin{center}
+\begin{tabular}{ll}
+Block size 16 & Block size 32\\
+\includegraphics[width=.45\columnwidth]{plots/dgebjp_setup_P100_lu_gje_gh_16_speedup.pdf}
+&
+\includegraphics[width=.45\columnwidth]{plots/dgebjp_setup_P100_lu_gje_gh_32_speedup.pdf}
+\end{tabular}
+\end{center}
+\caption
+[Speedup of BGJE and BGH / BGHT over BLU]
+{
+Speedup of BGJE and BGH / BGHT over BLU taken from the MAGMA software package.
+}
+\label{2017-gh-block-jacobi:fig:bgjeperformance}
+\end{figure}
+
 
 \subsection{Hardware and software framework}
 We use an NVIDIA Tesla P100 GPU with full double precision support.
@@ -16,21 +33,6 @@ MAGMA-sparse is also leveraged to provide a testing environment, the block-patte
 All computations use double precision arithmetic, as this is the standard in scientific computations.
 Since the complete algorithm is executed on the GPU, the details of the CPU are not relevant for the following experimentation. 
 
-
-\begin{figure}
-\begin{center}
-\begin{tabular}{ll}
-Block size 16 & Block size 32\\
-\includegraphics[width=.45\columnwidth]{plots/dgebjp_setup_P100_lu_gje_gh_16_speedup.pdf}
-&
-\includegraphics[width=.45\columnwidth]{plots/dgebjp_setup_P100_lu_gje_gh_32_speedup.pdf}
-\end{tabular}
-\end{center}
-\caption{
-Speedup of BGJE and BGH / BGHT over BLU taken from the MAGMA software package.
-}
-\label{2017-gh-block-jacobi:fig:bgjeperformance}
-\end{figure}
 
 \subsection{Performance of BGH}
 Figure~\ref{2017-gh-block-jacobi:fig:bgjeperformance} compares the performance of our BGH implementation with 
@@ -65,7 +67,7 @@ about 600 GFLOPS (billions of flops/second) on this architecture (see~\cite{gje}
 
 
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{ll}
 \includegraphics[width=.45\columnwidth]{plots/app_dgebjp_setup_P100_spmv_gh_ght_apply_fixed.pdf}
@@ -73,7 +75,10 @@ about 600 GFLOPS (billions of flops/second) on this architecture (see~\cite{gje}
 \includegraphics[width=.49\columnwidth]{plots/iteration_distribution}\\
 \end{tabular}
 \end{center}
-\caption{
+\caption
+[Ppreconditioner application runtime and BiCGSTAB convergence for block-Jacobi
+variants]
+{
 Left: Runtime of block-Jacobi application for distinct block sizes and a problem of row size 1,000,000.
 Right: BiCGSTAB convergence variations when using block-Jacobi based on 
 BGJE or BGH.
@@ -106,7 +111,7 @@ Once the blocks become too large for cache, some cache lines need to be evicted
 during the GH application, and noncoalescent reads in BGH start to impact the performance
 of this approach.
 
-\begin{figure*}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{lr}
 \hline
@@ -138,7 +143,9 @@ Block size 32\\
 
 \end{tabular}
 \end{center}
-\caption{
+\caption
+[Total execution time for BiCGSTAB enhanced with block-Jacobi]
+{
 Left: Total execution time (setup+solve) 
 for BiCGSTAB enhanced with block-Jacobi preconditioning based on either
 BGJE, BGH or BGHT.
@@ -147,7 +154,7 @@ Right: Decomposition of the total execution time into preconditioner setup time 
 for the left-most test cases.
 }
 \label{2017-gh-block-jacobi:fig:block-jacobi-runtime}
-\end{figure*}
+\end{figure}
 
 \subsection{Iterative solver analysis}
 We next assess the efficiency of the distinct strategies for block-Jacobi preconditioning in

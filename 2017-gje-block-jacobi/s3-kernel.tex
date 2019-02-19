@@ -29,13 +29,15 @@ outside the focus of this paper.
 Here, for all experiments we use the supervariable blocking routine
 available in MAGMA-sparse~\cite{magma}.
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{c}
 \includegraphics[width=.65\columnwidth]{plots/scheme_inversion}
 \end{tabular}
 \end{center}
-\caption{Generation of the block-Jacobi preconditioner: 1) data extraction; 2) variable-size BGJE; 3) data insertion.
+\caption
+[Generation of the block-Jacobi preconditioner]
+{Generation of the block-Jacobi preconditioner: 1) data extraction; 2) variable-size BGJE; 3) data insertion.
 The block structure is indicated with orange circles, the original nonzero pattern with blue dots, 
     {and} the block inverses with purple circles.
 }
@@ -200,13 +202,16 @@ Realizing the afore-described extraction step in reverse order,
 we store the inverse of the transposed block in transposed mode
  -- which is the inverse of the original block.
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
 \begin{tabular}{r}
 \includegraphics[width=.85\columnwidth]{plots/shared_extraction_legend}
 \end{tabular}
 \end{center}
-\caption{Illustration of the memory requests for the cached extraction and shared extraction (left and right, respectively).
+\caption
+[Illustration of the memory requests for the cached extraction and shared
+extraction]
+{Illustration of the memory requests for the cached extraction and shared extraction (left and right, respectively).
 We assume warps of 4 threads and memory transactions of 4 values.
 We only show the accesses to the vector storing the {\sf col-indices} of the CSR matrix structure; 
 the access to the actual values induces far less overhead,
