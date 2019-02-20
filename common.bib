@@ -1,0 +1,1296 @@
+% Instructions:
+% Book: author/editor, title, publisher, year, edition
+% Article: author, title, publisher, journal, year, volume, issue, pages
+% Misc: key, howpublished, year
+% InProceedings: author, title, booktitle, series, publisher, year, pages
+% techreport: author, title, institution, year
+% phdthesis: author, title, school, year
+% inbook: author/editor, title, booktitle, publisher, year, pages
+
+@article{ANU:10332060,
+    needed-for = {2017-gh-block-jacobi},
+    author = {Abdelfattah, A. and Anzt, H. and Dongarra, J. and Gates, M. and
+              Haidar, A. and Kurzak, J. and Luszczek, P. and Tomov, S. and
+              Yamazaki, I. and YarKhan, A.},
+    title = {Linear algebra software for large-scale accelerated multicore
+             computing},
+    publisher = {Cambridge University Press},
+    journal = {Acta Numerica},
+    year = {2016},
+    volume = {25},
+    pages = {1--160}
+}
+
+@inproceedings{Abdelfattah2016,
+    needed-for = {2017-batched-spmv}
+    author = {Abdelfattah, Ahmad and Haidar, Azzam and Tomov, Stanimire and
+              Dongarra, Jack},
+    title = {Performance, Design, and Autotuning of Batched {GEMM} for {GPUs}},
+    booktitle = {In Proceedings of the 31st International Conference on High
+                 Performance Computing},
+    series = {ISC 2016},
+    publisher = {Springer},
+    year = {2016},
+    pages = {21--38}
+}
+
+@article{Abdelfattah2016119,
+    needed-for = {2017-gh-block-jacobi},
+    author = {Abdelfattah, A. and Haidar, A. and Tomov, S. and Dongarra, J.},
+    title = {Performance Tuning and Optimization Techniques of Fixed and
+             Variable Size Batched {Cholesky} Factorization on {GPUs}},
+    publisher = {Elsevier},
+    journal = {Procedia Computer Science},
+    year = {2016},
+    volume = {80},
+    pages = {119--130},
+}
+
+@inproceedings{lapack,
+    needed-for = {2017-coo-spmv},
+    author = {Anderson, E. and Bai, Z. and Dongarra, J. and Greenbaum, A. and
+              McKenney, A. and Du Croz, J. and Hammarling, S. and Demmel, J. and
+              Bischof, C. and Sorensen, D.},
+    title = {{LAPACK}: A Portable Linear Algebra Library for High-performance
+             Computers},
+    booktitle = {Proceedings of the 1990 ACM/IEEE Conference on Supercomputing},
+    series = {SC '90},
+    publisher = {IEEE},
+    year = {1990},
+    pages = {2--11},
+}
+
+@inproceedings{triangular-solves,
+    needed-for = {introduction},
+    author = {Anzt, Hartwig and Chow, Edmond and Dongarra, Jack},
+    title = {Iterative Sparse Triangular Solves for Preconditioning},
+    booktitle = {Parallel Processing --- 21st International Conference on
+                 Parallel and Distributed Computing},
+    series = {Euro-Par 2015},
+    publisher = {Springer},
+    year = {2015},
+    pages = {650--661}
+}
+
+@book{lapack,
+    needed-for = {2017-lu-block-jacobi},
+    author = {Anderson E. and Bai Z, and Bischof, C. and Blackford, L. S. and
+              Demmel, J. and Dongarra, J. and Du Croz, J and Greenbaum, A. and
+              Hammarling, S. and McKenney, A. and Sorensen, D.},
+    title = {{LAPACK} Users' Guide},
+    publisher = {SIAM},
+    year = {1999},
+    edition = {3rd}
+}
+
+@inproceedings{triangular-iterative,
+    needed-for = {conclusion},
+    author = {Anzt, Hartwig and Chow, Edmond and Dongarra, Jack},
+    title = {Iterative Sparse Triangular Solves for Preconditioning},
+    booktitle = {Parallel Processing -- 21st International Conference on
+                 Parallel and Distributed Computing},
+    series = {Euro-Par 2015},
+    publisher = {Springer},
+    year = {2015},
+    pages={650--661}
+}
+
+@techreport{lawn2016,
+    needed-for = {2017-coo-spmv, 2017-batched-spmv},
+    author = {Anzt, H. and Chow, E. and Dongarra, J.},
+    title = {On Block-Asynchronous Execution on {GPUs}},
+    institution = {LAPACK Working Note},
+    year = {2016}
+}
+
+@article{parilut,
+    needed-for = {introduction, conclusion},
+    aka = {ilut},
+    author = {Anzt, Hartwig and Chow, Edmond and Donagarra, Jack},
+    title = {{ParILUT}---A New Parallel Threshold {ILU} Factorization},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing}
+    year = {2018},
+    volume = {40},
+    issue = {4},
+    pages = {C503--C519},
+}
+@article{ilut,
+    author = {Anzt, Hartwig and Chow, Edmond and Donagarra, Jack},
+    title = {{ParILUT}---A New Parallel Threshold {ILU} Factorization},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing}
+    year = {2018},
+    volume = {40},
+    issue = {4},
+    pages = {C503--C519},
+}
+
+@inproceedings{scala2016,
+    needed-for = {2017-gje-block-jacobi},
+    author = {Anzt, Hartwig and Chow, Edmond and Huckle, Thomas and Dongarra,
+              Jack},
+    title = {Batched Generation of Incomplete Sparse Approximate Inverses on
+             {GPUs}},
+    booktitle = {Proceedings of the 7th Workshop on Scalable Algorithms for
+                 Large-scale Systems},
+    series = {ScalA'16},
+    publisher = {IEEE},
+    Year = {2016},
+    pages = {49--56}
+}
+
+@inproceedings{Anzt:2017:BGE:3026937.3026940,
+    needed-for = {2017-gje-block-jacobi, 2017-gh-block-jacobi,
+                  2017-lu-block-jacobi, 2017-adaptive-block-jacobi},
+    aka = {gje},
+    author = {Anzt, Hartwig and Dongarra, Jack and Flegar, Goran and
+              Quintana-Ort\'{\i}, Enrique S.},
+    title = {Batched {Gauss}-{Jordan} Elimination for Block-{Jacobi}
+             Preconditioner Generation on {GPUs}},
+    booktitle = {Proceedings of the 8th International Workshop on Programming
+                 Models and Applications for Multicores and Manycores},
+    series = {PMAM'17},
+    publisher = {ACM},
+    year = {2017},
+    pages = {1--10}
+}
+@inproceedings{gje,
+    author = {Anzt, Hartwig and Dongarra, Jack and Flegar, Goran and
+              Quintana-Ort\'{\i}, Enrique S.},
+    title = {Batched {Gauss}-{Jordan} Elimination for Block-{Jacobi}
+             Preconditioner Generation on {GPUs}},
+    booktitle = {Proceedings of the 8th International Workshop on Programming
+                 Models and Applications for Multicores and Manycores},
+    series = {PMAM'17},
+    publisher = {ACM},
+    year = {2017},
+    pages = {1--10}
+}
+
+@article{ANZT2018,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Anzt, Hartwig  and Dongarra, Jack and Flegar, Goran and
+              Quintana-Ort\'{i}, Enrique S.},
+    title = {Variable-Size Batched {Gauss}-{Jordan} Elimination for
+             Block-{Jacobi} Preconditioning on Graphics Processors},
+    publisher = {Elsevier},
+    journal = {Parallel Computing},
+    year = {2019},
+    volume = {81},
+    pages = {131--146}
+}
+
+@inproceedings{lu,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Anzt, H. and Dongarra, J. and Flegar, G. and Quintana-Ort\'{i}, E.
+              S.},
+    title = {Variable-Size Batched {LU} for Small Matrices and Its Integration
+             into Block-{Jacobi} Preconditioning},
+    booktitle = {Proceedings of the 46th International Conference on Parallel
+                 Processing},
+    series = {ICPP 2017},
+    publisher = {IEEE},
+    year = {2017},
+    pages = {91--100},
+}
+
+@inbook{gh,
+    needed-for = {2017-lu-block-jacobi},
+    author = {Anzt, H. and Dongarra, J. and Flegar, G. and Quintana-Ort\'{\i},
+              E. S. and Tom\'as, A. E.},
+    title = {Variable-Size Batched Gauss-Huard for Block-Jacobi
+             Preconditioning},
+    booktitle = {Procedia Computer Science},
+    publisher = {Elsevier},
+    year = {2017},
+    volume = {108},
+    pages = {1783--1792}
+}
+
+
+@inproceedings{ashes2016,
+    needed-for = {2017-gje-block-jacobi, 2017-gh-block-jacobi,
+                  2017-lu-block-jacobi},
+    author = {Anzt, H. and Dongarra, J. and Kreutzer, M. and Wellein, G. and
+              K\"{o}hler, M.},
+    title = {Efficiency of General {Krylov} Methods on {GPUs} --- An
+             Experimental Study},
+    booktitle = {Proceedings of the 2016 IEEE International Parallel and
+                 Distributed Processing Symposium Workshops},
+    series={IPDPSW'16},
+    publisher={IEEE},
+    year = {2016},
+    pages = {683-691}
+}
+
+@inproceedings{jacobi,
+    needed-for = {conclusion},
+    author= {Anzt, Hartwig and Dongarra, Jack and Quintana-Ort{\'\i}, Enrique
+             S.},
+    title = {Adaptive Precision Solvers for Sparse Linear Systems},
+    booktitle = {Proceedings of the 3rd International Workshop on Energy
+                 Efficient Supercomputing},
+    series = {E2SC'15},
+    publisher = {ACM},
+    year={2015},
+    pages={2},
+}
+
+@inproceedings{patch-contrib,
+    needed-for = {conclusion},
+    author = {Anzt, Hartwig and Flegar, Goran},
+    title = {Are We Doing the Right Thing? --- A Critical Analysis of the
+             Academic {HPC} Community},
+    booktitle = {Proceedings of the 20th IEEE International Workshop on Parallel
+                 and Distributed Scientific and Engineering Computing},
+    publisher = {IEEE},
+    year={2019},
+    pages={submitted}
+}
+
+@inbook{anzt-ir,
+    needed-for = {introduction, conclusion},
+    author = {Anzt, Hartwig and Flegar, Goran and Novakovi{\'{c}}, Vedran and
+              Quintana-Ort{\'i}, Enrique S.  and Tom{\'a}s, Andr{\'e}s E.},
+    title = {Residual Replacement in Mixed-Precision Iterative Refinement for
+             Sparse Linear Systems},
+    booktitle = {High Performance Computing},
+    publisher = {Springer},
+    year = {2018},
+    pages = {554--561}
+}
+
+@article{parco2017,
+    needed-for = {2017-coo-spmv, 2017-batched-spmv},
+    author = {Anzt, Hartwig and Gates, Mark and Dongarra, Jack and Kreutzer,
+              Moritz and Wellein, Gerhard and K{\"o}hler, Martin},
+    title = {Preconditioned {Krylov} Solvers on {GPUs}},
+    publisher = {Elsevier},
+    journal = {Parallel Computing},
+    year = {2017},
+    volume = {68},
+    pages = {32-44}
+}
+
+@article{isai,
+    needed-for = {conclusion},
+    author = {Anzt, Hartwig and Huckle, Thomas K. and Br{\"a}ckle, J{\"u}rgen
+              and Dongarra, Jack},
+    title = {Incomplete Sparse Approximate Inverses for Parallel
+             Preconditioning},
+    publisher = {Elsevier},
+    journal = {Parallel Computing},
+    year = {2018},
+    volume = {71},
+    pages = {1--22}
+}
+
+@article{ijhpca2016,
+    needed-for = {2017-gje-block-jacobi},
+    author = {Anzt, H. and Kreutzer, M. and Ponce, E. and Peterson, G. D. and
+              Wellein, G. and Dongarra, J.},
+    title = {Optimization and Performance Evaluation of the {IDR} Iterative
+             {Krylov} Solver on {GPUs}},
+    publisher = {Sage Publications},
+    journal = {International Journal of High Performance Computing
+               Applications},
+    year = {2016},
+    volume = {32},
+    issue = {2},
+    pages = {220--230}
+}
+
+@inproceedings{idr,
+    needed-for = {2017-gje-block-jacobi},
+    author = {Anzt, H. and Ponce, E. and Peterson, G. D. and Dongarra, J.},
+    title = {{GPU}-Accelerated Co-Design of Induced Dimension Reduction:
+             Algorithmic Fusion and Kernel Overlap},
+    booktitle = {Proceedings of the 2nd International Workshop on
+                 Hardware-Software Co-Design for High Performance Computing},
+    series = {Co-HPC'15},
+    publisher = {ACM},
+    year = {2015},
+    pages = {5:1--5:8}
+}
+
+@inproceedings{ilut-gpu,
+    needed-for = {conclusion},
+    title={A Parallel Threshold {ILU} for {GPUs}},
+    author={Anzt, Hartwig and Ribizel, Tobias and Flegar, Goran and Chow, Edmond
+            and Dongarra, Jack },
+    booktitle={2019 IEEE International Parallel and Distributed Processing
+               Symposium (IPDPS)},
+    series = {IPDPS 2019},
+    publisher = {IEEE},
+    year = {2019},
+    note={accepted}
+}
+
+@techreport{sell-p,
+    needed-for = {introduction, 2017-csr-spmv, 2017-coo-spmv,
+                  2017-batched-spmv},
+    aka = {SELL-P, sellpreport},
+    author = {Anzt, Hartwig and Tomov, Stanimire and Dongarra, Jack},
+    title = {Implementing a Sparse Matrix-Vector Product for the
+             {SELL-C/SELL-C-$\sigma$} formats on {NVIDIA} {GPUs}},
+    institution = {The University of Tennessee at Knoxville},
+    year = {2014}
+}
+@techreport{SELL-P,
+    author = {Anzt, Hartwig and Tomov, Stanimire and Dongarra, Jack},
+    title = {Implementing a Sparse Matrix-Vector Product for the
+             {SELL-C/SELL-C-$\sigma$} formats on {NVIDIA} {GPUs}},
+    institution = {The University of Tennessee at Knoxville},
+    year = {2014}
+}
+@techreport{sellpreport,
+    author = {Anzt, Hartwig and Tomov, Stanimire and Dongarra, Jack},
+    title = {Implementing a Sparse Matrix-Vector Product for the
+             {SELL-C/SELL-C-$\sigma$} formats on {NVIDIA} {GPUs}},
+    institution = {The University of Tennessee at Knoxville},
+    year = {2014}
+}
+
+@article{Arioli2008,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Arioli, M. and Duff, I. S.},
+    title = {Using {FGMRES} to Obtain Backward Stability in Mixed Precision},
+    publisher = {Kent State University},
+    journal = {ETNA. Electronic Transactions on Numerical Analysis [electronic
+               only]},
+    year = {2008},
+    volume = {33},
+    pages = {31-44}
+}
+
+@techreport{exascale-report,
+    needed-for = {introduction},
+    title = {The opportunities and challenges of exascale computing},
+    author = {Ashby, Steve and Beckman, Pete and Chen, Jackie and Colella, Phil
+              and Collins, Bill and Crawford, Dona and Dongarra, Jack and Kothe,
+              Doug and Lusk, Rusty and Messina, Paul and Mezzacappa, Tony and
+              Moin, Parviz and Norman, Mike and Rosner, Robert and Sarkar, Vivek
+              and Siegel, Andrew and Streitz, Fred and White, Andy and Wright,
+              Margaret},
+    institution = {U.S. Department of Energy},
+    year = {2010}
+}
+
+@book{barrettemplates,
+    needed-for = {introduction, 2017-coo-spmv, 2017-batched-spmv,
+                  2017-adaptive-block-jacobi},
+    author = {Barrett, R. and Berry, M. and Chan, T. F. and Demmel, J. and
+              Donato, J. and Dongarra, J. and Eijkhout, V. and Pozo, R. and
+              Romine, C. and van der Vorst, H.},
+    title = {Templates for the Solution of Linear Systems: Building Blocks for
+             Iterative Methods},
+    publisher = {SIAM},
+    year = {1994},
+    edition = {2nd}
+}
+
+@techreport{bell-garland,
+    needed-for = {introduction, 2017-csr-spvm, 2017-coo-spmv,
+                  2017-batched-spmv},
+    aka = {Bell:SpMV:NVIDIA:2008, garlandspmv},
+    author = {Bell, Nathan and Garland, Michael},
+    title = {Efficient Sparse Matrix-Vector Multiplication on {CUDA}},
+    institution = {NVIDIA Corporation},
+    year = {2008}
+}
+@techreport{Bell:SpMV:NVIDIA:2008,
+    author = {Nathan Bell and Michael Garland},
+    title = {Efficient Sparse Matrix-Vector Multiplication on {CUDA}},
+    institution = {NVIDIA Corporation},
+    year = {2008}
+}
+@techreport{garlandspmv,
+    author = {Bell, Nathan and Garland, Michael},
+    title = {Efficient Sparse Matrix-Vector Multiplication on {CUDA}},
+    institution = {NVIDIA Corporation},
+    year = {2008}
+}
+
+@article{CPE:CPE2933,
+    needed-for = {2017-gje-block-jacobi, 2017-gh-block-jacobi},
+    author = {Benner, Peter and Ezzatti, Pablo and Quintana-Ort\'{\i},
+              Enrique S. and Rem\'on, Alfredo},
+    title = {Matrix Inversion on {CPU}-{GPU} Platforms With Applications in
+             Control Theory},
+    publisher = {Wiley},
+    journal = {Concurrency and Computation: Practice and Experience},
+    year = {2013},
+    volume = {25},
+    issue = {8},
+    pages = {1170--1182}
+}
+
+@inproceedings{Benner2016,
+    needed-for = {2017-gh-block-jacobi},
+    author = {Benner, P. and Ezzatti, P. and Quintana-Ort{\'i}, E. S.  and
+              Rem{\'o}n, A.},
+    title = {Revisiting the {Gauss}-{Huard} Algorithm for the Solution of Linear
+             Systems on Graphics Accelerators},
+    booktitle = {In Proceeding of the 11th International Conference on Parallel
+                 Processing and Applied Mathematics},
+    series = {PPAM 2015},
+    year = {2016},
+    pages = {505--514}
+}
+
+@misc{bssw,
+    needed-for = {conclusion},
+    key = {Better Scientific Software (BSSw)},
+    howpublished = {\url{https://bssw.io/}},
+    year = {2019}
+}
+
+@article{blas,
+    needed-for = {2017-lu-block-jacobi},
+    author = {Blackford, L. Susan and Demmel, James and Dongarra, Jack and Duff,
+              Iain and Hammarling, C. Sven and Henry, Greg and Heroux, Michael
+              and Kaufman Linda and Lumsdaine, Andrew and  Petitet, Antoine and
+              Pozo, Roldan and Remington, Karin and Whaley, R. Clint},
+    title = {An updated set of basic linear algebra subprograms ({BLAS})},
+    publisher = {ACM},
+    journal = {ACM Transactions on Mathematical Software},
+    year = {2002},
+    volume = {28},
+    issue = {2},
+    pages = {135--151}
+}
+
+@book{de-boor,
+    needed-for = {introduction},
+    author = {de Boor, Carl},
+    title = {A Practical Guide to Splines},
+    publisher = {Springer-Verlag},
+    year = {1978},
+    edition = {1st}
+}
+
+@inproceedings{csb,
+    needed-for = {introduction, 2017-csr-spmv},
+    aka = {Buluc:2009:PSM:Buluc:2009:PSM:1583991.1584053}
+    author = {Bulu\c{c}, Aydin and Fineman, Jeremy T. and Frigo, Matteo and
+              Gilbert, John R. and Leiserson, Charles E.},
+    title = {Parallel Sparse Matrix-vector and Matrix-transpose-vector
+             Multiplication Using Compressed Sparse Blocks},
+    booktitle = {Proceedings of the 21st Annual Symposium on Parallelism in
+                 Algorithms and Architectures},
+    series = {SPAA'09},
+    publisher = {ACM},
+    year = {2009},
+    pages = {233--244}
+} 
+@inproceedings{Buluc:2009:PSM:1583991.1584053,
+    author = {Bulu\c{c}, Aydin and Fineman, Jeremy T. and Frigo, Matteo and
+              Gilbert, John R. and Leiserson, Charles E.},
+    title = {Parallel Sparse Matrix-vector and Matrix-transpose-vector
+             Multiplication Using Compressed Sparse Blocks},
+    booktitle = {Proceedings of the 21st Annual Symposium on Parallelism in
+                 Algorithms and Architectures},
+    series = {SPAA'09},
+    publisher = {ACM},
+    year = {2009},
+    pages = {233--244}
+} 
+
+@article{Buo15,
+    needed-for = {2017-csr-spmv},
+    author = {Buono, Daniele and Gunnels, John A. and Que, Xinyu and Checconi,
+              Fabio and Petrini, Fabrizio and Tuan, Tai-Ching and Long, Chris},
+    title = {Optimizing Sparse Linear Algebra for Large-Scale Graph Analytics},
+    publisher = {IEEE},
+    journal = {Computer},
+    year = {2015},
+    volume = {48},
+    issue = {8},
+    pages = {26-34}
+}
+
+@article{higham-ir,
+    needed-for = {introduction, 2017-adaptive-block-jacobi, conclusion},
+    aka = {carson2},
+    author={Carson, Erin and Higham, Nicholas J.},
+    title={Accelerating the Solution of Linear Systems by Iterative Refinement
+           in Three Precisions},
+    publisher={SIAM},
+    journal={SIAM Journal on Scientific Computing},
+    year={2018},
+    volume={40},
+    issue={2},
+    pages={A817--A847}
+}
+@article{carson2,
+    author={Carson, Erin and Higham, Nicholas J.},
+    title={Accelerating the Solution of Linear Systems by Iterative Refinement
+           in Three Precisions},
+    publisher={SIAM},
+    journal={SIAM Journal on Scientific Computing},
+    year={2018},
+    volume={40},
+    issue={2},
+    pages={A817--A847}
+}
+
+@article{carson1,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Carson, Erin and Higham, Nicholas J.},
+    title = {A New Analysis of Iterative Refinement and its Application to
+             Accurate Solution of Ill-Conditioned Sparse Linear Systems},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2017},
+    volume = {39},
+    issue = {6},
+    pages = {A2834-A2856}
+}
+
+@article{chow-scott-2016,
+    needed-for = {2017-gje-block-jacobi},
+    author = {Chow, Edmond and Scott, Jennifer},
+    title = {On the Use of Iterative Methods and Blocking for Solving Sparse
+             Triangular Systems in Incomplete Factorization Preconditioning},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2016, submitted}
+}
+
+@techreport{jenniferscott,
+    needed-for = {2017-gh-block-jacobi, 2017-lu-block-jacobi,
+                  2017-adaptive-block-jacobi},
+    author = {Chow, E. and Scott, J.},
+    title = {On the Use of Iterative Methods and Blocking for Solving Sparse
+             Triangular Systems in Incomplete Factorization Preconditioning},
+    institution = {Rutherford Appleton Laboratory},
+    year = {2016}
+}
+
+@misc{cuda8.0,
+    needed-for = {2017-coo-spmv, 2017-batched-spmv, 2017-lu-block-jacobi},
+    Key = {CUDA Toolkit v8.0},
+    Howpublished = {\url{https://docs.nvidia.com/cuda/}},
+    Year = {2017}
+}
+
+@misc{cusp,
+    needed-for = {2017-batched-spmv},
+    key = {CUSP: Generic Parallel Algorithms for Sparse Matrix and Graph
+           Computations},
+    Howpublished = {\url{http://cusplibrary.github.io/}},
+    Year = {2014}
+}
+
+@misc{cusparse,
+    needed-for = {2017-csr-spmv},
+    key = {cuSPARSE},
+    Howpublished = {\url{http://docs.nvidia.com/cuda/cusparse/}},
+    Year = {2017}
+}
+
+@misc{cutlass,
+    needed-for = {conclusion},
+    howpublished = {\url{https://github.com/NVIDIA/cutlass}},
+    key = {CUTLASS},
+    year = {2019}
+}
+
+@book{Davis06,
+    needed-for = {2017-csr-spmv},
+    author = {Davis, T.},
+    title = {Direct Methods for Sparse Linear Systems},
+    publisher = {SIAM},
+    year = {2006},
+    edition = {1st}
+}
+
+@article{ufmc,
+    needed-for = {2017-coo-spmv, 2017-batched-spmv, 2017-gh-block-jacobi,
+                  2017-lu-block-jacobi, 2017-adaptive-block-jacobi},
+    author = {Davis, T. A. and Hu, Y.},
+    title = {The {University} of {Florida} Sparse Matrix Collection},
+    publisher = {ACM},
+    journal = {ACM Transactions on Mathematical Software (TOMS)},
+    year = {2011},
+    volume = {38},
+    issue = {1},
+    pages = {1--25}
+}
+
+@article{Dek97,
+    needed-for = {2017-gh-block-jacobi, 2017-lu-block-jacobi},
+    author = {Dekker, T. J. and Hoffmannm, W. and Potma, K.},
+    title = {Stability of the {Gauss}-{Huard} Algorithm with Partial Pivoting},
+    publisher = {Springer-Verlag},
+    journal = {Computing},
+    year = {1997},
+    volume = {58},
+    issue = {3},
+    Pages = {225--244}
+}
+
+@book{demmel,
+    needed-for = {introduction},
+    author = {Demmel, James W.},
+    title = {Applied Numerical Linear Algebra},
+    publisher = {SIAM},
+    year = {1997},
+    edition = {1st}
+}
+
+@techreport{Don14,
+    needed-for = {2017-adaptive-block-jacobi},
+    author={Dongarra, Jack and Hittinger, Jeffrey and Bell, John and Chacon,
+            Luis and Falgout, Robert and Heroux, Michael and Hovland, Paul and
+            Ng, Esmond and Webster, Clayton and Wild, Stefan},
+    title={Applied Mathematics Research for Exascale Computing},
+    institution={U.S. Department of Energy},
+    year={2014}
+}
+
+@techreport{bblas,
+    needed-for = {2017-batched-spmv, 2017-gje-block-jacobi, conclusion},
+    aka = {batched-blas},
+    author = {Dongarra, J. and Duff, I. S. and Gates,M. and Haidar, A. and
+              Hammerling, S. and Higham, J. and Hogg, J. and Valero-Lara, P. and
+              Relton, D. and Tomov, S. and Zounon, M.},
+    institution = {The University of Manchester},
+    title = {A Proposed {API} for Batched Basic Linear Algebra Subprograms},
+    Year = {2016}
+}
+@techreport{batched-blas,
+    title={A proposed {API} for batched basic linear algebra subprograms},
+    author = {Dongarra, J. and Duff, I. S. and Gates,M. and Haidar, A. and
+              Hammerling, S. and Higham, J. and Hogg, J. and Valero-Lara, P. and
+              Relton, D. and Tomov, S. and Zounon, M.},
+    institution = {The University of Manchester},
+    title = {A Proposed {API} for Batched Basic Linear Algebra Subprograms},
+    Year = {2016}
+}
+
+@book{duff,
+    needed-for = {introduction},
+    author = {Duff, Iain S. and Erisman, Al M. and Reid, John K.},
+    title = {Direct Methods for Sparse Matrices},
+    publisher = {Clarendon Press},
+    year = {2017},
+    edition = {2nd}
+}
+
+@misc{Dur15,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Duranton, M. and De Bosschere, K. and Cohen, A. and Maebe, J. and
+              Munk, H.},
+    title = {{HiPEAC} Vision 2015},
+    howpublished = {\url{https://www.hipeac.org/publications/vision/}},
+    year = {2015}
+}
+
+@article{duhi92,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Du Croz, Jeremy J. and Nicholas J. Higham},
+    title = {Stability of Methods for Matrix Inversion},
+    publisher = {Oxford University Press},
+    journal = {IMA Journal of Numerical Analysis},
+    year = {1992},
+    volume = {12},
+    issue = {1},
+    pages = {1-19},
+}
+
+@InProceedings{ecker,
+    needed-for = {introduction},
+    author = {Ecker, Jan Philipp and Berrendorf, Rudolf and Mannuss, Florian},
+    title = {New Efficient General Sparse Matrix Formats for Parallel {SpMV}
+             Operations},
+    booktitle = {Parallel Processing --- 23rd International
+                 Conference on Parallel and Distributed Computing},
+    series = {Euro-Par 2017},
+    publisher = {Springer},
+    year = {2017},
+    pages = {523--537}
+}
+
+@inproceedings{elafrou,
+    needed-for = {conclusion},
+    title = {Performance Analysis and Optimization of Sparse Matrix-Vector
+             Multiplication on Modern Multi- and Many-Core Processors},
+    author = {Elafrou, Athena and Goumas, Georgios and Koziris, Nectarios},
+    booktitle = {Proceedings of the 46th International Conference on Parallel
+                 Processing},
+    series = {ICPP 2017},
+    publisher = {IEEE},
+    year={2017},
+    pages={292--301}
+}
+
+@article{adaptive-jacobi-gpu,
+    needed-for = {conclusion},
+    author = {Flegar, Goran and Cojean, Terry and Anzt, Hartwig and
+              Quintana-Ort\'i, Enrique S.},
+    title = {Customized-Precision Block-Jacobi Preconditioning for Krylov
+             Iterative Solvers on Data-Parallel Manycore Processors},
+    publisher = {ACM},
+    journal = {ACM Transactions on Mathematical Software (TOMS)},
+    year = {submitted}
+}
+
+@article{floatx,
+    needed-for = {conclusion},
+    title = {{FloatX}: A {C++} library for customized floating-point arithmetic},
+    author = {Flegar, Goran and Scheidegger, Florian and Novakovi\'c, Vedran and
+              Mariani, Giovani and Tom\'as, Andr\'es E. and Malossi, A.
+              Cristiano I. and Quintana-Ort\'i, Enrique S.},
+    journal = {ACM Transactions on Mathematical Software (TOMS)},
+    publisher = {ACM},
+    year = {submitted}
+}
+
+@inproceedings{csri,
+    needed-for = {2017-coo-spmv, 2017-batched-spmv},
+    author = {Flegar, Goran and Quintana-Ort\'{\i}, Enrique S.},
+    title = {Balanced {CSR} Sparse Matrix-Vector Product on Graphics
+             Processors},
+    booktitle = {Parallel Processing --- 23rd International Conference on
+                 Parallel and Distributed Computing},
+    series = {Euro-Par 2017},
+    publisher = {Springer},
+    year = {2017},
+    pages = {697-709}
+}
+
+@misc{ginkgo,
+    needed-for = {introduction, conclusion},
+    howpublished = {\url{https://ginkgo-project.github.io}},
+    key = {Ginkgo},
+    year = {2019}
+}
+
+@book{GVL3,
+    needed-for = {2017-gh-block-jacobi, 2017-lu-block-jacobi,
+                  2017-adaptive-block-jacobi},
+    author = {Golub, G.H. and Van Loan, C.F.},
+    title = {Matrix Computations},
+    publisher = {The Johns Hopkins University Press},
+    year = {1996},
+    edition = {3rd}
+}
+
+@article{doi:10.1137/S1064827597323415,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Golub, Gene H. and Ya, Qiang},
+    title = {Inexact Preconditioned Conjugate Gradient Method with Inner-Outer
+             Iteration},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {1999},
+    volume = {21},
+    issue = {4},
+    pages = {1305-1320}
+}
+
+@inproceedings{jacobi-modular,
+    needed-for = {conclusion},
+    author = {Gr{\"u}tzmacher, Thomas and Anzt, Hartwig},
+    title = {A Modular Precision Format for Decoupling Arithmetic Format and
+             Storage Format},
+    booktitle = {Parallel Processing --- 24th International
+                 Conference on Parallel and Distributed Computing},
+    series = {Euro-Par 2018},
+    publisher = {Springer},
+    year = {2018},
+    pages = {434--443}
+}
+
+@inproceedings{pagerank,
+    needed-for = {conclusion},
+    author = {Gr{\"u}tzmacher, Thomas and Anzt, Hartwig},
+    title = {\gf{Need bibliographical info for PageRank paper}},
+}
+
+@article{gpu-selection,
+    needed-for = {conclusion},
+    author = {Guo, Ping and Wang, Liqiang and Chen, Po},
+    title = {A Performance Modeling and Optimization Analysis Tool for Sparse
+             Matrix-Vector Multiplication on {GPUs}},
+    publisher = {IEEE},
+    journal = {IEEE Transactions on Parallel and Distributed Systems},
+    year = {2014},
+    volume = {25},
+    issue = {5},
+    pages = {1112--1123},
+}
+
+@book{hierarchical,
+    needed-for = {introduction},
+    author = {Hackbusch, Wolfgang},
+    title = {Hierarchical Matrices: Algorithms and Analysis},
+    publisher = {Springer-Verlag},
+    year = {2015},
+    edition = {1st}
+}
+
+@article{Haidar:2015:BMC:2766466.2766470,
+    needed-for = {2017-gje-block-jacobi},
+    author = {Haidar, Azzam and Dong, Tingxing and Luszczek, Piotr and Tomov,
+              Stanimire and Dongarra, Jack},
+    title = {Batched Matrix Computations on Hardware Accelerators Based on
+             {GPUs}},
+    publisher = {Sage Publications},
+    journal = {International Journal of High Performance Computing
+               Applications},
+    year = {2015},
+    volume = {29},
+    issue = {2},
+    pages = {193--208}
+}
+
+@book{la,
+    needed-for = {conclusion},
+    author = {Hoffman, Kenneth and Kunze, Ray Alden},
+    title = {Linear Algebra},
+    publisher = {Pearson India Education Services},
+    year = {2015},
+    edition = {2nd}
+}
+
+@book{Householder,
+    needed-for = {2017-gje-block-jacobi},
+    author = {Householder, Alston S.},
+    title = {The Theory of Matrices in Numerical Analysis},
+    publisher = {Dover},
+    year = {1964},
+    edition = {1st}
+}
+
+@book{higham,
+    needed-for = {introduction, 2017-adaptive-block-jacobi},
+    aka = {higham2},
+    author = {Higham, Nicholas J.},
+    title = {Accuracy and Stability of Numerical Algorithms},
+    publisher = {SIAM},
+    year = {2002},
+    edition = {2nd}
+}
+@book{higham2,
+    author = {Higham, Nicholas J.},
+    title = {Accuracy and Stability of Numerical Algorithms},
+    publisher = {SIAM},
+    year = {2002},
+    edition = {2nd}
+}
+
+
+@article{Hua79,
+    needed-for = {2017-gh-block-jacobi, 2017-lu-block-jacobi},
+    author = {Huard, P.},
+    title = {La M\'ethode Simplex Sans Inverse Explicite},
+    journal = {E.D.F. Bull. de la Direction des \'Etudes at des Recherches},
+    year = {1979},
+    volume = {2},
+    issue = {2},
+    pages = {79--98}
+}
+
+@Book{Ipsen2009,
+    needed-for = {introduction},
+    author = {Ipsen, Ilse C. F.},
+    title = {Numerical Matrix Analysis: Linear Systems and Least Squares},
+    publisher = {SIAM},
+    year = {2009},
+    edition = {1st}
+}
+
+@phdthesis{joaqin-thesis,
+    needed-for = {introduction},
+    author = {Joaqu{\'{\i}}n P{\'{e}}rez Badenes},
+    title = {Consumo Energ{\'{e}}tico de M{\'{e}}todos Iterativos Para Sistemas
+             Dispersos en Procesadores Gr{\'{a}}ficos},
+    school = {Universitat Jaume I},
+    year = {2016}
+}
+
+@book{kepner,
+    needed-for = {introduction},
+    editor = {Kepner, Jeremy and Gilbert, John},
+    title = {Graph Algorithms in the Language of Linear Algebra},
+    publisher = {SIAM},
+    year = {2011},
+    edition = {1st}
+}
+
+@article{doi:10.1137/060675290,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Knyazev, Andrew V. and Lashuk, Ilya},
+    title = {Steepest Descent and Conjugate Gradient Methods with Variable
+             Preconditioning},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Matrix Analysis and Applications},
+    year = {2008},
+    Volume = {29},
+    issue = {4},
+    pages = {1267-1280},
+}
+
+@article{sell-c-sigma,
+    needed-for = {introduction, 2017-csr-spmv, 2017-coo-spmv,
+                  2017-batched-spmv},
+    aka = {Kreu14, sellcs},
+    author = {Kreutzer, Moritz and Hager, Georg and Wellein, Gerhard and Fehske,
+              Holger and Bishop, Alan R.},
+    title = {A Unified Sparse Matrix Data Format for Efficient General Sparse
+             Matrix-Vector Multiplication on Modern Processors with Wide {SIMD}
+             Units},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2014},
+    volume = {36},
+    issue = {5},
+    pages = {C401--C423}
+}
+@article{Kreu14,
+    author = {Kreutzer, Moritz and Hager, Georg and Wellein, Gerhard and Fehske,
+              Holger and Bishop, Alan R.},
+    title = {A Unified Sparse Matrix Data Format for Efficient General Sparse
+             Matrix-Vector Multiplication on Modern Processors with Wide {SIMD}
+             Units},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2014},
+    volume = {36},
+    issue = {5},
+    pages = {C401--C423}
+}
+@article{sellcs,
+    author = {Kreutzer, Moritz and Hager, Georg and Wellein, Gerhard and Fehske,
+              Holger and Bishop, Alan R.},
+    title = {A Unified Sparse Matrix Data Format for Efficient General Sparse
+             Matrix-Vector Multiplication on Modern Processors with Wide {SIMD}
+             Units},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2014},
+    volume = {36},
+    issue = {5},
+    pages = {C401--C423}
+}
+
+@article{7275187,
+    needed-for = {2017-gje-block-jacobi},
+    author = {Kurzak, J. and Anzt, H. and Gates, M. and Dongarra, J.},
+    title = {Implementation and Tuning of Batched Cholesky Factorization and
+             Solve for {NVIDIA} {GPUs}},
+    publisher = {IEEE},
+    journal = {IEEE Transactions on Parallel and Distributed Systems},
+    year = {2016},
+    volume = {27},
+    issue = {7},
+    pages = {2036-2048}
+}
+
+@book{big-o,
+    needed-for = {introduction},
+    author = {Landau, Edmund},
+    title = {Foundations of Analysis},
+    publisher = {AMS},
+    year = {1966},
+    edition = {3rd}
+}
+
+@book{pagerank,
+    needed-for = {2017-csr-spmv},
+    author = {Langville, A.N. and Meyer, C.D.},
+    title = {Google's PageRank and Beyond: The Science of Search Engine
+             Rankings},
+    publisher = {Princeton University Press},
+    year = {2009}
+}
+
+@techreport{Lec13,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Lavignon, J. F. and Lecomber, D. and Phillips, I. and Subirada, F.
+              and Bodin, F. and Gonnord, J. and Bassini, S. and Tecchiolli, G.
+              and Lonsdale, G. and Pflieger, A. and Andrietti, B. and Lippert,
+              T. and Bode, A. and Falter, H. and Blouet, P. and Muggeridge M.},
+    title = {{ETP4HPC} Strategic Research Agenda Achieving {HPC} Leadership in
+             {Europe}},
+    institution = {European Technology Platform for High Performance Computing},
+    Year = {2013}
+}
+
+@inproceedings{triangular-solve,
+    needed-for = {conclusion},
+    author = {Liu, Weifeng and Li, Ang and Hogg, Jonathan and Duff, Iain S and
+              Vinter, Brian},
+    title = {A Synchronization-Free Algorithm for Parallel Sparse Triangular
+             Solves},
+    booktitle = {Parallel Processing -- 22nd International Conference on
+                 Parallel and Distributed Computing},
+    series = {Euro-Par 2016},
+    publisher = {Springer},
+    year = {2016},
+    pages = {617--630},
+}
+
+@inproceedings{csr5,
+    needed-for = {introduction, 2017-csr-spmv, 2017-coo-spvm},
+    aka = {Liu:2015:CES:2751205.2751209},
+    author = {Liu, Weifeng and Vinter, Brian},
+    title = {{CSR5}: An Efficient Storage Format for Cross-Platform Sparse
+             Matrix-Vector Multiplication},
+    booktitle = {Proceedings of the 29th ACM on International Conference on
+                 Supercomputing},
+    series = {ICS'15},
+    publisher = {ACM},
+    year = {2015},
+    pages = {339--350}
+}
+@inproceedings{Liu:2015:CES:2751205.2751209,
+    author = {Liu, Weifeng and Vinter, Brian},
+    title = {{CSR5}: An Efficient Storage Format for Cross-Platform Sparse
+             Matrix-Vector Multiplication},
+    booktitle = {Proceedings of the 29th ACM on International Conference on
+                 Supercomputing},
+    series = {ICS'15},
+    publisher = {ACM},
+    year = {2015},
+    pages = {339--350}
+}
+
+@techreport{Luc14,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Lucas, R. and Bergman, K. and Borkar, S. and Carlson, W. and
+              Carrington, L. and Chiu, G. and Colwell, R. and Dally, W. and
+              Dongarra, J. and Geist, A. and Grider, G. and Haring, R. and
+              Hittinger J. and Hoisie, A. and Klein, D. and Kogge, P. and
+              Lethin, R. and Sarkar, V. and Schreiber, R. and Shalf, J. and
+              Sterling, T. and Stevens, R.},
+    title = {Top Ten Exascale Research Challenges},
+    institution = {U.S. Department of Energy},
+    year = {2014}
+}
+
+@misc{magma,
+    needed-for = {introduction},
+    howpublished = {\url{http://icl.cs.utk.edu/magma/}},
+    key = {MAGMA 2.5.0},
+    year = {2019}
+}
+
+@misc{magma-old,
+    needed-for = {2017-gje-block-jacobi, 2017-gh-block-jacobi,
+                  2017-lu-block-jacobi},
+    aka = {magma},
+    howpublished = {\url{http://icl.cs.utk.edu/magma/}},
+    key = {MAGMA 2.0.0},
+    year = {2016}
+}
+
+@inproceedings{sellc,
+    needed-for = {2017-coo-spmv},
+    Author = {Monakov, Alexander and Lokhmotov, Anton and Avetisyan, Arutyun},
+    Title = {Automatically Tuning Sparse Matrix-Vector Multiplication for {GPU}
+             Architectures},
+    Booktitle = {Proceedings of the 5th International Conference on High
+                 Performance Embedded Architectures and Compilers},
+    Series = {HiPEAC'10},
+    Publisher = {Springer-Verlag},
+    Year = {2010}
+}
+
+@article{notay,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Notay, Yvan},
+    title = {Flexible Conjugate Gradients},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2000},
+    volume = {22},
+    issue = {4},
+    pages = {1444-1460},
+}
+
+@misc{p100,
+    needed-for = {2017-batched-spmv},
+    Key = {NVIDIA Tesla P100},
+    Howpublished = {WP-08019-001\_v01.1},
+    Note = {Whitepaper},
+    Year = {2016}
+}
+
+@misc{paralution,
+    needed-for = {introduction},
+    howpublished = {\url{http://www.paralution.com/}},
+    key = {PARALUTION},
+    year = {2015}
+}
+
+@article{feast,
+    needed-for = {introduction},
+    author = {Polizzi, Eric},
+    title = {Density-Matrix-Based Algorithm for Solving Eigenvalue Problems},
+    publisher = {APS},
+    journal = {Phys. Rev. B},
+    year = {2009},
+    volume = {79},
+    issue = {11},
+    pages = {115112}
+}
+
+@article{doi:10.1137/S1064827598345679,
+    needed-for = {2017-gje-block-jacobi, 2017-gh-block-jacobi},
+    author = {Quintana-Ort\'{\i}, Enrique S. and Quintana-Ort\'{\i}, Gregorio
+              and Sun, Xiaobai and van de Geijn, Robert},
+    title = {A Note On Parallel Matrix Inversion},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2001},
+    volume = {22},
+    issue = {5},
+    pages = {1762-1771}
+}
+
+@book{saad,
+    needed-for = {introduction, 2017-csr-spmv, 2017-gje-block-jacobi,
+                  2017-gh-block-jacobi, 2017-adaptive-block-jacobi},
+    author = {Saad, Yousef},
+    title = {Iterative Methods for Sparse Linear Systems},
+    publisher = {SIAM},
+    year = {2003},
+    edition = {2nd}
+}
+
+@misc{shalf,
+    needed-for = {2017-adaptive-block-jacobi},
+    author = {Shalf, J.},
+    title = {The Evolution of Programming Models in Response to Energy
+             Efficiency Constraints},
+    year = {2013},
+    howpublished =
+    {\url{http://www.oscer.ou.edu/Symposium2013/oksupercompsymp2013_talk_shalf_20131002.pdf}},
+    Note = {Slides presented at Oklahoma Supercomputing Symposium 2013},
+}
+
+@article{idr1,
+    needed-for = {2017-gje-block-jacobi},
+    author = {Sonneveld, Peter and van Gijzen, Martin B.},
+    title = {{IDR(s)}: A Family of Simple and Fast Algorithms for Solving Large
+             Nonsymmetric Systems of Linear Equations},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2009},
+    volume = {31},
+    issue = {2},
+    pages = {1035-1062}
+}
+
+@inproceedings{clspmv,
+    needed-for = {conclusion},
+    author = {Su, Bor-Yiing and Keutzer, Kurt},
+    title = {{clSpMV}: A cross-platform {OpenCL} {SpMV} framework on {GPUs}},
+    booktitle = {Proceedings of the 26th ACM international conference on
+                 Supercomputing},
+    series = {ICS'12}
+    publisher = {ACM},
+    year = {2012},
+    pages = {353--364}
+}
+
+@article{flexfloat,
+    needed-for = {conclusion},
+    author = {Tagliavini, Giuseppe and Marongiu, Andrea and Benini, Luca},
+    title= {{FlexFloat}: A Software Library for Transprecision Computing},
+    journal = {IEEE Transactions on Computer-Aided Design of Integrated Circuits
+               and Systems},
+    publisher = {IEEE},
+    year = {2018},
+    volume = {Early Access}
+}
+
+@misc{toms,
+    needed-for = {conclusion},
+    key = {The TOMS Initiative and Policies for Replicated Computational Results
+           (RCR)},
+    howpublished =
+        {\url{https://toms.acm.org/replicated-computational-results.cfm}},
+    year={2019}
+}
+
+@misc{top500,
+    needed-for = {introduction},
+    Howpublished = {\url{http://www.top.org/}},
+    Key = {The Top 500 List},
+    Year = {2019}
+}
+
+@misc{hybrid,
+    needed-for = {conclusion},
+    title = {\gf{Hybrid paper --- need bibliographic details}},
+    author = {Tsai, Mike and Chen, Yen-Chen and Anzt, Hartwig and Flegar, Goran
+              and Dongarra, Jack},
+    note = {submitted}
+}
+
+@article{CPE:CPE1658,
+    needed-for = {2017-csr-spmv},
+    author = {V\'azquez, F. and Fern\'andez, J. J. and Garz\'on, E. M.},
+    title = {A New Approach for Sparse Matrix Vector Product on {NVIDIA}
+             {GPUs}},
+    publisher = {Wiley},
+    journal = {Concurrency and Computation: Practice and Experience},
+    year = {2011},
+    volume = {23},
+    issue = {8},
+    pages = {815--826}
+}
+
+@misc{vienna-cl,
+    needed-for = {introduction},
+    Howpublished = {\url{http://viennacl.sourceforge.net/}},
+    Key = {ViennaCl},
+    Year = {2015}
+}
+
+@phdthesis{bsr,
+    needed-for = {introduction},
+    author = {Vuduc, Richard Wilson},
+    title = {Automatic Performance Tuning of Sparse Matrix Kernels},
+    school = {University of California, Berkeley},
+    year = {2003}
+} 
+
+@article{bccoo,
+    needed-for = {2017-csr-spmv},
+    author = {Yan, Shengen and Li, Chao and Zhang, Yunquan and Zhou, Huiyang},
+    title = {{yaSpMV}: yet another {SpMV} framework on {GPUs}},
+    publisher = {ACM},
+    journal = {ACM SIGPLAN Notices - PPoPP'14},
+    year = {2014},
+    volume = {49},
+    issue = {8},
+    pages = {107--118}
+}
+
+@inproceedings{ca-gmres,
+    needed-for = {introduction},
+    author = {Yamazaki, Ichitaro and Anzt, Hartwig and Tomov, Stanimire and
+              Hoemmen, Mark and Dongarra, Jack},
+    title = {Improving the Performance of {CA-GMRES} on Multicores with Multiple
+             {GPUs}},
+    booktitle = {Proceedings of the 2014 IEEE 28th International Parallel and
+                 Distributed Processing Symposium},
+    series = {IPDPS'14},
+    publisher = {IEEE},
+    year = {2014},
+    pages = {382--391}
+}
+
+@misc{xsdk,
+    needed-for = {conclusion},
+    key = {xSDK: Extreme-scale Scientific Software Development Kit},
+    howpublished = {\url{https://xsdk.info/}},
+    year = {2019}
+}
+

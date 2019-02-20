@@ -46,7 +46,7 @@ the CSR format requires extra processing to determine the row location of
 a certain element.
 
 On SIMD architectures, a performance-relevant aspect is to have uniform operations
-across the SIMD unit. This makes the ELL format~\cite{ellpack} attractive for these architectures:
+across the SIMD unit. This makes the ELL format~\cite{garlandspmv} attractive for these architectures:
 In this format, each row is compressed to contain only the nonzero entries 
 and some explicit zeros that are used for padding to enforce
 an equal length for all rows.
@@ -89,7 +89,7 @@ when writing the resulting vector entry back into main memory.
 
 The standard approach of parallelizing the CSR, ELL and SELL-p formats is to
 distribute the rows among distinct threads (or groups of threads)
-\cite{ellpack, sellc}.
+\cite{garlandspmv, sellc}.
 For the CSR format, this works fair well for balanced sparsity patterns, but it can lead to
 severe load imbalance otherwise. 
 Recently, a strategy for a load balanced CSR \spmv was proposed that 

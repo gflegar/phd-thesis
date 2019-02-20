@@ -106,7 +106,7 @@ A simple parallelization of \spmv based on CSR
 is obtained by mapping the distinct rows to different threads.
 This corresponds to parallelizing the outer for-loop in the second listing
 in Figure~\ref{2017-batched-spmv:fig:spmv} ({\tt SpMV\_CSR}).
-This variant was first described for GPUs in~\cite{ellpack},
+This variant was first described for GPUs in~\cite{garlandspmv},
 under the name CSR-scalar.
 Even though CSR-scalar does not require any synchronization,
 it typically suffers from noncoalescent memory accesses
@@ -118,7 +118,7 @@ after processing their rows,
 all threads of a warp remain idle until the thread processing 
 the densest row has completed its work.
 
-To alleviate the issues with CSR-scalar, the authors of~\cite{ellpack}
+To alleviate the issues with CSR-scalar, the authors of~\cite{garlandspmv}
 proposed an alternative implementation: CSR-vector, which
 maps each row to one warp (group of 32 threads).
 This strategy removes two drawbacks at a time:
@@ -187,7 +187,7 @@ occupancy-limiting factor.
 \subsection{ELL}
 The implementation of the flexible batched \spmv kernel based on the ELL format
 ( we denote the batched kernel ``\ell'')
-is an immediate derivation of the standard ELL \spmv from~\cite{ellpack}:
+is an immediate derivation of the standard ELL \spmv from~\cite{garlandspmv}:
 Each thread of the block processes a different row, forming the partial
 sums of its row in thread-local memory, while the thread block traverses the column indices
 and values from left to right. After completion, the intermediate results are written into the output

@@ -1,241 +1,243 @@
-@inproceedings{clspmv,
-    title={{clSpMV}: A cross-platform {OpenCL} {SpMV} framework on {GPUs}},
-    author={Su, Bor-Yiing and Keutzer, Kurt},
-    booktitle={Proceedings of the 26th ACM international conference on Supercomputing},
-    pages={353--364},
-    year={2012},
-    organization={ACM}
-}
-
-
-@article{gpu-selection,
-    title={A performance modeling and optimization analysis tool for sparse
-         matrix-vector multiplication on {GPUs}},
-    author={Guo, Ping and Wang, Liqiang and Chen, Po},
-    journal={IEEE Transactions on Parallel and Distributed Systems},
-    volume={25},
-    number={5},
-    pages={1112--1123},
-    year={2014},
-    publisher={IEEE}
-}
-
-
-@inproceedings{elafrou,
-    title={Performance Analysis and Optimization of Sparse Matrix-Vector Multiplication on Modern Multi-and Many-Core Processors},
-    author={Elafrou, Athena and Goumas, Georgios and Koziris, Nectarios},
-    booktitle={Parallel Processing (ICPP), 2017 46th International Conference on},
-    pages={292--301},
-    year={2017},
-    organization={IEEE}
-}
-
-@misc{hybrid,
-    title={Hybrid paper --- need bibliographic details},
-    author={Mike Tsai and Yen-Chen Chen and Hartwig Anzt and Goran Flegar and
-            Jack Dongarra},
-    note={submitted}
-}
-
-@inproceedings{triangular-solve,
-    title={A synchronization-free algorithm for parallel sparse triangular solves},
-    author={Liu, Weifeng and Li, Ang and Hogg, Jonathan and Duff, Iain S and Vinter, Brian},
-    booktitle={European Conference on Parallel Processing},
-    pages={617--630},
-    year={2016},
-    organization={Springer}
-}
-
-@article{isai,
-    title={Incomplete sparse approximate inverses for parallel preconditioning},
-    author={Anzt, Hartwig and Huckle, Thomas K and Br{\"a}ckle, J{\"u}rgen and Dongarra, Jack},
-    journal={Parallel Computing},
-    volume={71},
-    pages={1--22},
-    year={2018},
-    publisher={Elsevier}
-}
-
 @inproceedings{triangular-iterative,
-    title={Iterative sparse triangular solves for preconditioning},
-    author={Anzt, Hartwig and Chow, Edmond and Dongarra, Jack},
-    booktitle={European Conference on Parallel Processing},
-    pages={650--661},
-    year={2015},
-    organization={Springer}
+    author = {Anzt, Hartwig and Chow, Edmond and Dongarra, Jack},
+    title = {Iterative Sparse Triangular Solves for Preconditioning},
+    booktitle = {Parallel Processing -- 21st International Conference on
+                 Parallel and Distributed Computing},
+    series = {Euro-Par 2015},
+    publisher = {Springer},
+    year = {2015},
+    pages={650--661}
 }
 
 @article{ilut,
-    title={{ParILUT}---A New Parallel Threshold {ILU} Factorization},
-    author={Anzt, Hartwig and Chow, Edmond and Dongarra, Jack},
-    journal={SIAM Journal on Scientific Computing},
-    volume={40},
-    number={4},
-    pages={C503--C519},
-    year={2018},
-    publisher={SIAM}
+    author = {Anzt, Hartwig and Chow, Edmond and Donagarra, Jack},
+    title = {{ParILUT}---A New Parallel Threshold {ILU} Factorization},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2018},
+    volume = {40},
+    issue = {4},
+    pages = {C503--C519},
+}
+
+@inproceedings{jacobi,
+    author= {Anzt, Hartwig and Dongarra, Jack and Quintana-Ort{\'\i}, Enrique
+             S.},
+    title = {Adaptive Precision Solvers for Sparse Linear Systems},
+    booktitle = {Proceedings of the 3rd International Workshop on Energy
+                 Efficient Supercomputing},
+    series = {E2SC'15},
+    publisher = {ACM},
+    year={2015},
+    pages={2},
+}
+
+@inproceedings{patch-contrib,
+    author = {Anzt, Hartwig and Flegar, Goran},
+    title = {Are We Doing the Right Thing? --- A Critical Analysis of the
+             Academic {HPC} Community},
+    booktitle = {Proceedings of the 20th IEEE International Workshop on Parallel
+                 and Distributed Scientific and Engineering Computing},
+    publisher = {IEEE},
+    year={2019},
+    pages={submitted}
+}
+
+@InProceedings{anzt-ir,
+    author = {Anzt, Hartwig and Flegar, Goran and Novakovi{\'{c}}, Vedran and
+              Quintana-Ort{\'i}, Enrique S.  and Tom{\'a}s, Andr{\'e}s E.},
+    title = {Residual Replacement in Mixed-Precision Iterative Refinement for
+             Sparse Linear Systems},
+    booktitle = {High Performance Computing},
+    publisher = {Springer},
+    year = {2018},
+    pages = {554--561}
+}
+
+@article{isai,
+    author = {Anzt, Hartwig and Huckle, Thomas K. and Br{\"a}ckle, J{\"u}rgen
+              and Dongarra, Jack},
+    title = {Incomplete Sparse Approximate Inverses for Parallel
+             Preconditioning},
+    publisher = {Elsevier},
+    journal = {Parallel Computing},
+    year = {2018},
+    volume = {71},
+    pages = {1--22}
 }
 
 @inproceedings{ilut-gpu,
     title={A Parallel Threshold {ILU} for {GPUs}},
-    author={Hartwig Anzt and Tobias Ribizel and Goran Flegar and Edmond Chow and
-            Jack Dongarra},
+    author={Anzt, Hartwig and Ribizel, Tobias and Flegar, Goran and Chow, Edmond
+            and Dongarra, Jack },
     booktitle={2019 IEEE International Parallel and Distributed Processing
                Symposium (IPDPS)},
+    series = {IPDPS 2019},
+    publisher = {IEEE},
+    year = {2019},
     note={accepted}
 }
 
-@techreport{batched-blas,
-    title={A proposed {API} for batched basic linear algebra subprograms},
-    author={Dongarra, Jack and Duff, Iain and Gates, Mark and Haidar, Azzam and
-          Hammarling, Sven and Higham, Nicholas J and Hogg, Jonathon and
-          Valero-Lara, Pedro and Relton, Samuel D and Tomov, Stanimire},
-    year={2016}
+@misc{bssw,
+    key = {Better Scientific Software (BSSw)},
+    howpublished = {\url{https://bssw.io/}},
+    year = {2019}
 }
 
-@misc{ginkgo,
-    Howpublished = {\url{https://ginkgo-project.github.io}},
-    Key = {Ginkgo},
-    Title = {{{Ginkgo}}},
-    Year = {2019}
+@article{higham-ir,
+    author={Carson, Erin and Higham, Nicholas J.},
+    title={Accelerating the Solution of Linear Systems by Iterative Refinement
+           in Three Precisions},
+    publisher={SIAM},
+    journal={SIAM Journal on Scientific Computing},
+    year={2018},
+    volume={40},
+    issue={2},
+    pages={A817--A847}
 }
 
 @misc{cutlass,
-    Howpublished = {\url{https://github.com/NVIDIA/cutlass}},
-    Key = {CUTLASS},
-    Title = {{CUTLASS}},
-    Year = {2019}
+    howpublished = {\url{https://github.com/NVIDIA/cutlass}},
+    key = {CUTLASS},
+    year = {2019}
 }
 
-
-@article{higham-ir,
-    title={Accelerating the solution of linear systems by iterative refinement in three precisions},
-    author={Carson, Erin and Higham, Nicholas J},
-    journal={SIAM Journal on Scientific Computing},
-    volume={40},
-    number={2},
-    pages={A817--A847},
-    year={2018},
-    publisher={SIAM}
+@techreport{batched-blas,
+    author = {Dongarra, J. and Duff, I. S. and Gates,M. and Haidar, A. and
+              Hammerling, S. and Higham, J. and Hogg, J. and Valero-Lara, P. and
+              Relton, D. and Tomov, S. and Zounon, M.},
+    title = {A Proposed {API} for Batched Basic Linear Algebra Subprograms},
+    institution = {The University of Manchester},
+    Year = {2016}
 }
 
-@inproceedings{anzt2015adaptive,
-    title={Adaptive precision solvers for sparse linear systems},
-    author={Anzt, Hartwig and Dongarra, Jack and Quintana-Ort{\'\i}, Enrique S},
-    booktitle={Proceedings of the 3rd International Workshop on Energy Efficient Supercomputing},
-    pages={2},
-    year={2015},
-    organization={ACM}
+@inproceedings{elafrou,
+    title = {Performance Analysis and Optimization of Sparse Matrix-Vector
+             Multiplication on Modern Multi- and Many-Core Processors},
+    author = {Elafrou, Athena and Goumas, Georgios and Koziris, Nectarios},
+    booktitle = {Proceedings of the 46th International Conference on Parallel
+                 Processing},
+    series = {ICPP 2017},
+    publisher = {IEEE},
+    year={2017},
+    pages={292--301}
 }
 
 @article{adaptive-jacobi-gpu,
-    title={Customized-Precision Block-Jacobi Preconditioning for Krylov
-           Iterative Solvers on Data-Parallel Manycore Processors},
-    author={Goran Flegar and Terry Cojean and Hartwig Anzt and Enrique S.
-            Quintana-Ort\'i},
-    journal={ACM Transactions on Mathematical Software},
-    note={submitted}
+    author = {Flegar, Goran and Cojean, Terry and Anzt, Hartwig and
+              Quintana-Ort\'i, Enrique S.},
+    title = {Customized-Precision Block-Jacobi Preconditioning for Krylov
+             Iterative Solvers on Data-Parallel Manycore Processors},
+    publisher = {ACM},
+    journal = {ACM Transactions on Mathematical Software (TOMS)},
+    year = {submitted}
 }
-
 
 @article{floatx,
-    title={{FloatX}: A {C++} library for customized floating-point arithmetic},
-    author={Goran Flegar and Florian Scheidegger and Vedran Novakovi\'c and
-            Giovani Mariani and Andr\'es E. Tom\'as and A. Cristiano I. Malossi
-            and Enrique S. Quintana-Ort\'i},
-    journal={ACM Transactions on Mathematical Software},
-    note={submitted}
+    title = {{FloatX}: A {C++} library for customized floating-point arithmetic},
+    author = {Flegar, Goran and Scheidegger, Florian and Novakovi\'c, Vedran and
+              Mariani, Giovani and Tom\'as, Andr\'es E. and Malossi, A.
+              Cristiano I. and Quintana-Ort\'i, Enrique S.},
+    journal = {ACM Transactions on Mathematical Software (TOMS)},
+    publisher = {ACM},
+    year = {submitted}
 }
 
-@InProceedings{anzt-ir,
-    author="Anzt, Hartwig
-    and Flegar, Goran
-    and Novakovi{\'{c}}, Vedran
-    and Quintana-Ort{\'i}, Enrique S.
-    and Tom{\'a}s, Andr{\'e}s E.",
-    editor="Yokota, Rio
-    and Weiland, Mich{\`e}le
-    and Shalf, John
-    and Alam, Sadaf",
-    title="Residual Replacement in Mixed-Precision Iterative Refinement for Sparse Linear Systems",
-    booktitle="High Performance Computing",
-    year="2018",
-    publisher="Springer International Publishing",
-    address="Cham",
-    pages="554--561",
-    abstract="We investigate the solution of sparse linear systems via iterative methods based on Krylov subspaces. Concretely, we combine the use of extended precision in the outer iterative refinement with a reduced precision in the inner Conjugate Gradient solver. This method is additionally enhanced with different residual replacement strategies that aim to avoid the pitfalls due to the divergence between the actual residual and the recurrence formula for this parameter computed during the iteration. Our experiments using a significant part of the SuiteSparse Matrix Collection illustrate the potential benefits of this technique from the point of view, for example, of energy and performance.",
-    isbn="978-3-030-02465-9"
-}
-
-@inproceedings{jacobi,
-    title={Adaptive precision solvers for sparse linear systems},
-    author={Anzt, Hartwig and Dongarra, Jack and Quintana-Ort{\'\i}, Enrique S},
-    booktitle={Proceedings of the 3rd International Workshop on Energy Efficient Supercomputing},
-    pages={2},
-    year={2015},
-    organization={ACM}
+@misc{ginkgo,
+    howpublished = {\url{https://ginkgo-project.github.io}},
+    key = {Ginkgo},
+    year = {2019}
 }
 
 @inproceedings{jacobi-modular,
-    title={A Modular Precision Format for Decoupling Arithmetic Format and Storage Format},
-    author={Gr{\"u}tzmacher, Thomas and Anzt, Hartwig},
-    booktitle={European Conference on Parallel Processing},
-    pages={434--443},
-    year={2018},
-    organization={Springer}
+    author = {Gr{\"u}tzmacher, Thomas and Anzt, Hartwig},
+    title = {A Modular Precision Format for Decoupling Arithmetic Format and
+             Storage Format},
+    booktitle = {Parallel Processing --- 24th International
+                 Conference on Parallel and Distributed Computing},
+    series = {Euro-Par 2018},
+    publisher = {Springer},
+    year = {2018},
+    pages = {434--443}
 }
 
 @inproceedings{pagerank,
-    title={Need bibliographical info for PageRank paper},
-    author={Gr{\"u}tzmacher, Thomas and Anzt, Hartwig},
-    booktitle={European Conference on Parallel Processing},
-    pages={434--443},
-    year={2018},
-    organization={Springer}
+    author = {Gr{\"u}tzmacher, Thomas and Anzt, Hartwig},
+    title = {\gf{Need bibliographical info for PageRank paper}},
 }
 
-@article{flexfloat,
-    title={{FlexFloat}: A Software Library for Transprecision Computing},
-    author={Tagliavini, Giuseppe and Marongiu, Andrea and Benini, Luca},
-    journal={IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems},
-    year={2018},
-    publisher={IEEE}
-}
-
-@article{toms,
-    Author={Michael Allen Heroux},
-    Journal={\url{https://toms.acm.org/replicated-computational-results.cfm}},
-    Title={The {TOMS} Initiative and Policies for Replicated Computational
-           Results ({RCR})},
-    Year={2017}
-}
-
-@misc{xsdk,
-    Title={{xSDK}: Extreme-scale Scientific Software Development Kit},
-    key={xSDK},
-    howpublished = {\url{https://xsdk.info/}},
-    Year={accessed in August 2018}
-}
-
-@misc{bssw,
-    Title={Better Scientific Software ({BSSw})},
-    key={BSSW},
-    howpublished={\url{https://bssw.io/}},
-    Year = {accessed in August 2018}
-}
-
-@article{patch-contrib,
-    Author={Hartwig Anzt and Goran Flegar},
-    Title={Are We Doing the Right Thing? --- A Critical Analysis of the
-           Academic {HPC} Community},
-    Year={2019},
-    Note={submitted}
+@article{gpu-selection,
+    author = {Guo, Ping and Wang, Liqiang and Chen, Po},
+    title = {A Performance Modeling and Optimization Analysis Tool for Sparse
+             Matrix-Vector Multiplication on {GPUs}},
+    publisher = {IEEE},
+    journal = {IEEE Transactions on Parallel and Distributed Systems},
+    year = {2014},
+    volume = {25},
+    issue = {5},
+    pages = {1112--1123},
 }
 
 @book{la,
-    Author={Kenneth Hoffman and Ray Alden Kunze},
-    Title={Linear algebra},
-    Publisher={Noida, U.P., India : Pearson India Education Services},
-    Edition={2nd},
-    Year={2015}
+    author = {Hoffman, Kenneth and Kunze, Ray Alden},
+    title = {Linear Algebra},
+    publisher = {Pearson India Education Services},
+    year = {2015},
+    edition = {2nd}
 }
+
+@inproceedings{triangular-solve,
+    author = {Liu, Weifeng and Li, Ang and Hogg, Jonathan and Duff, Iain S and
+              Vinter, Brian},
+    title = {A Synchronization-Free Algorithm for Parallel Sparse Triangular
+             Solves},
+    booktitle = {Parallel Processing -- 22nd International Conference on
+                 Parallel and Distributed Computing},
+    series = {Euro-Par 2016},
+    publisher = {Springer},
+    year = {2016},
+    pages = {617--630},
+}
+
+@inproceedings{clspmv,
+    author = {Su, Bor-Yiing and Keutzer, Kurt},
+    title = {{clSpMV}: A Cross-Platform {OpenCL} {SpMV} Framework on {GPUs}},
+    booktitle = {Proceedings of the 26th ACM International Conference on
+                 Supercomputing},
+    series = {ICS'12},
+    publisher = {ACM},
+    year = {2012},
+    pages = {353--364}
+}
+
+@article{flexfloat,
+    author = {Tagliavini, Giuseppe and Marongiu, Andrea and Benini, Luca},
+    title= {{FlexFloat}: A Software Library for Transprecision Computing},
+    journal = {IEEE Transactions on Computer-Aided Design of Integrated Circuits
+               and Systems},
+    publisher = {IEEE},
+    year = {2018},
+    volume = {Early Access}
+}
+
+@misc{toms,
+    key = {The TOMS Initiative and Policies for Replicated Computational Results
+           (RCR)},
+    howpublished =
+        {\url{https://toms.acm.org/replicated-computational-results.cfm}},
+    year={2019}
+}
+
+@misc{hybrid,
+    title = {\gf{Hybrid paper --- need bibliographic details}},
+    author = {Tsai, Mike and Chen, Yen-Chen and Anzt, Hartwig and Flegar, Goran
+              and Dongarra, Jack},
+    note = {submitted}
+}
+
+@misc{xsdk,
+    key = {xSDK: Extreme-scale Scientific Software Development Kit},
+    howpublished = {\url{https://xsdk.info/}},
+    year = {2019}
+}
+

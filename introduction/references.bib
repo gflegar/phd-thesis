@@ -1,333 +1,274 @@
-@book{saad,
-    Author = {Saad, Yousef},
-    Edition = {2nd},
-    Isbn = {0898715342},
-    Publisher = {SIAM},
-    Title = {Iterative Methods for Sparse Linear Systems},
-    Year = {2003}
+@inproceedings{triangular-solves,
+    author = {Anzt, Hartwig and Chow, Edmond and Dongarra, Jack},
+    title = {Iterative Sparse Triangular Solves for Preconditioning},
+    booktitle = {Parallel Processing --- 21st International Conference on
+                 Parallel and Distributed Computing},
+    series = {Euro-Par 2015},
+    publisher = {Springer},
+    year = {2015},
+    pages = {650--661}
 }
 
-@book{de-boor,
-    Author = {de Boor, Carl},
-    Edition = {1st},
-    Isbn = {978-0-387-95366-3},
-    Publisher = {Springer-Verlag New York},
-    Title = {A Practical Guide to Splines},
-    Year = {1978}
+@article{parilut,
+    author = {Anzt, Hartwig and Chow, Edmond and Donagarra, Jack},
+    title = {{ParILUT}---A New Parallel Threshold {ILU} Factorization},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2018},
+    volume = {40},
+    issue = {4},
+    pages = {C503--C519}
 }
 
-@book{demmel,
-    Author = {James W. Demmel},
-    Publisher = {SIAM},
-    Edition = {1st},
-    Title = {Applied Numerical Linear Algebra},
-    Year = {1997}
+@inbook{anzt-ir,
+    author = {Anzt, Hartwig and Flegar, Goran and Novakovi{\'{c}}, Vedran and
+              Quintana-Ort{\'i}, Enrique S.  and Tom{\'a}s, Andr{\'e}s E.},
+    title = {Residual Replacement in Mixed-Precision Iterative Refinement for
+             Sparse Linear Systems},
+    booktitle = {High Performance Computing},
+    publisher = {Springer},
+    year = {2018},
+    pages = {554--561}
 }
 
-@book{hierarchical,
-    Author = {Wolfgang Hackbusch},
-    Publisher = {Springer-Verlag Berlin Heidelberg},
-    Edition = {1st},
-    Title = {Hierarchical Matrices: Algorithms and Analysis},
-    Year = {2015}
+@techreport{sell-p,
+    author = {Anzt, Hartwig and Tomov, Stanimire and Dongarra, Jack},
+    title = {Implementing a Sparse Matrix-Vector Product for the
+             {SELL-C/SELL-C-$\sigma$} formats on {NVIDIA} {GPUs}},
+    institution = {The University of Tennessee at Knoxville},
+    year = {2014}
 }
 
-@article{feast,
-  title = {Density-matrix-based algorithm for solving eigenvalue problems},
-  author = {Polizzi, Eric},
-  journal = {Phys. Rev. B},
-  volume = {79},
-  issue = {11},
-  pages = {115112},
-  numpages = {6},
-  year = {2009},
-  month = {Mar},
-  publisher = {American Physical Society},
-  doi = {10.1103/PhysRevB.79.115112},
-  url = {https://link.aps.org/doi/10.1103/PhysRevB.79.115112}
-}
-
-@book{higham,
-    Author = {Nicholas J. Higham},
-    Edition = {Second},
-    Publisher = {SIAM},
-    Title = {{Accuracy and Stability of Numerical Algorithms}},
-    Year = {2002}
-}
-
-@book{exascale-report,
+@techreport{exascale-report,
     title = {The opportunities and challenges of exascale computing},
-    author = {Steve Ashby and Pete Beckman and Jackie Chen and Phil Colella and
-            Bill Collins and Dona Crawford and Jack Dongarra and Doug Kothe and
-            Rusty Lusk and Paul Messina and Tony Mezzacappa and Parviz Moin and
-            Mike Norman and Robert Rosner and Vivek Sarkar and Andrew Siegel and
-            Fred Streitz and Andy White and Margaret Wright},
-    year = {2010},
-    language = {English (US)},
-    series = {http://science.energy.gov/},
-    publisher = {U.S. Department of Energy},
-}
-
-
-@book{duff,
-    Author = {Iain S. Duff and Al M. Erisman and John K. Reid},
-    Publisher = {Clarendon Press},
-    Edition = {2nd},
-    Title = {Direct Methods for Sparse Matrices},
-    Year = {2017}
+    author = {Ashby, Steve and Beckman, Pete and Chen, Jackie and Colella, Phil
+              and Collins, Bill and Crawford, Dona and Dongarra, Jack and Kothe,
+              Doug and Lusk, Rusty and Messina, Paul and Mezzacappa, Tony and
+              Moin, Parviz and Norman, Mike and Rosner, Robert and Sarkar, Vivek
+              and Siegel, Andrew and Streitz, Fred and White, Andy and Wright,
+              Margaret},
+    institution = {U.S. Department of Energy},
+    year = {2010}
 }
 
 @book{barrettemplates,
-    Address = {Philadelphia, PA},
-    Author = {R. Barrett and M. Berry and T. F. Chan and J. Demmel and J. Donato and J. Dongarra and V. Eijkhout and R. Pozo and C. Romine and H. Van der Vorst},
+    author = {Barrett, R. and Berry, M. and Chan, T. F. and Demmel, J. and
+              Donato, J. and Dongarra, J. and Eijkhout, V. and Pozo, R. and
+              Romine, C. and van der Vorst, H.},
+    title = {Templates for the Solution of Linear Systems: Building Blocks for
+             Iterative Methods},
     Publisher = {SIAM},
-    Title = {Templates for the Solution of Linear Systems: Building Blocks for Iterative Methods, 2nd Edition},
-    Year = {1994}
+    Year = {1994},
+    edition = {2nd}
 }
-
-
-@electronic{top500,
-    Key = {Top 500},
-    Title = {{The Top 500 List, \url{http://www.top.org/}}}}
-
-
-@misc{paralution,
-    Howpublished = {\url{http://www.paralution.com/}},
-    Key = {Paralution},
-    Title = {{PARALUTION}},
-    Year = {2015}
-}
-
-@misc{vienna-cl,
-    Howpublished = {\url{http://viennacl.sourceforge.net/}},
-    Key = {ViennaCl},
-    Title = {{{ViennaCL}}},
-    Year = {2015}
-}
-
-@misc{magma,
-    Howpublished = {\url{http://icl.cs.utk.edu/magma/}},
-    Key = {Magma},
-    Title = {{{MAGMA 2.5.0}}},
-    Year = {2019}
-}
-
-@misc{ginkgo,
-    Howpublished = {\url{https://ginkgo-project.github.io}},
-    Key = {Ginkgo},
-    Title = {{{Ginkgo}}},
-    Year = {2019}
-}
-
-
-@Book{Ipsen2009,
-  title     = {Numerical Matrix Analysis},
-  publisher = {Society for Industrial {\&} Applied Mathematics ({SIAM})},
-  year      = {2009},
-  author    = {Ilse C. F. Ipsen},
-  month     = {jan},
-  abstract  = {This self-contained textbook presents matrix analysis in the context of numerical computation with numerical conditioning of problems and numerical stability of algorithms at the forefront. Using a unique combination of numerical insight and mathematical rigor, it advances readers' understanding of two phenomena: sensitivity of linear systems and least squares problems, and numerical stability of algorithms.
-
-This book differs from other numerical linear algebra texts by offering
-
-• a systematic development of numerical conditioning,
-
-• a simplified concept of numerical stability in exact arithmetic,
-
-• simple derivations,
-
-• a high-level view of algorithms, and
-
-• results for complex matrices.
-
-The material is presented at a basic level, emphasizing ideas and intuition, and each chapter offers simple exercises for use in the classroom and more challenging exercises for student practice.},
-  doi       = {10.1137/1.9780898717686},
-  file      = {:nla/Ipsen2009.pdf:PDF},
-  keywords  = {numerical linear algebra; linear systems; least squares},
-  url       = {http://dx.doi.org/10.1137/1.9780898717686},
-}
-
-@article{higham-ir,
-  title={Accelerating the solution of linear systems by iterative refinement in three precisions},
-  author={Carson, Erin and Higham, Nicholas J},
-  journal={SIAM Journal on Scientific Computing},
-  volume={40},
-  number={2},
-  pages={A817--A847},
-  year={2018},
-  publisher={SIAM}
-}
-
-
-@InProceedings{anzt-ir,
-    author="Anzt, Hartwig
-    and Flegar, Goran
-    and Novakovi{\'{c}}, Vedran
-    and Quintana-Ort{\'i}, Enrique S.
-    and Tom{\'a}s, Andr{\'e}s E.",
-    editor="Yokota, Rio
-    and Weiland, Mich{\`e}le
-    and Shalf, John
-    and Alam, Sadaf",
-    title="Residual Replacement in Mixed-Precision Iterative Refinement for Sparse Linear Systems",
-    booktitle="High Performance Computing",
-    year="2018",
-    publisher="Springer International Publishing",
-    address="Cham",
-    pages="554--561",
-    abstract="We investigate the solution of sparse linear systems via iterative methods based on Krylov subspaces. Concretely, we combine the use of extended precision in the outer iterative refinement with a reduced precision in the inner Conjugate Gradient solver. This method is additionally enhanced with different residual replacement strategies that aim to avoid the pitfalls due to the divergence between the actual residual and the recurrence formula for this parameter computed during the iteration. Our experiments using a significant part of the SuiteSparse Matrix Collection illustrate the potential benefits of this technique from the point of view, for example, of energy and performance.",
-    isbn="978-3-030-02465-9"
-}
-
-@InProceedings{csb,
-    author = {Bulu\c{c}, Aydin and Fineman, Jeremy T. and Frigo, Matteo and Gilbert, John R. and Leiserson, Charles E.},
-    title = {Parallel Sparse Matrix-vector and Matrix-transpose-vector Multiplication Using Compressed Sparse Blocks},
-    booktitle = {Proceedings of the Twenty-first Annual Symposium on Parallelism in Algorithms and Architectures},
-    series = {SPAA '09},
-    year = {2009},
-    isbn = {978-1-60558-606-9},
-    location = {Calgary, AB, Canada},
-    pages = {233--244},
-    numpages = {12},
-    url = {http://doi.acm.org/10.1145/1583991.1584053},
-    doi = {10.1145/1583991.1584053},
-    acmid = {1584053},
-    publisher = {ACM},
-    address = {New York, NY, USA},
-    keywords = {compressed sparse blocks, compressed sparse columns, compressed sparse rows, matrix transpose, matrix-vector multiplication, multithreaded algorithm, parallelism, span, sparse matrix, storage format, work},
-} 
 
 @TechReport{bell-garland,
     author = {Nathan Bell and Michael Garland},
     title = {Efficient Sparse Matrix-Vector Multiplication on {CUDA}},
     institution = {NVIDIA Corporation},
     year = {2008},
-    type = {NVIDIA Technical Report},
-    number = {NVR-2008-004},
-    month = dec
 }
 
-@Article{sell-c-sigma,
-    Aauthor = {Moritz Kreutzer and Georg Hager and Gerhard Wellein and Holger Fehske and Alan R. Bishop},
-    author = {Moritz Kreutzer and others},
-    title = {A Unified Sparse Matrix Data Format for Efficient General Sparse Matrix-Vector Multiplication on Modern Processors with Wide {SIMD} Units},
-    journal = {SIAM J. Scientific Computing},
-    volume = {36},
-    number = {5},
-    pages = {C401--C423},
-    year = {2014},
+@book{de-boor,
+    author = {de Boor, Carl},
+    title = {A Practical Guide to Splines},
+    publisher = {Springer-Verlag},
+    year = {1978},
+    edition = {1st}
 }
 
-@techreport{sell-p,
-    author      = "Hartwig Anzt and Stanimire Tomov and Jack Dongarra",
-    title       = "Implementing a Sparse Matrix-Vector Product for the {SELL-C/SELL-C-$\sigma$} formats on {NVIDIA GPUs}",
-    number      = "UT-EECS-14-727",
-    institution = "The University of Tennessee at Knoxville",
-    year        = 2014
+@inproceedings{csb,
+    author = {Bulu\c{c}, Aydin and Fineman, Jeremy T. and Frigo, Matteo and
+              Gilbert, John R. and Leiserson, Charles E.},
+    title = {Parallel Sparse Matrix-vector and Matrix-transpose-vector
+             Multiplication Using Compressed Sparse Blocks},
+    booktitle = {Proceedings of the 21st Annual Symposium on Parallelism in
+                 Algorithms and Architectures},
+    series = {SPAA'09},
+    publisher = {ACM},
+    year = {2009},
+    pages = {233--244}
+} 
+
+@article{higham-ir,
+    author={Carson, Erin and Higham, Nicholas J.},
+    title={Accelerating the Solution of Linear Systems by Iterative Refinement
+           in Three Precisions},
+    publisher={SIAM},
+    journal={SIAM Journal on Scientific Computing},
+    year={2018},
+    volume={40},
+    issue={2},
+    pages={A817--A847}
+}
+
+@book{demmel,
+    author = {Demmel, James W.},
+    title = {Applied Numerical Linear Algebra},
+    publisher = {SIAM},
+    year = {1997},
+    edition = {1st}
+}
+
+@book{duff,
+    author = {Duff, Iain S. and Erisman, Al M. and Reid, John K.},
+    title = {Direct Methods for Sparse Matrices},
+    publisher = {Clarendon Press},
+    year = {2017},
+    edition = {2nd}
 }
 
 @InProceedings{ecker,
-  author    = {Jan Philipp Ecker and
-               Rudolf Berrendorf and
-               Florian Mannuss},
-  title     = {New Efficient General Sparse Matrix Formats for Parallel SpMV Operations},
-  booktitle = {Euro-Par 2017: Parallel Processing - 23rd International Conference
-               on Parallel and Distributed Computing, Santiago de Compostela, Spain,
-               August 28 - September 1, 2017, Proceedings},
-  pages     = {523--537},
-  year      = {2017},
-  url       = {https://doi.org/10.1007/978-3-319-64203-1\_38},
-  doi       = {10.1007/978-3-319-64203-1\_38},
+    author = {Ecker, Jan Philipp and Berrendorf, Rudolf and Mannuss, Florian},
+    title = {New Efficient General Sparse Matrix Formats for Parallel {SpMV}
+             Operations},
+    booktitle = {Parallel Processing --- 23rd International
+                 Conference on Parallel and Distributed Computing},
+    series = {Euro-Par 2017},
+    publisher = {Springer},
+    year  = {2017},
+    pages = {523--537}
 }
 
-@inproceedings{csr5,
-    Address = {New York, NY, USA},
-    Author = {Liu, Weifeng and Vinter, Brian},
-    Booktitle = {Proceedings of the 29th ACM on International Conference on Supercomputing},
-    Doi = {10.1145/2751205.2751209},
-    Isbn = {978-1-4503-3559-1},
-    Keywords = {cpu, csr, csr5, gpu, sparse matrices, spmv, storage formats, xeon phi},
-    Location = {Newport Beach, California, USA},
-    Pages = {339--350},
-    Publisher = {ACM},
-    Series = {ICS '15},
-    Title = {{CSR5}: An Efficient Storage Format for Cross-Platform Sparse Matrix-Vector Multiplication},
-    Url = {http://doi.acm.org/10.1145/2751205.2751209},
-    Year = {2015},
+@misc{ginkgo,
+    howpublished = {\url{https://ginkgo-project.github.io}},
+    key = {Ginkgo},
+    year = {2019}
 }
 
-@Article{parilut,
-    doi = {10.1137/16m1079506},
-    url = {https://doi.org/10.1137/16m1079506},
-    year  = {2018},
-    month = {jan},
-    publisher = {Society for Industrial {\&} Applied Mathematics ({SIAM})},
-    volume = {40},
-    number = {4},
-    pages = {C503--C519},
-    author = {Hartwig Anzt and Edmond Chow and Jack Dongarra},
-    title = {{ParILUT}---A New Parallel Threshold {ILU} Factorization},
-    journal = {{SIAM} Journal on Scientific Computing}
+@book{hierarchical,
+    author = {Hackbusch, Wolfgang},
+    title = {Hierarchical Matrices: Algorithms and Analysis},
+    publisher = {Springer-Verlag},
+    year = {2015},
+    edition = {1st}
 }
 
-
-@inproceedings{ca-gmres,
-    Acmid = {2650529},
-    Address = {Washington, DC, USA},
-    Author = {Yamazaki, Ichitaro and Anzt, Hartwig and Tomov, Stanimire and Hoemmen, Mark and Dongarra, Jack},
-    Booktitle = {Proceedings of the 2014 IEEE 28th International Parallel and Distributed Processing Symposium},
-    Doi = {10.1109/IPDPS.2014.48},
-    Isbn = {978-1-4799-3800-1},
-    Numpages = {10},
-    Pages = {382--391},
-    Publisher = {IEEE Computer Society},
-    Series = {IPDPS '14},
-    Title = {{Improving the Performance of CA-GMRES on Multicores with Multiple GPUs}},
-    Url = {http://dx.doi.org/10.1109/IPDPS.2014.48},
-    Year = {2014},
-    Bdsk-Url-1 = {http://dx.doi.org/10.1109/IPDPS.2014.48}
+@book{higham,
+    author = {Higham, Nicholas J.},
+    title = {Accuracy and Stability of Numerical Algorithms},
+    publisher = {SIAM},
+    year = {2002},
+    edition = {2nd}
 }
 
-@inproceedings{triangular-solves,
-	Author = {Anzt, H. and Chow, E. and Dongarra, J.},
-	Booktitle = {Euro-Par 2015: Parallel Processing: 21st Int. Conf. on Parallel and Distributed Computing},
-	Pages = {650--661},
-	Publisher = {Springer},
-	Title = {Iterative Sparse Triangular Solves for Preconditioning},
-    month = {dec},
-	Year = {2015}
+@Book{Ipsen2009,
+    author = {Ipsen, Ilse C. F.},
+    title = {Numerical Matrix Analysis: Linear Systems and Least Squares},
+    publisher = {SIAM},
+    year = {2009},
+    edition = {1st}
 }
 
 @phdthesis{joaqin-thesis,
-    doi = {10.6035/14028.2016.34889},
-    url = {https://doi.org/10.6035/14028.2016.34889},
-    publisher = {Universitat Jaume I},
     author = {Joaqu{\'{\i}}n P{\'{e}}rez Badenes},
-    title = {Consumo energ{\'{e}}tico de m{\'{e}}todos iterativos para sistemas
-             dispersos en procesadores gr{\'{a}}ficos},
+    title = {Consumo Energ{\'{e}}tico de M{\'{e}}todos Iterativos Para Sistemas
+             Dispersos en Procesadores Gr{\'{a}}ficos},
+    school = {Universitat Jaume I},
     year = {2016}
 }
 
-@phdthesis{bsr,
- author = {Vuduc, Richard Wilson},
- title = {Automatic Performance Tuning of Sparse Matrix Kernels},
- year = {2003},
- note = {AAI3121741},
- publisher = {University of California, Berkeley},
-} 
-
 @book{kepner,
-    Editor = {Jeremy Kepner and John Gilbert},
-    Edition = {1st},
-    Publisher = {SIAM},
-    Title = {Graph algorithms in the language of linear algebra},
-    Year = {2011}
+    editor = {Kepner, Jeremy and Gilbert, John},
+    title = {Graph Algorithms in the Language of Linear Algebra},
+    publisher = {SIAM},
+    year = {2011},
+    edition = {1st}
+}
+
+@article{sell-c-sigma,
+    author = {Kreutzer, Moritz and Hager, Georg and Wellein, Gerhard and Fehske,
+              Holger and Bishop, Alan R.},
+    title = {A Unified Sparse Matrix Data Format for Efficient General Sparse
+             Matrix-Vector Multiplication on Modern Processors with Wide {SIMD}
+             Units},
+    publisher = {SIAM},
+    journal = {SIAM Journal on Scientific Computing},
+    year = {2014},
+    volume = {36},
+    issue = {5},
+    pages = {C401--C423}
 }
 
 @book{big-o,
-    Author={Edmund Landau},
-    Edition={3rd},
-    Publisher={AMS Chelsea Publishing},
-    Title={Foundations of Analysis},
-    Year={1966}
+    author = {Landau, Edmund},
+    title = {Foundations of Analysis},
+    publisher = {AMS},
+    year = {1966},
+    edition = {3rd}
+}
+
+@inproceedings{csr5,
+    author = {Liu, Weifeng and Vinter, Brian},
+    title = {{CSR5}: An Efficient Storage Format for Cross-Platform Sparse
+             Matrix-Vector Multiplication},
+    booktitle = {Proceedings of the 29th ACM on International Conference on
+                 Supercomputing},
+    series = {ICS'15},
+    publisher = {ACM},
+    year = {2015},
+    pages = {339--350}
+}
+
+@misc{magma,
+    howpublished = {\url{http://icl.cs.utk.edu/magma/}},
+    key = {MAGMA 2.5.0},
+    year = {2019}
+}
+
+@misc{paralution,
+    howpublished = {\url{http://www.paralution.com/}},
+    key = {PARALUTION},
+    year = {2015}
+}
+
+@article{feast,
+    author = {Polizzi, Eric},
+    title = {Density-Matrix-Based Algorithm for Solving Eigenvalue Problems},
+    publisher = {APS},
+    journal = {Phys. Rev. B},
+    year = {2009},
+    volume = {79},
+    issue = {11},
+    pages = {115112}
+}
+
+@book{saad,
+    author = {Saad, Yousef},
+    title = {Iterative Methods for Sparse Linear Systems},
+    publisher = {SIAM},
+    year = {2003},
+    edition = {2nd}
+}
+
+@misc{top500,
+    Howpublished = {\url{http://www.top.org/}},
+    Key = {The Top 500 List},
+    Year = {2019}
+}
+
+@misc{vienna-cl,
+    Howpublished = {\url{http://viennacl.sourceforge.net/}},
+    Key = {ViennaCl},
+    Year = {2015}
+}
+
+@phdthesis{bsr,
+    author = {Vuduc, Richard Wilson},
+    title = {Automatic Performance Tuning of Sparse Matrix Kernels},
+    school = {University of California, Berkeley},
+    year = {2003}
+} 
+
+@inproceedings{ca-gmres,
+    author = {Yamazaki, Ichitaro and Anzt, Hartwig and Tomov, Stanimire and
+              Hoemmen, Mark and Dongarra, Jack},
+    title = {Improving the Performance of {CA-GMRES} on Multicores with Multiple
+             {GPUs}},
+    booktitle = {Proceedings of the 2014 IEEE 28th International Parallel and
+                 Distributed Processing Symposium},
+    series = {IPDPS'14},
+    publisher = {IEEE},
+    year = {2014},
+    pages = {382--391}
 }
