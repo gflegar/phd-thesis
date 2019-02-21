@@ -5,16 +5,16 @@ of linear systems, and showed that significant performance improvements can be
 obtained on modern hardware even with basic, well-studied building blocks.
 
 \noindent \textbf{Sparse matrix-vector product.}
-Part~\ref{pt:matrix-vector} began the discussion by focusing on the most time
+Part~\ref{pt:matrix-vector} started with a discussion on the most time
 consuming and difficult to parallelize operation: the sparse matrix-vector
 product. Even though a variety of advanced sparse matrix formats and
 accompanying matrix-vector product algorithms were recently proposed,
-Chapter~\ref{ch:2017-csr-spmv} showed that most of them exhibit corner cases
-where they either consume significantly more memory than the standard formats,
-or achieve far lower matrix-vector product performance than standard
-implementations. Furthermore, since the majority of existing software packages
-provides high performance implementations of other operations, they are often
-restricted to one of the standard formats as a means of managing software
+Chapter~\ref{ch:2017-csr-spmv} demonstrated that most of them exhibit corner
+cases where the formats either consume significantly more memory than the
+standard formats, or achieve far lower matrix-vector product performance than
+standard implementations. Furthermore, since the majority of existing software
+packages provides high performance implementations of other operations, they are
+often restricted to one of the standard formats as a means of managing software
 complexity and developer burden. Thus, while application-specific formats can
 undoubtedly outperform the conventional alternatives, they should only be
 developed in case the potential improvements over the formats provided by the
@@ -28,35 +28,36 @@ application-specific formats --- by optimizing relevant corner cases of the most
 widely used CSR format.  Enabled by advancements in accelerator technology,
 which recently started offering full support for atomic operations, the proposed
 optimizations effectively deal with the issue of imbalanced sparsity patterns.
-While the classical approach still offers superior performance on regular
+While the classical approach still offers superior performance for regular
 sparsity patterns, the ultimate matrix-vector product algorithm can be obtained
 by coupling the two realizations with a simple heuristic that predicts the
-winner and selects the superior approach automatically.
+winner, and selects the superior approach automatically.
 
 Chapter~\ref{ch:2017-coo-spmv} continued the development of the sparse
 matrix-vector product by identifying the COO format as an alternative
 general-purpose format for GPUs. Similarly to the improved CSR algorithm, the
-new algorithm for COO is highly efficient and does not suffer from extremely
-unfavorable sparsity patterns. Furthermore, its higher minimum and average
-performance make it a better default choice than CSR. Ultimately, reasonable
-use-cases can be found for both options: the improved CSR algorithm can be used
-in conjunction with software that relies on CSR historically or in case the
-efficiency of other operations depends on it. In cotrast, COO can be adopted as
-the default choice for new software whose performance does not depend on CSR.
+new kernel developed for the COO format is highly efficient and does not suffer
+from extremely unfavorable sparsity patterns. Furthermore, its higher minimum
+and average performance make it a better default choice than CSR. Ultimately,
+reasonable use-cases can be found for both options: the improved CSR algorithm
+can be used in conjunction with software that relies on CSR historically or in
+case the efficiency of other operations depends on it. In contrast, COO can be
+adopted as the default choice for new software whose performance does not depend
+on CSR.
 
 While most sparse matrix-vector product algorithms are focused on large
 problems that utilize the entire GPU (processor group),
 Chapter~\ref{ch:2017-batched-spmv} explored the underdeveloped case of smaller
 problems suitable for individual streaming multiprocessors (single processors).
-It showed that this case can be implemented more efficiently by slightly
+It demonstrated that this case can be implemented more efficiently by slightly
 modifying standard algorithms to make better use of the available memory
 hierarchy.
 
 New findings presented in this part  can be used in the development of more
 specialized matrix formats. For example, the ideas from the COO algorithm are
 currently being used for the development of an improved hybrid matrix
-format~\cite{hybrid}. The success of the synchronization-free load-balanced
-algorithms on a single GPU should also prove useful for the development of
+format~\cite{hybrid}. The success of the synchronization-free load-balancing
+algorithms on a single GPU should also prove to be useful for the development of
 sparse matrix-vector product algorithms that utilize the computational resources
 of the entire node in unison, as synchronization and load-balancing penalties
 become more pronounced on higher levels of the \textdef{hardware hierarchy}
@@ -72,22 +73,23 @@ implementation from a pool of potential optimizations~\cite{elafrou}.
 \noindent\textbf{Preconditioning.}
 Part~\ref{pt:preconditioning} explored the potential of block-Jacobi
 preconditioning on highly parallel GPU hardware. Even though this relatively
-simple preconditioner usually features lower convergence rate improvement than
+simple preconditioner usually features lower convergence improvement than
 the popular ILU-based preconditioners, this part of the thesis showed that
-problems with inherent block structure can greatly benefit from it.  The
-parallel performance of block-Jacobi can be attributed to its inherent
-parallelism, as each block can be processed independently. The first step
-towards a high performance implementation consists of mapping the blocks to the
-appropriate level of the hardware hierarchy. By assigning each block to a single
-vector unit, taking advantage of increased register counts and warp shuffle
-instructions available on recent hardware, and replacing conventional pivoting
-strategies with implicit pivoting, the resulting algorithms are able to
-outperform equivalent functionality available in vendor libraries. The first
-such algorithm, the block-Jacobi preconditioner based on Gauss-Jordan
-elimination, was presented in Chapter~\ref{ch:2017-gje-block-jacobi}. The
-algorithm inverts the diagonal blocks during preconditioner generation, which
-means that the application stage can be realized as a sequence of highly
-parallel dense used matrix-vector products.
+problems with inherent block structure can greatly benefit from block-Jacobi
+preconditioning.  The parallel performance of block-Jacobi can be attributed to
+its inherent parallelism, as each block can be processed independently. The
+first step towards a high performance implementation consists of mapping the
+blocks to the appropriate level of the hardware hierarchy. By assigning each
+block to a single vector unit, taking advantage of increased register counts and
+warp shuffle instructions available on recent hardware, and replacing
+conventional pivoting strategies with implicit pivoting, the resulting
+algorithms are able to outperform equivalent functionality available in vendor
+libraries. The first such algorithm, the block-Jacobi preconditioner based on
+Gauss-Jordan elimination, was presented in
+Chapter~\ref{ch:2017-gje-block-jacobi}. The algorithm inverts the diagonal
+blocks during preconditioner generation, which means that the application stage
+can be realized as a sequence of highly parallel dense used matrix-vector
+products.
 
 However, as discussed in Section~\ref{introduction:sec:linear-systems}, the
 solution of a linear system via matrix inversion can result in numerical
@@ -122,31 +124,31 @@ parameter batch is shared, another stored as a contiguous sequence, or scattered
 throughout the memory), covering all the options leads to an exponential
 growth of interface functions with an unmanageable number of parameters.
 Another issue arises from the implicit synchronization between two consecutive
-batched routine calls. While there are no dependencies between distinct problems
-in the batch, the entire batch is still synchronized, as each batched call is
-essentially a (parallel) loop over all problem instances. While this can be
-partially alleviated by implementing the routines in terms of a set of jobs
-submitted to a job scheduling system, relying on the existence of such a system
-is not always an option. For example, this is the case for block-Jacobi
+batched routine calls. While there are no dependencies between the distinct
+problems forming a batch, the entire batch is still synchronized, as each
+batched call is essentially a (parallel) loop over all problem instances. While
+this can be partially alleviated by implementing the routines in terms of a set
+of jobs submitted to a job scheduling system, relying on the existence of such a
+system is not always an option. For example, this is the case for block-Jacobi
 preconditioning presented in this work, where the ``batch'' of problems is
-distributed on the GPU (where scheduling systems are not commonly used),
-and there is additional code needed for preprocessing and postprocessing of the
+distributed on the GPU (where scheduling systems are not commonly used), and
+there is additional code needed for preprocessing and postprocessing of the
 problem data as part of the same GPU kernel. Ultimately, the pragmatic solution
 might be to depart from the idea of ``batched'' routines, and instead build
 libraries that provide BLAS-like functionality for various levels of the
-hardware hierarchy.  Essentially, the responsibility of building the outer
-parallel loop would be left to the user, while the need for complicated
-parameter lists would be removed, the number of interface variations greatly
-reduced, and implicit synchronizations of unrelated problems avoided. While such
-libraries are still uncommon, NVIDIA has recently taken a step in this direction
-with its CUTLASS~\cite{cutlass} library, which provides matrix-matrix multiply
+hardware hierarchy.  Essentially, the responsibility of building the inherently
+parallel outer loop would be left to the user, removing the need for complicated
+parameter lists, greatly reducing the number of interface variations, and
+avoiding implicit synchronizations of unrelated problems. While such libraries
+are still uncommon, NVIDIA has recently taken a step in this direction with its
+CUTLASS~\cite{cutlass} library, which provides matrix-matrix multiply
 implementations (GEMMs) for various levels of the GPU hardware hierarchy.
 
 \noindent\textbf{Adaptive precision.}
 As a result of recent trends in HPC and the emergence of hardware support for
-low-precision computing, Part~\ref{pt:adaptive} evaluated the potential of these
-techniques in combination with preconditioning.
-Chapter~\ref{ch:2017-adaptive-block-jacobi} analysed the theoretical aspects and
+low precision arithmetic, Part~\ref{pt:adaptive} evaluated the potential of
+employing low precision techniques in combination with preconditioning.
+Chapter~\ref{ch:2017-adaptive-block-jacobi} analyzed the theoretical aspects and
 the effect on convergence rate when lower precision storage is used in the
 block-Jacobi preconditioner. The success of the approach is based on
 several observations: 1) since the preconditioner application is bounded by the
@@ -170,10 +172,10 @@ preconditioner design, it may be possible to enhance other preconditioners using
 similar techniques. Adaptive block-Jacobi preconditioning itself may also be
 improved further by using non-conventional storage formats instead of the
 standard IEEE floating point types~\cite{adaptive-jacobi-gpu}. In the bigger
-picture of iterative methods, adaptive block-Jacobi preconditioning is only a
-single example of recent research in low-precision methods. In addition to the
-well-known iterative refinement~\cite{higham-ir}, other examples include the
-adaptive versions of the Jacobi and PageRank relaxation
+picture of iterative methods, adaptive block-Jacobi preconditioning is only one
+example of recent research in low-precision methods. In addition to the
+well-known mixed precision iterative refinement~\cite{higham-ir}, other examples
+include the adaptive versions of the Jacobi and PageRank relaxation
 methods~\cite{jacobi,jacobi-modular,pagerank} and the development of the modular
 precision storage format, which enables efficient access to the same array of
 floating point values in multiple
@@ -189,28 +191,34 @@ As a parting note, the final paragraph of this work focuses on the role of
 scientific software in high performance computing. Leaving aside the question of
 whether or not ``scientific software engineering'' should be considered an
 academic field, it is undeniable that highly efficient software is one of the
-key enablers of many scientific disciplines. Thus, it is not surprising that
-significant effort (including this work) is directed towards the optimization of
-various algorithms for the latest hardware. Paradoxically, even though software
-is the most valuable contribution of such efforts, researchers' efficiency is
-still measured by the number of papers they produce. Since the vast majority of
-journals and conferences does not have any software quality assurance policies
-in place, most scientific software produced today is developed as a prototype
-``throwaway'' implementation, intended only to support the publication of a
-scientific paper, instead of providing benefits to the broader community. As
-such, this software is usually of low quality, poorly documented, and lacks a
-community which would maintain it. Furthermore, using such software as a basis
-for performance evaluation in a scientific paper is highly questionable, as it
-does not have to implement edge-case handling, nor takes into account the
-tradeoffs between performance gains and the manpower cost of its development,
-maintenance an integration into larger projects. To avoid these issues, most of
-the code presented in this work (specifically, the CSR and COO SpMV algorithms,
-and the inversion based block-Jacobi and adaptive block-Jacobi algorithms) are
-integrated into the Ginkgo software library~\cite{ginkgo}, ensuring continuing
-community support and maintenance in the following years. On a brighter note, as
-hardware and software becomes more complex, and the available manpower scarcer,
-recent years have witnessed the emergence of community efforts with the goal of
-increasing the quality of academic software~\cite{toms,xsdk,bssw,patch-contrib}.
-Hopefully, this trend will continue, and ultimately lead to a change of metrics
-that define a successful researcher in a direction favourable for scientific
-software and the high performance community.
+most important pillars in modern science based on computer simulations, data
+analytics, and machine learning.  Thus, it is not surprising that significant
+efforts (including this work) are dedicated to the development of novel
+algorithms and their efficient realization on the latest hardware technology.
+Paradoxically, even though software is the
+most valuable contribution of such efforts, researchers' efficiency is still
+is the most valuable contribution to such efforts, a scientist's reputation is
+still mostly determined by the traditional metrics like the number of
+publications or the Hirsch index. Since the vast majority of journals and
+conferences does not have any software quality assurance policies in place, most
+scientific software produced today is developed as a prototype ``throwaway''
+implementation, intended only to support the publication of a scientific paper,
+instead of providing benefits to the broader community. As such, this software
+is usually of low quality, poorly documented, and lacks a community which would
+maintain it. Furthermore, using such software as a basis for performance
+evaluation in a scientific paper is highly questionable, as it usually does not
+have to implement edge-case handling, nor takes into account the tradeoffs
+between performance gains and the manpower cost of its development, maintenance
+and integration into larger projects. The aspect of reproducibility --- one of
+the central pillars of science --- is in many cases also ignored. To avoid these
+issues, most of the code presented in this work (specifically, the CSR and COO
+SpMV algorithms, and the inversion based block-Jacobi and adaptive block-Jacobi
+algorithms) are integrated into the Ginkgo software library~\cite{ginkgo},
+ensuring continuing community support and maintenance in the future. On
+a brighter note, as hardware and software becomes more complex, and the
+available manpower scarcer, recent years have witnessed the emergence of
+community efforts with the goal of increasing the quality of academic
+software~\cite{toms,xsdk,bssw,patch-contrib}.  Hopefully, this trend will
+continue, and ultimately lead to a change of metrics that define the success of
+a researcher in a direction favourable for scientific software and the high
+performance community.
