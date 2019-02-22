@@ -48,23 +48,9 @@ A^*x$. For a fixed matrix $A$, the key properties of the matrix-vector product
 are \textdef{additivity} $A(x+y) = Ax + Ay$ and \textdef{homogeneity}
 $A(\alpha x) = \alpha Ax$ --- which are often written combined into the
 equivalent \textdef{linearity} property $A(\alpha x + \beta y) = \alpha Ax +
-\beta Ay$.
-\ha{where did you get homogeneity from? associativity
-\url{https://en.wikipedia.org/wiki/Associative_property} and komul}
-\gf{I've used the jargon from functions here, where additivity means $f(x + y) =
-f(x) + f(y)$ and homogeneity (of degree 1) $f(\alpha x) = \alpha f(x)$. In this
-case $f$ would be defined as $f : x \mapsto Ax$. This is something completely
-natural if one knows about the isomorphism between linear operators and
-matrices, but I see it is a bit strange to do it before we actually establish
-it. Since I don't know how else to call it (the first one could be called
-distributivity, but there is no one-word name for the second one), 
-I removed the parenthesis  around the mathematical expression and put the terms
-in italic, to make the statement define these terms as replacements for the
-formulas written behind them.
-additivity: \url{https://en.wikipedia.org/wiki/Additive_function};
-homogeneity: \url{https://en.wikipedia.org/wiki/Homogeneous_function}}
-Focusing only on these properties allows us to define an abstraction that can
-hide the details about the coefficients and the storage scheme of the matrix.
+\beta Ay$. Focusing only on these properties allows us to define an abstraction
+that can hide the details about the coefficients and the storage scheme of the
+matrix.
 
 \begin{theorem}
 \label{conclusion:thm:matrix-linop}
@@ -91,7 +77,7 @@ Thus, $A \mapsto L_A$ defines a one-to-one correspondence between the set of
 matrices $\mathbb{F}^{m \times n}$ and linear operators
 $\mathcal{L}(\mathbb{F}^n, \mathbb{F}^m)$.
 \end{theorem}
-\begin{proof}~\\
+\begin{proof}\leavevmode
 \begin{enumerate}
 \item This is a trivial consequence of the definition of $L_A$: $L_A(\alpha x +
 \beta y) = A(\alpha x + \beta y) = \alpha Ax + \beta Ay = \alpha L_Ax + \beta
@@ -231,7 +217,7 @@ linear operators.
 \end{enumerate}
 \end{theorem}
 
-\begin{proof}~\\
+\begin{proof}\leavevmode
 \begin{enumerate}
 \item Due to the equality $A(\alpha S_A x + \beta S_A y) = \alpha A S_A x +
 \beta A S_A y = \alpha x + \beta y$, $\alpha S_A x + \beta S_A y$ is the
@@ -349,36 +335,6 @@ application and conjugate transpose preconditioner application is established
 via Corollary~\ref{conclusion:cor:matrix-linop}. Thus, precondtioners easily
 join the family of linear algebra operations that can be represented as linear
 operators.
-
-\ha{We note that preconditioners are not always available in explicit form. In
-    some cases, they are only implicitly available as (a few) iterations of an
-    iterative solver (Jacobi/Gauss-Seidel), in some cases they are available in
-    factorized form (ILU).}
-\ha{Thus, even though not always available in explicit form, well-defined
-preconditioners can be represented as linear operators.}
-\gf{I feel this is off-topic here. This section talks about the interface, and
-how a preconditioner (which is usually represented by a matrix $M$, at least in
-all the literature about Krylov solvers) can be expressed as a linear operator,
-so the interface can stick with linear operators, instead of making up a new
-concept for preconditioners. Whether or not that matrix $M$ is represented
-explicitly (whatever your definition of ``explicitly'' means: is a row-major
-dense matrix stored explicitly? a sparse matrix in CSR? a sparse matrix stored
-as a sum in the context of the hybrid format? a matrix stored as two factors?
-how about a hierarchical matrix with factorized blocks?) are implementation
-details that are (in good software design) completely orthogonal to the issues
-of the interface.
-Another point for this and all previous sections is that everything is
-discussed from the purely mathematical point of view. Just the fact that I
-mention $A^{-1}$ does not imply that I'm actually trying to compute $A^{-1}$.
-Just because I mention the preconditioner matrix $M$ and its invers $M^{-1}$
-which is being applied to a vector, does not mean that I'm actually trying to
-compute them (again - whatever your definition of ``compute'' may be). This is
-further elaborated in the following section, which points out the fact that the
-actual software does not exactly mirror everything that is discussed in the
-mathematical background, but works around the restrictions imposed by the real
-world (computability, finite arithmetic) by using other methods of approximating
-the effect of the math-backed interface.
-}
 
 \subsection{Linear Operators --- Towards a Generic Interface for Sparse
             Computations}
@@ -500,67 +456,30 @@ to iteratively solve a linear system. Line~5 defines the CUDA device with id 0
 as the execution space where the operations will be performed. The linear system
 data, including the input matrix, the right hand side, and the initial guess is
 read from standard input and stored in linear operators \texttt{A}, \texttt{b}
-and \texttt{x} on Lines~6--8. Then, Lines~9--17 define a specific instantiation
-of the solver factory $\Sigma$ (denoted by the \texttt{solver} variable in the
-code) which will be used to generate the solver operator. The solver operators
-generated by this specific instantiation of the factory will use the conjugate
-gradient (CG) Krylov method to approximate its application (Line~10). The method
-is executed for at most 1000 iterations (Line~13), or until the original
-residual norm is reduced by 15 orders of magnitude (Lines~14--16), whichever
-happens sooner. The Krylov method will be enhanced by a precondtioner generated
-from the system matrix using the block-Jacobi preconditioner factory $\Pi$
-(Line~11). This part of the example shows that, while there is a unique solver
-factory $\Sigma$, libraries may allow multiple ``instantiations'' of it to
-incorporate the fact that the same mathematical operation may be computed in
-multiple ways, depending on the desired accuracy and problem characteristics.
-The complete computation is done on Line~18, which generates the solver operator
-and solves the system. The \texttt{generate} method uses the matrix product
-operator \texttt{A} to create the corresponding solver operator.
-Since the specified Krylov method is enhanced with preconditioners generated
-by the block-Jacobi preconditioner factory, this factory's \texttt{generate}
-method will be used to generate a block-Jacobi precondtiioner operator from the
-matrix product operator \texttt{A}. Then, once the \texttt{apply} method is
-called, the CG Krylov solver is employed to approximate the result of the solver
-operator application, using the matrix product operator \texttt{A} and the
-previously generated block-Jacobi preconditioner operator for \texttt{A}.
-Finally, the approximate solution is written to standard output on Line~19.
-
-\ha{
-Maybe mention that also the composition of the linear solver and the
-preconditioner is a linear operator? Maybe mention that earlier?}
-\gf{
-Difficult... First of all, what is a ``linear solver''? This is not something
-defined anywhere in the text. If you're thinking about a Krylov solver, or even
-a relaxation solver with a variable amount of iterations (\ie if the stopping
-criterion is based on the residual), these do not satisfy the strict linearity,
-even as mathematical concepts, so they themselves are not linear operators and
-their composition with anything is also generally not a linear operator. If
-you're talking about the solver operator defined previously, which is a linear
-operator, then its composition (in the mathematical sense of function
-composition) with any other linear operator (including any of the preconditioner
-operators) is trivially also a linear operator. However, a mathematical
-composition of these things is not something one is normally interested in, as
-it results in $y = P_A^\Pi S_Ab$, which satisfies $AMy = b$, and not $Ay = b$.
-Strictly speaking, preconditioners are used to enhance the method (not the
-mathematical concept of the solver operator!) employed to approximate the
-application of the solver operator, which belongs to the approximate linear
-operator amendment described above. This is also the reason why I didn't use
-your suggestion for the part of the text that describes the role of Krylov
-solvers, as I feel that it somehow obfuscates this distinction.  Not sure
-whether this is something that should be a discussed in more detail here in a
-form of a remark, or maybe put in the FAQ section of Ginkgo if a lot of people
-has the same question.
-}
-\ha{
-Maybe mention the data is transferred "behind the scenes", i.e. the user does
-not have to explicitly copy? Execution space and memory space are coupled...
-}
-\gf{
-I think it's pretty clear by looking at the code that there are no explicit
-copies. As for the coupling of execution and memory spaces, this is something
-that will have to be significantly refined in a future version of Ginkgo, so I
-don't want to go into to much details here, to avoid this thesis becoming
-outdated to soon. In any case, I would rather focus here on motivating ginkgo
-using its mathematical background, and leave an exhaustive description of all
-its features for the interface paper or a whitepaper.
-}
+and \texttt{x} on Lines~6--8. Since the specified execution space for these
+operators is a CUDA device, the data will be automatically copied to the
+the memory space attached to it. Then, Lines~9--17 define a specific
+instantiation of the solver factory $\Sigma$ (denoted by the \texttt{solver}
+variable in the code) which will be used to generate the solver operator. The
+solver operators generated by this specific instantiation of the factory will
+use the conjugate gradient (CG) Krylov method to approximate its application
+(Line~10). The method is executed for at most 1000 iterations (Line~13), or
+until the original residual norm is reduced by 15 orders of magnitude
+(Lines~14--16), whichever happens sooner. The Krylov method will be enhanced by
+a precondtioner generated from the system matrix using the block-Jacobi
+preconditioner factory $\Pi$ (Line~11). This part of the example shows that,
+while there is a unique solver factory $\Sigma$, libraries may allow multiple
+``instantiations'' of it to incorporate the fact that the same mathematical
+operation may be computed in multiple ways, depending on the desired accuracy
+and problem characteristics.  The complete computation is done on Line~18, which
+generates the solver operator and solves the system. The \texttt{generate}
+method uses the matrix product operator \texttt{A} to create the corresponding
+solver operator.  Since the specified Krylov method is enhanced with
+preconditioners generated by the block-Jacobi preconditioner factory, this
+factory's \texttt{generate} method will be used to generate a block-Jacobi
+precondtiioner operator from the matrix product operator \texttt{A}. Then, once
+the \texttt{apply} method is called, the CG Krylov solver is employed to
+approximate the result of the solver operator application, using the matrix
+product operator \texttt{A} and the previously generated block-Jacobi
+preconditioner operator for \texttt{A}.  Finally, the approximate solution is
+written to standard output on Line~19.

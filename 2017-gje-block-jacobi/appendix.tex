@@ -1,21 +1,13 @@
 \begin{landscape}
-
-\begin{figure}
-\begin{center}
-{\scriptsize
+\begin{figure}[p]
+\centering
+\scriptsize
 \begin{tabular}{c|cccccc}
 & \textbf{Jacobi(1)}&\textbf{Jacobi(8)}&\textbf{Jacobi(12)}&\textbf{Jacobi(16)}&\textbf{Jacobi(24)}&\textbf{Jacobi(32)}\\
 \hline
-\parbox[t]{2mm}{\multirow{1}{*}{\rotatebox[origin=r]{90}{\textbf{
-    Jacobi(32)\hspace*{1.08cm}
-    Jacobi(24)\hspace*{1.08cm}
-    Jacobi(16)\hspace*{1.08cm}
-    Jacobi(12)\hspace*{1.08cm}
-    Jacobi(8)\hspace*{1.2cm}
-    Jacobi(1)\hspace*{.5cm}}}}
-}
 \\
 
+\parbox[c]{5pt}{\turnbox{90}{\hspace*{18pt}\textbf{Jacobi(1)}}}
 &
  \includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(1).pdf}
 &
@@ -29,6 +21,7 @@
 &
 \includegraphics[width=.135\columnwidth]{plots/Jacobi(1)_vs_Jacobi(32).pdf}
 \\
+\parbox[c]{5pt}{\turnbox{90}{\hspace*{18pt}\textbf{Jacobi(8)}}}
 &
 \includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(1).pdf}
 &
@@ -42,6 +35,7 @@
 &
 \includegraphics[width=.135\columnwidth]{plots/Jacobi(8)_vs_Jacobi(32).pdf}
 \\
+\parbox[c]{5pt}{\turnbox{90}{\hspace*{18pt}\textbf{Jacobi(12)}}}
 &
 \includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(1).pdf}
 &
@@ -55,6 +49,7 @@
 &
 \includegraphics[width=.135\columnwidth]{plots/Jacobi(12)_vs_Jacobi(32).pdf}
 \\
+\parbox[c]{5pt}{\turnbox{90}{\hspace*{18pt}\textbf{Jacobi(16)}}}
 &
 \includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(1).pdf}
 &
@@ -68,6 +63,7 @@
 &
 \includegraphics[width=.135\columnwidth]{plots/Jacobi(16)_vs_Jacobi(32).pdf}
 \\
+\parbox[c]{5pt}{\turnbox{90}{\hspace*{18pt}\textbf{Jacobi(24)}}}
 &
 \includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(1).pdf}
 &
@@ -81,6 +77,7 @@
 &
 \includegraphics[width=.135\columnwidth]{plots/Jacobi(24)_vs_Jacobi(32).pdf}
 \\
+\parbox[c]{5pt}{\turnbox{90}{\hspace*{18pt}\textbf{Jacobi(32)}}}
 &
 \includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(1).pdf}
 &
@@ -95,8 +92,6 @@
  \includegraphics[width=.135\columnwidth]{plots/Jacobi(32)_vs_Jacobi(32).pdf}
 \\
 \end{tabular}
-}
-\end{center}
 \caption
 [Detailed comparison of IDR(4) enhanced with block-Jacobi
 using different block sizes]
@@ -106,11 +101,12 @@ using different block sizes.
 }
 \label{2017-gje-block-jacobi:fig:solverperformance-detailed}
 \end{figure}
-
 \end{landscape}
+
+
 \begin{landscape}
 \begin{table}[p]
-\scriptsize
+\fontsize{7pt}{8pt}\selectfont
 \centering
 \begin{tabular}{lrrr||rr|rr|rr|rr|rr|rr}
 \hline

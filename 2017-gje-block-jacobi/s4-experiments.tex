@@ -122,15 +122,16 @@ equal-size matrices with an upper bound of 32 $\times$ 32.
 \end{enumerate}
 
 We note that the scope of the distinct batched inversion routines is slightly
-different: {\tt BGJE}, {\sc BGJE-MPW}, and {\tt matinvBatched} only support
-matrices of size up to 32 $\times$ 32; and neither {\tt matinvBatched} nor {\tt
-	getriBatched} support batches containing matrices of different sizes. Therefore,
-we limit the performance comparison to batches composed of equal-size matrices
-of up to 32 $\times$ 32. While this upper bound is usually not a problem in the
-context of block-Jacobi preconditioning, handling batches that contain variable-size 
-matrices is essential to accommodating the inherent block structure of FEM
-discretizations. Consequently, the cuBLAS routines will not be considered
-in the complete preconditioner generation and application experiments.
+different: {\tt BGJE}, {\tt BGJE-MPW}, and {\tt matinvBatched} only support
+matrices of size up to 32 $\times$ 32; and neither {\tt matinvBatched} nor
+\linebreak {\tt getriBatched} support batches containing matrices of different
+sizes. Therefore, we limit the performance comparison to batches composed of
+equal-size matrices of up to 32 $\times$ 32. While this upper bound is usually
+not a problem in the context of block-Jacobi preconditioning, handling batches
+that contain variable-size matrices is essential to accommodating the inherent
+block structure of FEM discretizations. Consequently, the cuBLAS routines will
+not be considered in the complete preconditioner generation and application
+experiments.
 
 Figure~\ref{2017-gje-block-jacobi:fig:bgje-mpw-performance} compares the performance, in terms of
 gigaFLOPS (billions of arithmetic floating-point operations per second), for two 

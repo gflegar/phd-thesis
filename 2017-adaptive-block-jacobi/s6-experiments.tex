@@ -38,9 +38,9 @@ condition number distribution of the blocks for each test
 matrix. These condition numbers are one of the metrics considered when 
 selecting the storage format in the \apbj preconditioner.
 
-Using Octave, we emulate the procedure for truncation of \fpd values to reduced 
-precision
-formats ({\tt \small force\_reduction} shown in Figure~\ref{2017-adaptive-block-jacobi:fig:adaptive})
+Using Octave, we emulate the procedure for truncation of \fpd values to reduced
+precision \linebreak formats (\texttt{force\_reduction} shown in
+Figure~\ref{2017-adaptive-block-jacobi:fig:adaptive})
 as follows. First, we transform the full precision value to a text
 string and then truncate that string to keep only the two most significant 
 decimal digits for \fph and the seven most significant decimal digits for \fps.

@@ -2,7 +2,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % basic document setup
-\documentclass[final,a4paper,11pt,twoside]{book}
+\documentclass[a4paper,11pt,twoside]{book}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm,head=26pt]{geometry}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -190,7 +190,8 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
 \usepackage{booktabs}   % improved tables
 \usepackage{caption}    % better figure captions
 \usepackage{float}      % improved float behavior
-\usepackage{pdflscape}     % landscape pages
+\usepackage{pdflscape}  % landscape pages
+\usepackage{rotating}   % for vertical text
 \usepackage{multirow}   % table cells spanning multiple rows
 \usepackage{subcaption} % subfigure environment
 \usepackage{url}        % \url command
@@ -211,7 +212,7 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
 % \title{Accelerating the Solution of Sparse Linear Systems on Graphics
 %        Processing Units}
 \title{Sparse Linear System Solvers on GPUs: \\
-    Workload Balancing, Parallel Preconditioning and Communication Reduction}
+    Parallel Preconditioning, Workload Balancing, and Communication Reduction}
 \author{Goran Flegar}
 \advisor{Enrique S. Quintana-Ort\'{i}}
 \coadvisor{Hartwig Anzt}

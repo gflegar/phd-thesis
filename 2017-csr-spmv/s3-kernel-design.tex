@@ -31,7 +31,7 @@ parallel,private}]{codes/spmv_i.c}
 
 In order to distribute the arrays \val and \colidx, both of size $n_z$,
 evenly among $T$ threads,
-thread $k \in \lbrace 0,1, \ldots, T-1 \rbrace$ is given
+thread \linebreak $k \in \lbrace 0,1, \ldots, T-1 \rbrace$ is given
 a segment of the arrays starting at $\lfloor kn_z / T\rfloor$ (inclusive)
 and ending at $\lfloor (k+1)n_z/T\rfloor$ (exclusive).
 During the execution of the \spmv $y:=Ax + y$, with an $m \times n$ matrix $A$,

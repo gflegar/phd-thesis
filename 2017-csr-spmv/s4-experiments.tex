@@ -56,8 +56,8 @@ and this setting is used for all experiments in this section.
 
 \begin{figure}[p]
 \begin{tabular}{cc}
-    \includegraphics[width=0.48\textwidth]{plots/storage_consumption.pdf}
-    \includegraphics[width=0.48\textwidth]{plots/storage_overhead.pdf} &
+    \includegraphics[width=0.45\textwidth]{plots/storage_consumption.pdf}
+    \includegraphics[width=0.45\textwidth]{plots/storage_overhead.pdf} &
 \end{tabular}
 \caption[Storage consumption 
     of different sparse matrix formats
@@ -66,16 +66,16 @@ and this setting is used for all experiments in this section.
     of different sparse matrix formats (left)
     and overhead compared to CSR for these formats (right).
     The data is shown for 100 selected matrices from SMC,
-    assuming $s_v$=8 (double precision) and $s_i$=4.}
+    assuming $s_v$=8 \linebreak (double precision) and $s_i$=4.}
 \label{2017-csr-spmv:fig:storage}
 \end{figure}
 
 \begin{figure}[p]
 \begin{tabular}{c}
-\includegraphics[width=0.48\textwidth]{plots/range_K40_single.pdf}
-\includegraphics[width=0.48\textwidth]{plots/range_K40_double.pdf}\\
-\includegraphics[width=0.48\textwidth]{plots/range_GTX1080_single.pdf}
-\includegraphics[width=0.48\textwidth]{plots/range_GTX1080_double.pdf}
+\includegraphics[width=0.45\textwidth]{plots/range_K40_single.pdf}
+\includegraphics[width=0.45\textwidth]{plots/range_K40_double.pdf}\\
+\includegraphics[width=0.45\textwidth]{plots/range_GTX1080_single.pdf}
+\includegraphics[width=0.45\textwidth]{plots/range_GTX1080_double.pdf}
 \end{tabular}
 \caption[GFLOPS distribution of \spmv implementations]
     {GFLOPS distribution of \spmv implementations on K40 (top)
@@ -113,7 +113,7 @@ Concretely, we first filtered the complete collection (2,757 problem instances)
 keeping only real-valued instances with $10^6 \leq n_z < 10^8$ (491 problems),
 and then randomly selected 100 cases%
 \footnote{The list of cases employed in the experiments can be downloaded from
-\mbox{\url{http://www3.uji.es/~flegar/2017_csri/matrices.txt}}.}
+\\ \hspace*{2cm} \url{http://www3.uji.es/~flegar/2017_csri/matrices.txt}.}
 among these
 (about 20\% of the filtered problems and 3.6\% of the complete collection). 
 The limits for $n_z$ were chosen to allow the utilization
@@ -126,10 +126,10 @@ not being biassed to any particular format.
 
 \begin{figure}[t]
 \begin{tabular}{c}
-\includegraphics[width=0.48\textwidth]{plots/performance_K40_single.pdf}
-\includegraphics[width=0.48\textwidth]{plots/performance_K40_double.pdf}\\
-\includegraphics[width=0.48\textwidth]{plots/performance_GTX1080_single.pdf}
-\includegraphics[width=0.48\textwidth]{plots/performance_GTX1080_double.pdf}
+\includegraphics[width=0.45\textwidth]{plots/performance_K40_single.pdf}
+\includegraphics[width=0.45\textwidth]{plots/performance_K40_double.pdf}\\
+\includegraphics[width=0.45\textwidth]{plots/performance_GTX1080_single.pdf}
+\includegraphics[width=0.45\textwidth]{plots/performance_GTX1080_double.pdf}
 \end{tabular}
 \caption[Comparison of \spmv implementations]
     {Comparison of \spmv implementations on K40 (top)
@@ -199,10 +199,10 @@ with the first transfer of the matrix data to the GPU memory.
 
 \begin{figure}[t]
 \begin{tabular}{c}
-\includegraphics[width=0.48\textwidth]{plots/speedup_K40_single.pdf}
-\includegraphics[width=0.48\textwidth]{plots/speedup_K40_double.pdf}\\
-\includegraphics[width=0.48\textwidth]{plots/speedup_GTX1080_single.pdf}
-\includegraphics[width=0.48\textwidth]{plots/speedup_GTX1080_double.pdf}
+\includegraphics[width=0.45\textwidth]{plots/speedup_K40_single.pdf}
+\includegraphics[width=0.45\textwidth]{plots/speedup_K40_double.pdf}\\
+\includegraphics[width=0.45\textwidth]{plots/speedup_GTX1080_single.pdf}
+\includegraphics[width=0.45\textwidth]{plots/speedup_GTX1080_double.pdf}
 \end{tabular}
 \caption[Comparison between CSR and \bcsr implementations]
     {Comparison between CSR and \bcsr implementations of \spmv on K40 (top) and
@@ -237,10 +237,10 @@ This is explained by the lack of hardware support for DP atomic updates in this 
 
 \begin{figure}[t]
 \begin{tabular}{cc}
-\includegraphics[width=0.48\textwidth]{plots/std_speedup_K40_single.pdf} &
-\includegraphics[width=0.48\textwidth]{plots/std_speedup_K40_double.pdf}\\
-\includegraphics[width=0.48\textwidth]{plots/std_speedup_GTX1080_single.pdf} &
-\includegraphics[width=0.48\textwidth]{plots/std_speedup_GTX1080_double.pdf}
+\includegraphics[width=0.45\textwidth]{plots/std_speedup_K40_single.pdf} &
+\includegraphics[width=0.45\textwidth]{plots/std_speedup_K40_double.pdf}\\
+\includegraphics[width=0.45\textwidth]{plots/std_speedup_GTX1080_single.pdf} &
+\includegraphics[width=0.45\textwidth]{plots/std_speedup_GTX1080_double.pdf}
 \end{tabular}
 \caption
     [{Relationship between $s[n_{zr}]/E[n_{zr}]$
