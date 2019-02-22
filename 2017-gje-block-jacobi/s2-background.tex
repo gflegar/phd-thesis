@@ -60,18 +60,12 @@ On parallel architectures, it is possible to exploit the pairwise independence o
 by generating their individual inverses in parallel.
 
 \begin{figure}[t]
-\begin{center}
-\begin{minipage}{\columnwidth}
-{\small
-\lstinputlisting[language=matlab,caption=,morekeywords={SpMV,ddot,daxpy,dscal}]{code/GJE.m}
-}
-\end{minipage}
+\lstinputlisting[language=Matlab]{code/GJE.m}
 \caption
 [Basic GJE implementation in Matlab notation using standard pivoting]
 {Simplified loop-body of the basic GJE implementation in Matlab
     notation using standard pivoting.}
 \label{2017-gje-block-jacobi:fig:gje}
-\end{center}
 \end{figure}
 \subsection{GJE for matrix inversion}\label{2017-gje-block-jacobi:sec:gauss-jordan}
 
@@ -100,18 +94,12 @@ which dramatically reduces explicit data movements.
 
 
 \begin{figure}[t]
-\begin{center}
-\begin{minipage}{\columnwidth}
-{\small
-\lstinputlisting[language=matlab,caption=,morekeywords={SpMV,ddot,daxpy,dscal}]{code/GJEI.m}
-}
-\end{minipage}
+\lstinputlisting[language=Matlab]{code/GJEI.m}
 \caption
 [Basic GJE implementation in Matlab notation using implicit pivoting]
 {Simplified loop-body of the basic GJE implementation in Matlab
     notation using implicit pivoting.}
 \label{2017-gje-block-jacobi:fig:gje2}
-\end{center}
 \end{figure}
 
 \subsection{GJE with implicit pivoting}\label{2017-gje-block-jacobi:sec:implicit-pivoting}

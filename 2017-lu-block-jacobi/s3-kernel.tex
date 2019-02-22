@@ -11,23 +11,13 @@ This is consistent with the batched implementation of GH in~\cite{gh}
 which is also designed for small problems, of the type arising in block-Jacobi preconditioning.
 
 \begin{figure}[t]
-\begin{center}
-\begin{minipage}{0.9\columnwidth}
-{\small
-\lstinputlisting[language=matlab,caption=,morekeywords={SpMV,ddot,daxpy,dscal}]{code/LU.m}
-}
-\end{minipage}
-\begin{minipage}{0.9\columnwidth}
-{\small
-\lstinputlisting[language=matlab,caption=,morekeywords={SpMV,ddot,daxpy,dscal}]{code/LUI.m}
-}
-\end{minipage}
+\lstinputlisting[language=Matlab]{code/LU.m}
+\lstinputlisting[language=Matlab]{code/LUI.m}
 \caption
 [Basic LU factorization in Matlab notation using explicit and implicit pivoting]
 {Loop-body of the basic LU factorization in Matlab notation
     using explicit and implicit partial pivoting (top and bottom, respectively).}
 \label{2017-lu-block-jacobi:fig:lu}
-\end{center}
 \end{figure}
 
 \begin{figure}[t]
@@ -126,23 +116,13 @@ see Figure~\ref{2017-lu-block-jacobi:fig:precscheme}.
 
 
 \begin{figure}[t]
-\begin{center}
-\begin{minipage}{0.9\columnwidth}
-{\small
-\lstinputlisting[language=matlab,caption=,morekeywords={SpMV,ddot,daxpy,dscal}]{code/TRS_L.m}
-}
-\end{minipage}
-\begin{minipage}{0.9\columnwidth}
-{\small
-\lstinputlisting[language=matlab,caption=,morekeywords={SpMV,ddot,daxpy,dscal}]{code/TRS_E.m}
-}
-\end{minipage}
+\lstinputlisting[language=Matlab]{code/TRS_L.m}
+\lstinputlisting[language=Matlab]{code/TRS_E.m}
 \caption
 [Loop-body of the ``lazy'' and ``eager'' \textsc{trsv} algorithms variants]
 {Loop-body of the ``lazy'' and ``eager'' algorithmic variants (top and bottom, respectively)
 for the solution of a unit lower triangular system in Matlab notation.}
 \label{2017-lu-block-jacobi:fig:trs}
-\end{center}
 \end{figure}
 
 \begin{figure}[p]

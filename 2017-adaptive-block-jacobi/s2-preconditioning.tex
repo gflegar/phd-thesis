@@ -130,12 +130,7 @@ preconditioner~\cite{notay}, which is needed when applying a preconditioner in
 reduced precision.
 
 \begin{figure}[t]
-\begin{center}
-\begin{minipage}{\columnwidth}
-{\small
-\lstinputlisting[language=matlab,caption=,keywords={while,end}]{code/pcg.m}
-}
-\end{minipage}
+\lstinputlisting[language=Matlab]{code/pcg.m}
 \caption
 [Algorithmic formulation (in MATLAB) of the PCG method]
 {Algorithmic formulation (in MATLAB) of the PCG method.
@@ -143,16 +138,10 @@ For a problem of size $n$ containing $n_z$ nonzero elements in the system matrix
 stored in CSR format, ignoring the preconditioner application, each PCG
 iteration requires $(14n+n_z)\cdot\fpd+(n_z+n)\cdot\inti$ memory transactions.}
 \label{2017-adaptive-block-jacobi:fig:codepcg}
-\end{center}
 \end{figure}
 
 \begin{figure}[t]
-\begin{center}
-\begin{minipage}{\columnwidth}
-{\small
-\lstinputlisting[language=matlab,caption=,keywords={while,end}]{code/fcg.m}
-}
-\end{minipage}
+\lstinputlisting[language=Matlab]{code/fcg.m}
 \caption
 [Algorithmic formulation (in MATLAB) of the FCG method]
 {Algorithmic formulation (in MATLAB) of the FCG method.
@@ -160,7 +149,6 @@ For a problem of size $n$ containing $n_z$ nonzero elements in the system matrix
 stored in CSR format, ignoring the preconditioner application, each FCG
 iteration requires $(21n+n_z)\cdot\fpd+(n_z+n)\cdot\inti$ memory transactions.}
 \label{2017-adaptive-block-jacobi:fig:codefcg}
-\end{center}
 \end{figure}
 
 

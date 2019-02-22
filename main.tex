@@ -141,48 +141,29 @@
 
 % Listings
 \usepackage{listings}
-
-\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
-\definecolor{mylilas}{RGB}{170,55,241}
-\lstset{language=matlab,%
-    %basicstyle=\color{red},
-    breaklines=true,%
-    morekeywords={matlab2tikz},
-    keywordstyle=\color{blue},%
-    morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
-    identifierstyle=\color{black},%
-    stringstyle=\color{mylilas},
-    commentstyle=\color{mygreen},%
-    showstringspaces=false,%without this there will be a symbol in the places where there is a space
-    numbers=left,%
-    numberstyle={\tiny \color{black}},% size of the numbers
-    numbersep=9pt, % this defines how far the numbers are from the text
-    emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
-    %emph=[2]{word1,word2}, emphstyle=[2]{style},    
+\lstloadlanguages{C,C++,Matlab}
+\definecolor{slbase02}{RGB}{7,54,66}
+\definecolor{slbase0}{RGB}{131,148,150}
+\definecolor{slbase1}{RGB}{147,161,161}
+\definecolor{slbase3}{RGB}{253,246,227}
+\definecolor{slcyan}{RGB}{42,161,152}
+\definecolor{slgreen}{RGB}{133,153,0}
+\lstdefinestyle{common}{
+    basicstyle=\footnotesize,
+    identifierstyle=\textcolor{slbase02},
+    commentstyle=\textcolor{slbase0},
+    stringstyle=\textcolor{slcyan},
+    keywordstyle=\bfseries\textcolor{slgreen},
+    numbers=left,
+    numberstyle=\textcolor{slbase0},
+    xleftmargin=2em,
+    xrightmargin=2em,
+    breaklines=true,
+    breakatwhitespace=true,
+    frame=tb,
+    backgroundcolor=\color{slbase3}
 }
-\lstset{language=C,
-basicstyle=\scriptsize\tt,
-numbers=left,                   % where to put the line-numbers
-numberstyle=\scriptsize,      % the size of the fonts that are used for the line-numbers
-stepnumber=1,                   % the step between two line-numbers. If it's 1, each line  numbered
-numbersep=5pt,
-stringstyle=\scriptsize\tt,
-identifierstyle=\scriptsize\tt,
-commentstyle=\scriptsize\em,
-keywordstyle=\scriptsize\bf,
-breaklines,frameround=ffff,frame=trbl,captionpos=b}
-
-\lstset{language=C++,
-basicstyle=\scriptsize\tt,
-numbers=left,                   % where to put the line-numbers
-numberstyle=\scriptsize,      % the size of the fonts that are used for the line-numbers
-stepnumber=1,                   % the step between two line-numbers. If it's 1, each line  numbered
-numbersep=5pt,
-stringstyle=\scriptsize\tt,
-identifierstyle=\scriptsize\tt,
-commentstyle=\scriptsize\em,
-keywordstyle=\scriptsize\bf,
-breaklines,frameround=ffff,frame=trbl,captionpos=b}
+\lstset{style=common}
 
 % Other utilities
 \usepackage{adjustbox}  % adjustbox evnironment

@@ -53,22 +53,10 @@ We recognize this can result in workload imbalance in-between the distinct probl
 However, optimizing the resource allocation to the characteristics of the distinct matrices in the batch remains outside the scope of this work.
 
 \begin{figure}[t]
-\begin{minipage}{\textwidth}
-\lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
-parallel,private}]{codes/coo.c}
-\end{minipage}
-\begin{minipage}{\textwidth}
-\lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
-parallel,private}]{codes/csr.c}
-\end{minipage}
-\begin{minipage}{\textwidth}
-\lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
-parallel,private}]{codes/csr_i.c}
-\end{minipage}
-\begin{minipage}{\textwidth}
-\lstinputlisting[language=C,caption=,morekeywords={pragma, omp,
-parallel,private}]{codes/ell.c}
-\end{minipage}
+\lstinputlisting[language=C]{codes/coo.c}
+\lstinputlisting[language=C]{codes/csr.c}
+\lstinputlisting[language=C]{codes/csr_i.c}
+\lstinputlisting[language=C]{codes/ell.c}
 \caption
 [Sequential C implementations of basic \spmv algorithms]
 {Sequential C implementations of basic \spmv algorithms.}
