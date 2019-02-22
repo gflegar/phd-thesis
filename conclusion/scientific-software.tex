@@ -11,21 +11,17 @@ user (stored in one of the formats supported by the software, or even in a
 custom format), generated from the system matrix as one of the standard
 preconditioners (\eg, relaxation or factorization based), or even implemented as
 a coarse (Krylov) solver. The system matrix may not even be stored explicitly,
-but available as a specialized implementation provided by the user \ha{but be
-available implicitly via a user-defined vector norm} \gf{can you double
-check this? vector norm? matrix-vector product cannot be replaced by a norm.
-It's actually a user-defined linear operator, but we don't mention the
-equivalence until later}. The preconditioners themselves may also be complex
-methods for the solution of linear systems, as even the most common ILU-based
-preconditioners can be constructed via selecting components from a pool of
-factorization methods that generate a preconditioner, and a pool of linear
-system solution methods that are used to solve systems with the upper and lower
-triangular factors arising from the incomplete factorization. Another aspect
-increasing the complexity of software design is the heterogeneity of modern
-hardware. If the goal of the software is to support computation on various
-devices, or even collaborative computation on a heterogeneous platform, its
-design has to incorporate abstractions that allow reasoning about the underlying
-hardware.
+but available as a specialized implementation provided by the user. The
+preconditioners themselves may also be complex methods for the solution of
+linear systems, as even the most common ILU-based preconditioners can be
+constructed via selecting components from a pool of factorization methods that
+generate a preconditioner, and a pool of linear system solution methods that are
+used to solve systems with the upper and lower triangular factors arising from
+the incomplete factorization. Another aspect increasing the complexity of
+software design is the heterogeneity of modern hardware. If the goal of the
+software is to support computation on various devices, or even collaborative
+computation on a heterogeneous platform, its design has to incorporate
+abstractions that allow reasoning about the underlying hardware.
 
 While there are various high performance libraries that try to address these
 aspects~\cite{magma,vienna-cl,paralution}, they usually struggle with at least

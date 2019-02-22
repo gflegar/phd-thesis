@@ -12,10 +12,10 @@
 \DeclareTextCommandDefault{\textbullet}{\ensuremath{\bullet}}
 \usepackage[scaled]{helvet}  % fix size of helvetica fonts
 \usepackage[square,sort,comma,numbers]{natbib}
-% \usepackage[colorlinks=false]{hyperref}
 
 % Paper inclusion
 \usepackage[sectionbib]{bibunits}
+\usepackage{bibentry}
 \usepackage{color}
 \usepackage{import}
 \usepackage{suffix}
@@ -52,18 +52,15 @@
 }
 
 % includes a paper from a subfolder
-\newcommand\includepaper[5]{
+\newcommand\includepaper[4]{
     \chapter{#2}
     \chaptermark{#3}
     \label{ch:#1}
-    \begin{bibunit}[abbrvnat]
     \begin{quote}
-        \textcolor{blue}{\footnotesize
-            #4.\\
-            {\em #2}.\\
-            #5.\\
-        }
+    \textbf{Published as:}
+    \bibentry{#4}
     \end{quote}
+    \begin{bibunit}[abbrvnat]
     \textit{\import*{#1/}{abstract}}
     \import*{#1/}{body}
     \putbib[#1/references]
@@ -79,6 +76,8 @@
 \usepackage{graphicx}
 \newcommand{\advisor}[1]{\def \theadvisor {#1}}
 \newcommand{\coadvisor}[1]{\def \thecoadvisor {#1}}
+\newcommand{\subject}[1]{\def \thesubject {#1}}
+\newcommand{\keywords}[1]{\def \thekeywords {#1}}
 
 % TOC setup
 \setcounter{secnumdepth}{4}
@@ -197,9 +196,18 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
 \usepackage{url}        % \url command
 \usepackage{xspace}     % \xspace command - prevents eating spaces
 
+\usepackage[
+    breaklinks,
+    bookmarksnumbered]
+    {hyperref}   % generate hyperlinks
+
+\input{cover}
 \input{macros}
 
 \begin{document}
+
+\bibliographystyle{abbrvnat}
+\nobibliography{included}
 
 \layout{}
 % Remove comments from the text
@@ -216,10 +224,13 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
 \author{Goran Flegar}
 \advisor{Enrique S. Quintana-Ort\'{i}}
 \coadvisor{Hartwig Anzt}
+\subject{Computer Science}
+\keywords{High Performance Computing, Graphics Processing Units, %
+Linear Systems, Krylov Methods, Sparse Matrix-Vector Product, Preconditioning, %
+Mixed Precision, Adaptive Precision}
 \date{March 2019}
-%%%%
-
-\input{cover}
+\maketitle
+%%%
 
 \includechapter*{abstract}{Abstract}
 
@@ -242,25 +253,17 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
 \includepaper{2017-csr-spmv}
     {Balanced CSR Sparse Matrix-Vector Product on Graphics Processors}
     {Balanced CSR \spmv}
-    {G.~Flegar, E.~S.~Quintana-Ort\'{i}}
-    {In Proceedings of Euro-Par 2017: Parallel Processing, pp. 697--709, 2017.
-    DOI: 10.1007/978-3-319-64203-1\_50}
+    {csr-spmv}
 
 \includepaper{2017-coo-spmv}
     {Overcoming Load Imbalance for Irregular Sparse Matrices}
     {Balanced COO \spmv}
-    {G.~Flegar, H.~Anzt}
-    {In Proceedings of the Seventh Workshop on Irregular Applications:
-    Architectures and Algorithms (IA3'17), pp. 2:1--2:8, 2017.
-    DOI: 10.1145/3149704.3149767}
+    {coo-spmv}
 
 \includepaper{2017-batched-spmv}
     {Flexible Batched Sparse Matrix-Vector Product on GPUs}
     {Batched \spmv}
-    {H.~Anzt, G.~Colins, J.~Dongarra, G.~Flegar, E.~S.~Qunitana-Ort\'{i}}
-    {In Proceedings of the 8th Workshop on Latest Advances in Scalable
-    Algorithms for Large-Scale Systems (ScalA'17), pp. 3:1--3:8, 2017.
-    DOI: 10.1145/3148226.3148230}
+    {batched-spmv}
 
 \part{Preconditioning}
 \label{pt:preconditioning}
@@ -269,25 +272,18 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
     {Variable-Size Batched Gauss-Jordan Elimination for Block-Jacobi
     Preconditioning on Graphics Processors}
     {Batched GJE for Block-Jacobi Preconditioning}
-    {H.~Anzt, J.~Dongarra, G.~Flegar, E.~S.~Quintana-Ort\'{i}}
-    {Parallel Computing, Vol 81, pp. 131--146, 2019.
-    DOI: 10.1016/j.parco.2017.12.006}
+    {gje-block-jacobi}
 
 \includepaper{2017-gh-block-jacobi}
     {Variable-Size Batched Gauss-Huard for Block-Jacobi Preconditioning}
     {Batched GH for Block-Jacobi Preconditioning}
-    {H.~Anzt, J.~Dongarra, G.~Flegar, E.~S.~Qunitana-Ort\'{i}, A.~E.~Tom\'{a}s}
-    {Procedia Computer Science, Vol 108, pp. 1783--1792, 2017.
-    DOI: 10.1016/j.procs.2017.05.186}
+    {gh-block-jacobi}
 
 \includepaper{2017-lu-block-jacobi}
     {Variable-Size Batched LU for Small Matrices and its Integration into
     Block-Jacobi Preconditioning}
     {Batched LU for Block-Jacobi Preconditioning}
-    {H.~Anzt, J.~Dongarra, G.~Flegar, E.~S.~Quintana-Ort\'{i}}
-    {In Proceedings of the  46th International Conference on Parallel Processing
-    (ICPP'2017), pp. 91--100, 2017.
-    DOI: 10.1109/ICPP.2017.18}
+    {lu-block-jacobi}
 
 \part{Towards Low Precision Methods}
 \label{pt:adaptive}
@@ -296,9 +292,7 @@ breaklines,frameround=ffff,frame=trbl,captionpos=b}
     {Adaptive Precision in Block-Jacobi Preconditioning for Iterative Sparse
     Linear System Solvers}
     {Adaptive Precision Block-Jacobi Preconditioning}
-    {H.~Anzt, J.~Dongarra, G.~Flegar, N.~J.~Higham, E.~S.~Quintana-Ort\'{i}}
-    {Concurrency and Computation: Practice and Experience, pp. e4460, 2018.
-    DOI: 10.1002/cpe.4460}
+    {adaptive-block-jacobi}
 
 \part{Epilogue}
 \label{pt:epilogue}

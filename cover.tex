@@ -1,3 +1,17 @@
+\makeatletter
+
+\renewcommand{\maketitle}{
+% Write metainformation to PDF output
+\providecommand{\hypersetup}{}
+\hypersetup{
+    pdfinfo={
+        Title={\thetitle},
+        Author={\theauthor},
+        Subject={\thesubject},
+        Keywords={\thekeywords} 
+    }
+}
+
 % Using the setup from Joaquin's thesis as the ground truth here
 \newgeometry{includehead,left=1.5in,right=1.5in,top=1in,head=12pt,textheight=8.75in}
 
@@ -14,7 +28,7 @@
 
 \vspace*{15ex}
 
-\centerline{\includegraphics[width=2.5cm]{logo}}
+\centerline{\includegraphics[width=3.0cm]{logo.png}}
 
 \vspace{\fill}
 
@@ -65,3 +79,6 @@
 \end{center}
 
 \restoregeometry
+}
+
+\makeatother
