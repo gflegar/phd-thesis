@@ -192,7 +192,7 @@
 
 \layout{}
 % Remove comments from the text
-% \nocoments
+%\nocomments
 
 \frontmatter
 \pagestyle{plain}
@@ -232,46 +232,43 @@ Mixed Precision, Adaptive Precision}
 \label{pt:matrix-vector}
 
 \includepaper{2017-csr-spmv}
-    {Balanced CSR Sparse Matrix-Vector Product on Graphics Processors}
+    {Balanced Sparse Matrix-Vector Product for the CSR Matrix Format}
     {Balanced CSR \spmv}
     {csr-spmv}
 
 \includepaper{2017-coo-spmv}
-    {Overcoming Load Imbalance for Irregular Sparse Matrices}
+    {Balanced Sparse Matrix-Vector Product for the COO Matrix Format}
     {Balanced COO \spmv}
     {coo-spmv}
 
 \includepaper{2017-batched-spmv}
-    {Flexible Batched Sparse Matrix-Vector Product on GPUs}
-    {Batched \spmv}
+    {Matrix-Vector Product Algorithms for Individual Streaming Multiprocessors}
+    {\spmv for a Single SM}
     {batched-spmv}
 
 \part{Preconditioning}
 \label{pt:preconditioning}
 
 \includepaper{2017-gje-block-jacobi}
-    {Variable-Size Batched Gauss-Jordan Elimination for Block-Jacobi
-    Preconditioning on Graphics Processors}
-    {Batched GJE for Block-Jacobi Preconditioning}
+    {Block-Jacobi Preconditioning Using Explicit Inversion}
+    {Inversion-Based Block-Jacobi Preconditioning}
     {gje-block-jacobi}
 
 \includepaper{2017-gh-block-jacobi}
-    {Variable-Size Batched Gauss-Huard for Block-Jacobi Preconditioning}
-    {Batched GH for Block-Jacobi Preconditioning}
+    {Block-Jacobi Preconditioning Based on Gauss-Huard Decomposition}
+    {GH-Based Block-Jacobi Preconditioning}
     {gh-block-jacobi}
 
 \includepaper{2017-lu-block-jacobi}
-    {Variable-Size Batched LU for Small Matrices and its Integration into
-    Block-Jacobi Preconditioning}
-    {Batched LU for Block-Jacobi Preconditioning}
+    {Block-Jacobi Preconditioning Based on LU Factorization}
+    {LU-Based Block-Jacobi Preconditioning}
     {lu-block-jacobi}
 
-\part{Towards Low Precision Methods}
+\part{Towards Adaptive Precision Methods}
 \label{pt:adaptive}
 
 \includepaper{2017-adaptive-block-jacobi}
-    {Adaptive Precision in Block-Jacobi Preconditioning for Iterative Sparse
-    Linear System Solvers}
+    {Leveraging Adaptive Precision in Block-Jacobi Preconditioning}
     {Adaptive Precision Block-Jacobi Preconditioning}
     {adaptive-block-jacobi}
 

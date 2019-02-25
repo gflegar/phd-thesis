@@ -220,9 +220,9 @@ possible if $m$ is significantly smaller than $n$.
 
 \begin{figure}[t]
 \begin{center}
-\begin{tabular}{|l|}
+\begin{tabular}{l}
 \hline
-\\Initialize $x_0, r_0 := b-Ax_0, p_0 := r_0, \tau_0 := r_{0}^* r_{0}^{}$
+\textbf{Initialize} $x_0, r_0 := b-Ax_0, p_0 := r_0, \tau_0 := r_{0}^* r_{0}^{}$
 \\ $k := 0$                                                
 \\ {\bf while} not converged
 \\ ~~~ $q_{k+1}:=Ap_{k}$                        
@@ -334,7 +334,7 @@ method, where $r_0 = b - A\tilde{x}_0$, obtaining $c = A^{-1}r_0 = A^{-1}b -
 solution $\tilde{x}_0$, since $x = \tilde{x}_0 + c$. However, as $c$ is only
 approximated using the coarse method, $\tilde{c} = c + e_c$ is obtained instead
 of $c$. Thus, the corrected solution is actually $\tilde{x}_1 = \tilde{x}_0 +
-\tilde{c} = x + e_c$. Nevertheless, as long as the residual $r_0$ and the upate
+\tilde{c} = x + e_c$. Nevertheless, as long as the residual $r_0$ and the update
 $\tilde{x}_1$ is computed more accurately than the solution of the system, the
 new error $e_c$ will be several orders of magnitude smaller than
 $e$~\cite{demmel,saad}. The process can be repeated iteratively to decrease the

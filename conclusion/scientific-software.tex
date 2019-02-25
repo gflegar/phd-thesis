@@ -1,27 +1,27 @@
 \section{Designing Scientific Software for Sparse Computations}
 
-With the previous chapters of this work focusing on the components for the
-solution of linear systems, the natural next consideration is the integration of
-these components into a holistic software ecosystem for the solution of linear
-systems.  A central challenge in this context is the manifoldness that arises
-from combining different components. Each matrix format can be used with any Krylov
-method. On top of that, each combination can be enhanced with any
-preconditioner, which could be available directly as a matrix provided by the
-user (stored in one of the formats supported by the software, or even in a
-custom format), generated from the system matrix as one of the standard
-preconditioners (\eg, relaxation or factorization based), or even implemented as
-a coarse (Krylov) solver. The system matrix may not even be stored explicitly,
-but available as a specialized implementation provided by the user. The
-preconditioners themselves may also be complex methods for the solution of
-linear systems, as even the most common ILU-based preconditioners can be
-constructed via selecting components from a pool of factorization methods that
-generate a preconditioner, and a pool of linear system solution methods that are
-used to solve systems with the upper and lower triangular factors arising from
-the incomplete factorization. Another aspect increasing the complexity of
-software design is the heterogeneity of modern hardware. If the goal of the
-software is to support computation on various devices, or even collaborative
-computation on a heterogeneous platform, its design has to incorporate
-abstractions that allow reasoning about the underlying hardware.
+With the previous chapters of this dissertation focusing on the components for
+the solution of linear systems, the natural next consideration is the
+integration of these components into a holistic software ecosystem for the
+solution of linear systems.  A central challenge in this context is the
+manifoldness that arises from combining different components. Each matrix format
+can be used with any Krylov method. On top of that, each combination can be
+enhanced with any preconditioner, which could be available directly as a matrix
+provided by the user (stored in one of the formats supported by the software, or
+even in a custom format), generated from the system matrix as one of the
+standard preconditioners (\eg, relaxation or factorization based), or even
+implemented as a coarse (Krylov) solver. The system matrix may not even be
+stored explicitly, but available as a specialized implementation provided by the
+user. The preconditioners themselves may also be complex methods for the
+solution of linear systems, as even the most common ILU-based preconditioners
+can be constructed via selecting components from a pool of factorization methods
+that generate a preconditioner, and a pool of linear system solution methods
+that are used to solve systems with the upper and lower triangular factors
+arising from the incomplete factorization. Another aspect increasing the
+complexity of software design is the heterogeneity of modern hardware. If the
+goal of the software is to support computation on various devices, or even
+collaborative computation on a heterogeneous platform, its design has to
+incorporate abstractions that allow reasoning about the underlying hardware.
 
 While there are various high performance libraries that try to address these
 aspects~\cite{magma,vienna-cl,paralution}, they usually struggle with at least
@@ -37,16 +37,15 @@ mathematical or software object, and only representing it as a concept with
 certain operations that behave according to some rules, every concrete object
 that defines these operations and follows the same rules can be
 handled in the exact same way. In the context of Krylov methods, matrices are
-used only as part of the matrix-vector product operation $y = Ax$. In rare
-cases, the conjugate transpose matrix (\textdef{adjoint matrix}) $A^*$ is also
-needed as part of the conjugate transpose matrix-vector product operation $y =
-A^*x$. For a fixed matrix $A$, the key properties of the matrix-vector product
-are \textdef{additivity} $A(x+y) = Ax + Ay$ and \textdef{homogeneity}
-$A(\alpha x) = \alpha Ax$ --- which are often written combined into the
-equivalent \textdef{linearity} property $A(\alpha x + \beta y) = \alpha Ax +
-\beta Ay$. Focusing only on these properties allows us to define an abstraction
-that can hide the details about the coefficients and the storage scheme of the
-matrix.
+used only as part of the matrix-vector product operation. In rare cases, the
+conjugate transpose matrix (\textdef{adjoint matrix}) is also needed as part of
+the conjugate transpose matrix-vector product operation. For a fixed matrix $A$,
+the key properties of the matrix-vector product are \textdef{additivity} $A(x+y)
+= Ax + Ay$ and \textdef{homogeneity} $A(\alpha x) = \alpha Ax$ --- which are
+often written combined into the equivalent \textdef{linearity} property
+$A(\alpha x + \beta y) = \alpha Ax + \beta Ay$. Focusing only on these
+properties allows us to define an abstraction that can hide the details about
+the coefficients and the storage scheme of the matrix.
 
 \begin{theorem}
 \label{conclusion:thm:matrix-linop}
@@ -157,9 +156,9 @@ matrices $F^{m \times n}$ and linear operators $\mathcal{L}(\mathbb{F}^n,
 \mathbb{F}^m)$ that preserves the algebraic structure of the matrix-vector
 multiplication and conjugate transpose operations, that is:
 \begin{enumerate}
-\item Matrix-vector multiplication is equivalent to the application of the
+\item The matrix-vector multiplication is equivalent to the application of the
 matrix product operator: $Ax = L_Ax$, for $x \in \mathbb{F}^n$.
-\item Conjugate transpose matrix-vector multiplication is equivalent to the
+\item The conjugate transpose matrix-vector multiplication is equivalent to the
 application of the matrix product operator's adjoint: $A^*x = L_A^*x$, for $x
 \in \mathbb{F}^n$.
 \end{enumerate}
@@ -180,13 +179,13 @@ matrix-vector multiplication.
 
 \begin{definition}
 \label{conclusion:def:solver-linop}
-For any nonsingular matrix $A \in GL_n(\mathbb{F}) := \lbrace M \in \mathbb{F}^n
-\ \vert \ \det(M) \neq 0 \rbrace$, let $S_A : \mathbb{F}^n \rightarrow
-\mathbb{F}^n$ be an operator that satisfies $A(S_Ab) = b$, for $b \in
-\mathbb{F}^n$. That is, the operator $S_A$ maps any (right-hand side) vector $b$
-to the solution $x$ of the linear system $Ax = b$ induced by the system matrix
-$A$ and the right-hand side $b$. Such an operator is called a \textdef{solver
-operator} with respect to $A$.
+For any nonsingular matrix $A \in GL_n(\mathbb{F}) := \lbrace M \in
+\mathbb{F}^{n \times n} \ \vert \ \det(M) \neq 0 \rbrace$, let $S_A :
+\mathbb{F}^n \rightarrow \mathbb{F}^n$ be an operator that satisfies $A(S_Ab) =
+b$, for $b \in \mathbb{F}^n$. That is, the operator $S_A$ maps any (right-hand
+side) vector $b$ to the solution $x$ of the linear system $Ax = b$ induced by
+the system matrix $A$ and the right-hand side $b$. Such an operator is called a
+\textdef{solver operator} with respect to $A$.
 \end{definition}
 
 \begin{theorem}
@@ -203,7 +202,7 @@ For any $A \in GL_n(\mathbb{F})$:
 \item The mapping $A \mapsto S_A$ is surjective onto the set
 \begin{align}
 \aut(\mathbb{F}^n) := \lbrace L \in \mathcal{L}(\mathbb{F}^n, \mathbb{F}^n) \
-\vert \ L \text{ is invertible} \rbrace
+\vert \ L \text{ is invertible} \rbrace,
 \end{align}
 \ie, for every $L \in \aut(\mathbb{F}^n)$ there is a matrix $A \in
 GL_n(\mathbb{F})$ such that $L = S_A$.
@@ -282,10 +281,10 @@ the conjugate transpose operation and the operation of solving a linear system,
 that is:
 \begin{enumerate}
 \item Solving a linear system with a fixed matrix $A$ is equivalent to the
-application of the solver operator $S_A$, \ie, $Ax = b$ if and only if $x =
+application of the solver operator $S_A$; \ie, $Ax = b$ if and only if $x =
 S_Ab$, for $x, b \in \mathbb{F}^n$.
 \item Solving a linear system with the conjugate transpose of a matrix $A$ is
-equivalent to the application of the solver operator's adjoint $S_A^*$, \ie,
+equivalent to the application of the solver operator's adjoint $S_A^*$, \ie;
 $A^*x = b$ if and only if $x = S_A^*b$, for $x, b \in \mathbb{F}^n$.
 \end{enumerate}
 \end{corollary}
@@ -300,7 +299,7 @@ obtained by substituting $A$ with $A^*$ in (1) and using $S_{A^*} = S_A^*$.
 
 \subsection{Preconditioners}
 
-Preconditioning (replacing the original linear system $Ax = b$ with a
+Preconditioning (\ie, replacing the original linear system $Ax = b$ with a
 preconditioned system, \eg $M^{-1}Ax = M^{-1}b$ for right preconditioning, where
 $M$ is some approximation of $A$) is another central concept in the iterative
 solution of linear systems. While the preconditioner $M$ is often
@@ -309,15 +308,15 @@ are its application to a vector $y = M^{-1}x$, and sometimes the application of
 its conjugate transpose to a vector $y = (M^{-1})^*x$. The preconditioner matrix
 $M$ is associated to the original system matrix $A$ via the method $\Pi$ that
 was used to derive the preconditioner from the system matrix $A$. A
-preconditoner needs to be nonsingular to preserve the existence and uniqueness
-of the linear system's solution. These considerations motivate the following
-definition:
+preconditioner needs to be nonsingular to preserve the existence and uniqueness
+of the solution to the linear system. These considerations motivate the
+following definition:
 
 \begin{definition}
 \label{conclusion:def:precond-linop}
 Any mapping $\Pi : \aut(\mathbb{F}^n) \rightarrow \aut(\mathbb{F}^n)$ is called
 a \textdef{preconditioner factory}. For any operator $L_A \in
-\aut(\mathbb{F}^n)$ (or equivalently, matrix $A \in GL_n(\mathbb{F})$) the
+\aut(\mathbb{F}^n)$ (or equivalently, matrix $A \in GL_n(\mathbb{F})$), the
 linear operator $P_A^\Pi := \Pi(L_A)$ is called the \textdef{preconditioner
 operator} with respect to the operator $L_A$ (or equivalently, $A$) and the
 preconditioner factory $\Pi$.  The unique matrix $M \in GL_n(\mathbb{F})$ such
@@ -325,12 +324,12 @@ that $P_A^\Pi = L_{M^{-1}}$ is called the \textdef{preconditioner matrix} with
 respect to $A$ and $\Pi$.
 \end{definition}
 
-An isomorphism $M \mapsto P_A^\Pi$ between precondtioner matrices and
-precondtioner operators that preserves the algebraic structure of preconditoner
-application and conjugate transpose preconditioner application is established
-via Corollary~\ref{conclusion:cor:matrix-linop}. Thus, precondtioners easily
-join the family of linear algebra operations that can be represented as linear
-operators.
+An isomorphism $M \mapsto P_A^\Pi$ between preconditioner matrices and
+preconditioner operators that preserves the algebraic structure of
+preconditioner application and conjugate transpose preconditioner application is
+established via Corollary~\ref{conclusion:cor:matrix-linop}. Thus,
+preconditioners easily join the family of linear algebra operations that can be
+represented as linear operators.
 
 \subsection{Linear Operators --- Towards a Generic Interface for Sparse
             Computations}
@@ -340,22 +339,22 @@ preconditioners and preconditioner application, and linear systems and their
 solution --- as linear operators. Using this abstraction in the design of a
 library effectively solves the problem of various component combinations for the
 solution of linear systems.  Every component is implemented in terms of the
-linear operator abstraction (\eg a Krylov method uses the abstract interface of
+linear operator abstraction (\eg, a Krylov method uses the abstract interface of
 the linear operator to realize matrix-vector products and preconditioner
 applications), and the decision of which concrete linear operators should be
 used for the components is left to the top-level application. The ability to
 substitute an abstract linear operator by a concrete implementation allows
 users to express any of the complex component combinations presented at the
 beginning of this chapter. Another advantage is that support for
-application-specific matrix formats, precondtioners, or methods for the solution
-of linear systems can be enabled by simply leaving the concept of the linear
-operator open for extension. This allows users to provide their own
+application-specific matrix formats, preconditioners, or methods for the
+solution of linear systems can be enabled by simply leaving the concept of the
+linear operator open for extension. This allows users to provide their own
 implementations of components that interoperate with the rest of the library in
-the same way the built-in components do.
+the same way as built-in components do.
 
 While the linear operator abstraction is perfectly suited for software that
 computes linear algebra operations symbolically, numerical libraries need to
-adopt a small approximation for these abstractions to work. The usual
+adopt an approximation for these abstractions to work. The usual
 argument against the linear operator abstraction is the fact that a fixed number
 of iterations of a Krylov method does not represent a linear operator. Indeed,
 for any Krylov method, the linear combination $\alpha x_k + \beta y_k$ of $k$-th
@@ -374,8 +373,8 @@ A(\alpha b + \beta c)$, respectively, will not satisfy $\widetilde{z} = \alpha
 \widetilde{x} + \beta \widetilde{y}$.  The same aspects arise for the
 preconditioner application. In consequence, the only way to obtain accurate
 matrix product and preconditioner operators is to use infinite precision
-arithmetic, which is usually to expensive and not necessary. In the case of
-Krylov methods, that are used to compute the application of the solver operator
+arithmetic, which is usually too expensive and not necessary. In the case of
+Krylov methods, which are used to compute the application of the solver operator
 $S_A$, the accurate solution that satisfies the additivity and homogeneity
 properties could be obtained by using infinite precision arithmetic and running
 the method until full convergence is reached.
@@ -383,9 +382,9 @@ the method until full convergence is reached.
 The short answer to the observation about Krylov methods is that the method is
 not intended to be used as a linear operator $S_A$, but as a way of
 approximating the effect of applying the linear operator $S_A$ to a vector.
-In more detail, the main distinction between the solver operator (which is a
-linear operator) and any of the Krylov methods (which are strictly speaking not
-linear operators) is that the former is used to described what is being
+In more detail, the main distinction between the solver operator (which is
+linear) and any of the Krylov methods (which are strictly speaking not
+linear operators) is that the former is used to describe what is being
 computed, and the latter how is it being computed.
 Assuming there is an implicit consensus that every operation in the software
 library comes with some approximation error --- which is a common concept in
@@ -427,10 +426,10 @@ adds orthogonal abstractions representing hardware implementation aspects.
 Precisely, Ginkgo employs ``executors'' that link the data with the appropriate
 memory spaces and the operations with computational resources. It implements
 several matrix formats, which represent matrix product operators, Krylov
-methods, which approximate the appliction of the solver operator, as well as
+methods, which approximate the application of the solver operator, as well as
 preconditioners, which enhance the convergence rate of the Krylov methods. The
 linear operator abstraction is left open to extension to allow user-defined
-implementations of matrix formats, Krylov methods, and precondtioners. To
+implementations of matrix formats, Krylov methods, and preconditioners. To
 simplify the adaptation of existing methods to specific needs, several other
 extensible abstractions are provided. These include the ability to modify the
 stopping criteria used to check convergence of iterative methods, as well as
@@ -450,32 +449,31 @@ operations.
 Figure~\ref{conclusion:fig:ginkgo-example} shows an example where Ginkgo is used
 to iteratively solve a linear system. Line~5 defines the CUDA device with id 0
 as the execution space where the operations will be performed. The linear system
-data, including the input matrix, the right hand side, and the initial guess is
-read from standard input and stored in linear operators \texttt{A}, \texttt{b}
-and \texttt{x} on Lines~6--8. Since the specified execution space for these
-operators is a CUDA device, the data will be automatically copied to the
-the memory space attached to it. Then, Lines~9--17 define a specific
-instantiation of the solver factory $\Sigma$ (denoted by the \texttt{solver}
-variable in the code) which will be used to generate the solver operator. The
-solver operators generated by this specific instantiation of the factory will
-use the conjugate gradient (CG) Krylov method to approximate its application
-(Line~10). The method is executed for at most 1000 iterations (Line~13), or
-until the original residual norm is reduced by 15 orders of magnitude
-(Lines~14--16), whichever happens sooner. The Krylov method will be enhanced by
-a precondtioner generated from the system matrix using the block-Jacobi
-preconditioner factory $\Pi$ (Line~11). This part of the example shows that,
-while there is a unique solver factory $\Sigma$, libraries may allow multiple
-``instantiations'' of it to incorporate the fact that the same mathematical
-operation may be computed in multiple ways, depending on the desired accuracy
-and problem characteristics.  The complete computation is done on Line~18, which
-generates the solver operator and solves the system. The \texttt{generate}
-method uses the matrix product operator \texttt{A} to create the corresponding
-solver operator.  Since the specified Krylov method is enhanced with
-preconditioners generated by the block-Jacobi preconditioner factory, this
-factory's \texttt{generate} method will be used to generate a block-Jacobi
-precondtiioner operator from the matrix product operator \texttt{A}. Then, once
-the \texttt{apply} method is called, the CG Krylov solver is employed to
-approximate the result of the solver operator application, using the matrix
-product operator \texttt{A} and the previously generated block-Jacobi
-preconditioner operator for \texttt{A}.  Finally, the approximate solution is
-written to standard output on Line~19.
+data, including the input matrix, the right-hand side, and the initial guess is
+read from the standard input and stored in linear operators \texttt{A},
+\texttt{b} and \texttt{x} in Lines~6--8. Since the specified execution space for
+these operators is a CUDA device, the data will be automatically copied to the
+memory space attached to it. Then, Lines~9--17 define a specific instantiation
+of the solver factory $\Sigma$ (denoted by the \texttt{solver} variable in the
+code) which will be used to generate the solver operator. The solver operators
+generated by this specific instantiation of the factory will use the conjugate
+gradient (CG) Krylov method to approximate its application (Line~10). The method
+is executed for at most 1000 iterations (Line~13), or until the original
+residual norm is reduced by 15 orders of magnitude (Lines~14--16), whichever
+happens first. The Krylov method will be enhanced by a preconditioner generated
+from the system matrix using the block-Jacobi preconditioner factory $\Pi$
+(Line~11). This part of the example shows that, while there is a unique solver
+factory $\Sigma$, libraries may allow multiple ``instantiations'' of it to
+incorporate the fact that the same mathematical operation may be computed in
+multiple ways, depending on the desired accuracy and problem characteristics.
+The complete computation is done in Line~18, which generates the solver operator
+and solves the system. The \texttt{generate} method uses the matrix product
+operator \texttt{A} to create the corresponding solver operator.  Since the
+specified Krylov method is enhanced with preconditioners generated by the
+block-Jacobi preconditioner factory, this factory's \texttt{generate} method
+will be used to generate a block-Jacobi preconditioner operator from the matrix
+product operator \texttt{A}. Then, once the \texttt{apply} method is called, the
+CG Krylov solver is employed to approximate the result of the solver operator
+application, using the matrix product operator \texttt{A} and the previously
+generated block-Jacobi preconditioner operator for \texttt{A}.  Finally, the
+approximate solution is written to standard output in Line~19.
