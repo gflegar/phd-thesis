@@ -195,11 +195,11 @@
     pages = {91--100},
 }
 
-@inbook{gh,
+@inproceedings{gh,
     needed-for = {2017-lu-block-jacobi},
     author = {Anzt, H. and Dongarra, J. and Flegar, G. and Quintana-Ort\'{\i},
               E. S. and Tom\'as, A. E.},
-    title = {Variable-Size Batched Gauss-Huard for Block-Jacobi
+    title = {Variable-Size Batched {Gauss}-{Huard} for Block-{Jacobi}
              Preconditioning},
     booktitle = {Procedia Computer Science},
     publisher = {Elsevier},
@@ -249,7 +249,7 @@
     pages={submitted}
 }
 
-@inbook{anzt-ir,
+@inproceedings{anzt-ir,
     needed-for = {introduction, conclusion},
     author = {Anzt, Hartwig and Flegar, Goran and Novakovi{\'{c}}, Vedran and
               Quintana-Ort{\'i}, Enrique S.  and Tom{\'a}s, Andr{\'e}s E.},
@@ -549,23 +549,29 @@
 }
 
 @article{chow-scott-2016,
-    needed-for = {2017-gje-block-jacobi},
-    author = {Chow, Edmond and Scott, Jennifer},
-    title = {On the Use of Iterative Methods and Blocking for Solving Sparse
-             Triangular Systems in Incomplete Factorization Preconditioning},
-    publisher = {SIAM},
-    journal = {SIAM Journal on Scientific Computing},
-    year = {2016, submitted}
+    needed-for = {2017-gje-block-jacobi, 2017-gh-block-jacobi,
+                  2017-lu-block-jacobi, 2017-adaptive-block-jacobi},
+    aka = {jenniferscott},
+    author = {Chow, Edmond and Anzt, Hartwig and Scott, Jennifer and Dongarra,
+              Jack},
+    title = {Using Jacobi Iterations and Blocking for Solving Sparse Triangular
+             Systems in Incomplete Factorization Preconditioning},
+    publisher = {Elsevier},
+    journal = {Journal of Parallel and Distributed Computing},
+    year = {2018},
+    volume = {119},
+    pages = {219--230}
 }
-
-@techreport{jenniferscott,
-    needed-for = {2017-gh-block-jacobi, 2017-lu-block-jacobi,
-                  2017-adaptive-block-jacobi},
-    author = {Chow, E. and Scott, J.},
-    title = {On the Use of Iterative Methods and Blocking for Solving Sparse
-             Triangular Systems in Incomplete Factorization Preconditioning},
-    institution = {Rutherford Appleton Laboratory},
-    year = {2016}
+@article{jenniferscott,
+    author = {Chow, Edmond and Anzt, Hartwig and Scott, Jennifer and Dongarra,
+              Jack},
+    title = {Using Jacobi Iterations and Blocking for Solving Sparse Triangular
+             Systems in Incomplete Factorization Preconditioning},
+    publisher = {Elsevier},
+    journal = {Journal of Parallel and Distributed Computing},
+    year = {2018},
+    volume = {119},
+    pages = {219--230}
 }
 
 @misc{cuda8.0,
