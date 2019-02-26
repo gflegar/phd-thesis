@@ -86,13 +86,16 @@
 % Header and footer setup
 \usepackage{fancyhdr}
 \fancyhf{}
+\renewcommand\bibsection{\section*{\bibname}}
 \renewcommand\chaptermark[1]{\markboth{Chapter \thechapter. #1}{}}
 \renewcommand\sectionmark[1]{\markright{\thesection. #1}{}}
 \renewcommand\headrulewidth{0.2pt}
 \renewcommand\footrulewidth{0.1pt}
 \fancyfoot[LE,RO]{\thepage} 
-\fancyhead[LO]{{\sffamily \rightmark}}
-\fancyhead[RE]{{\sffamily \leftmark}}
+\fancyhead[RO]{{\sffamily \rightmark}}
+\fancyhead[LE]{{\sffamily \leftmark}}
+
+% \show\thebibliography
 
 % Chapter setup
 \usepackage[Bjornstrup]{fncychap}
@@ -215,10 +218,20 @@ Mixed Precision, Adaptive Precision}
 
 \includechapter*{abstract}{Abstract}
 
-\tableofcontents
 \cleardoublepage
+\tableofcontents
 
-% \includechapter*{acknowledgements}{Acknowledgements}
+\includechapter*{acknowledgements}{Acknowledgements}
+
+\cleardoublepage
+\begin{center}
+    \vspace*{\fill}
+    \textit{
+    To my friend \ldots \\ \hspace{2cm}
+    right till the end.
+    }
+    \vspace*{\fill}
+\end{center}
 
 \mainmatter
 \pagestyle{fancy}
