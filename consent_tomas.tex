@@ -1,0 +1,34 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=2cm,right=2cm,top=1cm,bottom=1cm]{geometry}
+\usepackage{hyperref}
+\input{consent}
+
+\begin{document}
+\pagestyle{empty}
+\begin{Form}
+\signee{Andr\'{e}s E. Tom\'{a}s}
+\signeeid{%
+    DNI %
+    \TextField[
+        name=passport,
+        borderstyle=U,
+        bordercolor={ 0 0 0},
+        width=3cm]{}%
+}
+\signeecontact{%
+    \TextField[
+        name=contact,
+        borderwidth=0,
+        multiline=true,
+        height=5cm,
+        width=5cm]{}%
+}
+\student{Goran Flegar}
+\publications{gh-block-jacobi}{included}
+\placeanddate{%
+    \TextField[name=place,borderstyle=U,bordercolor={0 0 0},width=5cm]{},~%
+    \TextField[name=date,borderstyle=U,bordercolor={0 0 0},width=2.5cm]{} 2019%
+}
+\makeconsentletter
+\end{Form}
+\end{document}

@@ -1,0 +1,44 @@
+\usepackage{graphicx}
+\usepackage[square,sort,comma,numbers]{natbib}
+\usepackage{xspace}
+
+\makeatletter
+
+\renewcommand\bibsection{\subsection*{List of publications:}}
+
+\newcommand\signee[1]{\def\consent@thesignee{#1\xspace}}
+\newcommand\signeeid[1]{\def\consent@thesigneeid{#1\xspace}}
+\newcommand\signeecontact[1]{\def\consent@thesigneecontact{#1\xspace}}
+
+\newcommand\student[1]{\def\consent@thestudent{#1\xspace}}
+
+\newcommand\publications[2]{%
+    \def\consent@thepublications{%
+        \nocite{#1}
+        \bibliographystyle{abbrvnat}
+        \bibliography{#2}
+    }%
+}
+
+\newcommand\placeanddate[1]{\def\consent@theplaceanddate{#1\xspace}}
+
+\newcommand\makeconsentletter{%
+    \clearpage
+    \let\consent@oldindent\parindent
+    \setlength\parindent{0cm}
+    \begin{flushright}
+        \consent@thesigneecontact\\[4ex]
+    \end{flushright}
+    To whom it may concern:\\[2ex]
+    I, \consent@thesignee, with \consent@thesigneeid, consent to the inclusion
+    of the publication(s) listed below as part of \consent@thestudent's doctoral
+    dissertation and confirm that I will not use the publication(s) in question
+    as part of another doctoral dissertation.
+    \consent@thepublications
+    \vspace*{\fill}
+    \consent@theplaceanddate\\[16ex]
+    Signed: \consent@thesignee\\[8ex]
+    \setlength{\parindent}{\consent@oldindent}
+}
+
+\makeatother
