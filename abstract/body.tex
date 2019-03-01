@@ -10,44 +10,46 @@ powerful supercomputers to solve the world's most complex problems in physics
 simulations, weather forecasting, data analytics, social network analysis, and
 machine learning, among others. The potential of GPUs for these problems can
 only be unleashed by developing appropriate software, specifically tuned for the
-GPU architecture.  Fortunately, as these applications are decomposed into
-simpler building blocks, it becomes obvious that the same ones appear in
-multiple applications. One such basic kernel is the solution of large, sparse
-linear systems, which is the topic of this thesis.
+GPU architectures. Fortunately, many algorithms that appear in these
+applications are constructed out of the same basic building blocks. One example
+of a heavily-used building block is the solution of large, sparse linear
+systems, a challenge that is addressed in this thesis.
 
 After a quick overview of the current state-of-the-art methods for the solution
 of linear systems, this dissertation pays detailed attention to the class of
-Krylov iterative methods. As opposed to deriving new methods, this work suggests
-improvements of components that are found in all existing methods and represent
-a significant fraction of the total runtime. The components are designed for a
-single GPU, while scaling to multiple GPUs can be achieved either by
-generalizing the same ideas, or by decomposing a larger problem into multiple
-independent parts which can leverage the implementations described in this work.
+Krylov iterative methods.  Instead of deriving new methods, improvements are
+introduced to components that are already widely used in existing methods, and
+therein account for a significant fraction of the overall runtime cost. The
+components are designed for a single GPU, while scaling to multiple GPUs can be
+achieved by either generalizing the same ideas, or by decomposing the larger
+problem into multiple independent parts which can leverage the implementations
+described in this thesis.
 
 The most time-consuming part of a Krylov method is often the matrix-vector
 product. Two improvements are suggested in this dissertation: one for the
 widely-used compressed sparse row (CSR) matrix format, and an alternative one
-for the coordinate (COO) format, which has not yet achieved such ample adoption.
-The new GPU implementation for the CSR format is specifically tuned for matrices
-with irregular sparsity patterns and, while experiencing slowdowns of up to 3x
-compared with the vendor library implementation for regular patterns, it
-achieves up to 100x speedup for irregular ones.  However, the slowdown can be
-eliminated by using a simple heuristic that selects the superior implementation
-based on the sparsity pattern of the matrix.  The new COO algorithm is suggested
-as the default matrix-vector product implementation in cases when a specific
-matrix sparsity pattern is not known in advance. This algorithm achieves
-80\% higher minimal and 22\% higher average performance than the newly developed
-CSR algorithm on a variety of large matrices arising from real-world
-applications, making it an ideal default choice for general-purpose libraries.
+for the coordinate (COO) format, which has not yet achieved such ample adoption
+in numerical linear algebra. The new GPU implementation for the CSR format is
+specifically tuned for matrices with irregular sparsity patterns and, while
+experiencing slowdowns of up to 3x compared with the vendor library
+implementation for regular patterns, it achieves up to 100x speedup for
+irregular ones. However, the slowdown can be eliminated by using a simple
+heuristic that selects the superior implementation based on the sparsity pattern
+of the matrix. The new COO algorithm is suggested as the default matrix-vector
+product implementation for cases when a specific matrix sparsity pattern is not
+known in advance. This algorithm achieves 80\% higher minimal and 22\% higher
+average performance than the newly developed CSR algorithm on a variety of large
+matrices arising from real-world applications, making it an ideal default choice
+for general-purpose libraries.
 
 The second component addressed in this dissertation is preconditioning. It
-explores the relatively simple class of block-Jacobi preconditioners and shows
-that they can significantly increase the robustness and decrease the total
+explores the relatively simple class of block-Jacobi preconditioners, and shows
+that these can significantly increase the robustness and decrease the total
 runtime of Krylov solvers for a certain class of matrices. Several algorithmic
-realizations of the preconditioner are evaluated, and the one based on the
-Gauss-Jordan elimination algorithm is found to offer the best performance in
-most situations, while the variant based on LU factorization can be attractive
-for problems that converge in few iterations.
+realizations of the preconditioner are evaluated, and the one based on
+Gauss-Jordan elimination is identified as performance winner in most problem
+settings. The variant based on the LU factorization can be attractive for
+problems that converge in few iterations.
 
 In this dissertation, block-Jacobi preconditioning is analyzed further via an
 initial study of the effects that single and half precision floating-point
@@ -56,15 +58,17 @@ block-Jacobi preconditioner dynamically assigns storage precisions to individual
 blocks at runtime, taking into account the numerical properties of the blocks. A
 sequential implementation in a high-level language, backed by a theoretical
 error analysis, shows that this preconditioner reduces the total memory transfer
-volume, while keeping the quality of the preconditioner comparable with that of
-the full precision variant. A theoretical energy model predicts that the
-adaptive variant can offer energy savings of around 25\% compared with the full
-precision block-Jacobi.
+volume, while maintaining the preconditioner quality of a full precision
+block-Jacobi.  A theoretical energy model predicts that the adaptive variant can
+offer energy savings of around 25\% in comparison to the full precision
+block-Jacobi.
 
-No new algorithm nor implementation is useful if it is not made available to the
-high performance computing community. Thus, the final part of this dissertation
-presents a possible design of a sparse linear algebra library, which effectively
-solves the problem of excessive manifoldness of components for the iterative
-solution of linear systems. These ideas represent the backbone of the open
-source Ginkgo library, which also includes successful implementations of
-matrix-vector product algorithms and preconditioners described in this work.
+
+Acknowledging that new algorithms or optimized implementations are only useful
+for the scientific computing community if they are available as production-ready
+open source code, the final part of this dissertation presents a possible design
+of a sparse linear algebra library, which effectively solves the problem of
+excessive manifoldness of components for the iterative solution of linear
+systems. These ideas represent the backbone of the open source Ginkgo library,
+which also includes successful implementations of matrix-vector product
+algorithms and preconditioners described in this thesis.

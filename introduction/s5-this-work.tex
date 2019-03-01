@@ -39,13 +39,12 @@ case where current research is somewhat lacking. Chapter~\ref{ch:2017-csr-spmv}
 describes a load-balanced matrix-vector algorithm for the widely used CSR
 storage format, which achieves superior performance on irregular matrices
 compared to conventional algorithms. Chapter~\ref{ch:2017-coo-spmv} explores the
-potential of the historically slightly \ha{??} \gf{Not sure if this refers only
-to ``slightly'' or something more?} forgotten COO format and shows that it
-becomes relevant once more on modern accelerator hardware. Finally,
-Chapter~\ref{ch:2017-batched-spmv} describes various algorithms and storage
-formats in cases when the full problem is decomposed into smaller problems whose
-granularity fits a single processor (\ie Streaming Multiprocessor), instead of a
-processor group (\ie GPU).
+potential of the COO format, which fell out of favor in numerical linear
+algebra, and shows that it becomes relevant once more on modern accelerator
+hardware. Finally, Chapter~\ref{ch:2017-batched-spmv} describes various
+algorithms and storage formats in cases when the full problem is decomposed into
+smaller problems whose granularity fits a single processor (\ie, Streaming
+Multiprocessor), instead of a processor group (\ie, GPU).
 \item In Part~\ref{pt:preconditioning}, the attention is shifted towards
 preconditioning. The discussion is restricted to block-Jacobi preconditioners,
 which in itself already offer an abundance of possible algorithms.
