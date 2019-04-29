@@ -59,9 +59,15 @@ currently being used for the development of an improved hybrid matrix
 format~\cite{hybrid}. The success of the synchronization-free load-balancing
 algorithms on a single GPU should also prove to be useful for the development of
 sparse matrix-vector product algorithms that utilize the computational resources
-of the entire node in unison, as synchronization and load-balancing penalties
-become more pronounced on higher levels of the \textdef{hardware hierarchy}
-(vector unit, processor, processor group, node, cluster). Finally, the
+of the entire node, or even multiple nodes in unison as synchronization and
+load-balancing penalties become more pronounced on higher levels of the
+\textdef{hardware hierarchy} (vector unit, processor, processor group, node,
+cluster). While this task is far from straightforward when targeting a general
+matrix-vector product due to the unpredictable memory access and lack of atomic
+operations on a distributed memory architecture, previous research on the topic
+suggests that it may be possible to design effective algorithms if
+problem-specific details are exploited in algorithm
+design~\cite{distributed-spmv}. Finally, the
 simple heuristic used to select between the two CSR algorithms is also a small
 contribution to research in automatic sparse matrix format selection. This
 research area focuses on selecting the best format based on the properties of
@@ -112,6 +118,12 @@ systems~\cite{triangular-solve, isai, triangular-iterative}, and parallel
 generation of threshold ILU preconditioners~\cite{ilut, ilut-gpu}. As a direct
 extension of the block-Jacobi preconditioner presented here, future research can
 explore the effectiveness of other preconditioners based on relaxation methods.
+An orthogonal research direction would include scaling up the block-Jacobi
+preconditioner to distributed memory systems. Unlike the sparse matrix-vector
+product, the regular structure of the block-Jacobi preconditioner allows for
+relatively straightforward distributed algorithm, as each block can be moved to
+the memory space that holds the corresponding segments of the input and output
+vectors, and processed on the processor with direct access to that memory space.
 
 All algorithms presented in this part are also related to a broader topic of
 ``batched'' routines, which apply the same operation on a sequence of small
@@ -171,7 +183,13 @@ Since the adaptive precision block-Jacobi represents a pioneering idea in
 preconditioner design, it may be possible to enhance other preconditioners using
 similar techniques. Adaptive block-Jacobi preconditioning itself may also be
 improved further by using non-conventional storage formats instead of the
-standard IEEE floating point types~\cite{adaptive-jacobi-gpu}. In the bigger
+standard IEEE floating point types~\cite{adaptive-jacobi-gpu}. Exploiting
+support for low-precision computing hardware, such as the tensor cores available
+on the latest generations of NVIDIA GPUs is another possible research direction.
+However, one would first have to escape the memory-bandwidth-bound nature of
+preconditioner application (most likely through the use of block Krylov methods,
+or simply by solving a problem with multiple right-hand sides) before gaining
+benefits from these hardware features. In the bigger
 picture of iterative methods, adaptive block-Jacobi preconditioning is only one
 example of recent research in low-precision methods. In addition to the
 well-known mixed precision iterative refinement~\cite{higham-ir}, other examples
