@@ -1,0 +1,277 @@
+\section{Conclusiones y Líneas abiertas de Investigación}
+
+Este trabajo se ha centrado en la aceleración de componentes para la resolución
+de sistemas lineales dispersos sobre GPUs, y ha mostrado que es posible obtener
+mejoras de rendimiento significativas en hardware reciente, incluso en el caso
+de núcleos computacionales básicos muy trabajados.
+
+\noindent \textbf{Producto matriz-vector disperso.}
+El Bloque~\ref{pt:matrix-vector} se abrió con una discusión de la operación más
+costosa y más difícil de paralelizar: el producto matriz-vector disperso. Aunque
+recientemente se han propuesto una gran variedad de formatos de almacenamiento
+avanzados, junto con sus correspondientes algoritmos para el producto
+matriz-vector, el Capítulo~\ref{ch:2017-csr-spmv} demuestra que la mayor parte
+de estos presentan casos particulares donde, o bien consumen mucha más memoria,
+o bien ofrecen un rendimiento bastante más reducido que las implementaciones
+estándar. Además, la mayoría de bibliotecas de programas existentes proporcionan
+implementaciones optimizadas de otras operaciones, que están restringidas en
+cuanto a los formatos de almacenamiento que pueden usar como medio para
+gestionar la cantidad y la complejidad del trabajo del desarrollador.  Así,
+mientras que los formatos específicamente diseñados para algunas aplicaciones
+pueden batir a las alternativas estándar, los primeros solo tienen sentido en
+caso de que las mejoras potenciales, respecto a los formatos en bibliotecas de
+propósito general, compensen el coste de su desarrollo.
+
+El Capítulo~\ref{ch:2017-csr-spmv} se centró en reducir la diferencia de
+rendimiento frente a los formatos especializados --- y la necesidad de destinar
+recursos al desarrollo de formatos específicos para aplicaciones --- a través de
+la optimización de casos particulares revelantes para el formato CSR.  Gracias a
+los recientes avances en tecnología de aceleradores, que recientemente empezaron
+a proporcionar pleno soporte para operaciones atómicas, las optimizaciones
+propuestas resuelven de manera efectiva los problemas asociados con patrones
+irregulares de dispersión.  Si bien es cierto que la aproximación clásica
+todavía ofrece un rendimiento superior para patrones de dispersión regulares, un
+algoritmo globalmente óptimo para el producto matriz-vector definitivo puede
+obtenerse combinando ambas soluciones con un heurístico simple que predice el
+mejor esquema, y que selecciona la aproximación correspondiente de manera
+automática.
+
+El Capítulo~\ref{ch:2017-coo-spmv} continuó con el desarrollo del producto
+matriz-vector disperso identificando el formato COO como una alternativa de
+propósito general para GPUs. De manera análoga al caso mejorado del algoritmo
+CSR, el nuevo núcleo desarrollado para el formato COO es altamente eficiente y
+no sufre ante patrones de dispersión con propiedades extremadamente
+desfavorables. Además, sus tasas de rendimiento menor y medio más elevadas hacen
+que sea una opción por defecto más favorable que CSR.  En global, es posible
+obtener casos de uso mejores para cada una de las opciones: el algoritmo CSR
+mejorado puede utilizarse en combinación con programas que históricamente han
+explotado el formato CSR, o en aquellos casos en los que la eficiencia de otras
+operaciones dependa del uso de este formato. Por su parte, el formato COO puede
+escogerse para nuevos programas cuyo rendimiento no dependa del uso de CSR.
+
+Si bien la mayor parte de algoritmos para el producto matriz-vector se centran
+en operaciones de cálculo con problemas enormes, que utilizan la GPU al
+completo, el Capítulo~\ref{ch:2017-batched-spmv} explora el caso menos
+desarrollado de problemas más pequeños, apropiados para su ejecución en
+multiprocesadores individuales de la GPU.  En particular, el capítulo demuestra
+que este caso se puede implementar de manera más eficiente modificando los
+algoritmos estándar para que estos hagan un mejor uso de la jerarquía de
+memoria.
+
+Los avances presentados en esta parte pueden utilizarse en el desarrollo de
+formatos más especializados. Por ejemplo, las ideas del algoritmo COO se están
+usando actualmente para el desarrollo de un formato híbrido~\cite{hybrid}.  El
+éxito de los formatos de equilibrado de carga libres de sincronizaciones en una
+única GPU también pueden ser útiles para el desarrollo de algoritmos para el
+producto matriz-vector que aprovechen los recursos computacioneales del nodo
+completo, o incluso de múltiples nodos ya que las penalizaciones debidas a
+sincronizaciones y desequilibrios de carga son más elevadas en los niveles
+superiores de la jerarquía hardware (unidad vectorial, procesador, grupo de
+procesadores, nodo y cluster).  Si bien esta tarea no es trivial cuando se
+aplica a un producto matriz-vector general, debido al patrón irregular de acceso
+a la memoria y la falta de operaciones atómicas en una arquitectura de memoria
+distribuida, las últimas investigaciones sobre el tema sugieren que es posible
+diseñar algoritmos efectivos si se explotan los detalles específicos del
+problema durante el diseño del algoritmo~\cite{distributed-spmv}. Finalmente, el
+heurístico simple para seleccionear entre los dos algoritmos CSR es también una
+pequeña contribución en materia de investigación hacia la selección automática
+de formatos para matrices dispersas. Esta área se centra en seleccionar el mejor
+formato basándose en propiedades de la matriz, utilizando ciertas políticas (a
+menudo basadas en algoritmos de aprendizaje automático) para decidir entre
+varios formatos~\cite{clspmv,gpu-selection}, o incluso en ensamblar una
+implementación de posibles productos matriz-vector a partir de un conjunto de
+optimizaciones potenciales~\cite{elafrou}.
+
+\noindent\textbf{Precondicionado.}
+El Bloque~\ref{pt:preconditioning} exploró las ventajas del precondicionador de
+Jacobi por bloques implementado sobre hardware altamente paralelo de tipo GPU.
+Aunque este tipo de precondicionador, relativamente simple, presenta una menor
+aceleración de la convergencia frente a los precondicionadores de tipo ILU, esta
+parte de la tesis doctoral mostró que, para problemas con una estructura por
+bloques intrínseca, los precondicionadores de Jacobi por bloques son
+especialmente eficientes.  El rendimiento paralelo de estos precondicionadores
+puede atribuirse a su paralelismo intrínseco, puesto que cada bloque puede
+procesarse independientemente. El primer paso en pos del desarrollo de una
+implementación de alto rendimiento consiste en mapear los bloques sobre el nivel
+apropiado de la jerarquía hardware. La asignación de un bloque a cada unidad
+vectorial, aprovechando el incremento en el número de registros y las
+instrucciones \textit{warp shuffle} disponibles en hardware reciente, y el
+reemplazo de las estrategias convencionales de pivotamiento con una técnica
+implícita, ofrece una serie de algoritmos que son capaces de batir en cuanto a
+rendimiento a las implementaciones de funcionalidad equivalente en las
+bibliotecas de los vendedores.  El primero de estos algoritmos, el
+precondicionador de Jacobi por bloques basado en la eliminación de Gauss-Jordan,
+se presentó en el Capítulo~\ref{ch:2017-gje-block-jacobi}.  Este algoritmo
+particular invierte los bloques diagonales durante la generación del
+precondicionador, lo que significa que la etapa de aplicación se puede
+implementar como una sencilla secuencia de productos matriz-vector densos
+altamente paralela.
+
+
+Sin embargo, tal y como se discute en la
+Sección~\ref{introduction:sec:linear-systems}, la resolución de un sistema
+lineal mediante la inversión explícita de matrices en general puede introducir
+inestabilidades numéricas. El Capítulo~\ref{ch:2017-gh-block-jacobi} aborda esta
+problemática demonstrando que, en la práctica, no existe diferencia en la
+calidad de un precondicionador que usa el esquema basado en la inversión
+explícita frente a otro clásico que utiliza la aproximación basada en
+factorizaciones. Así mismo, también se revisita el método de Gauss-Huard para la
+resolución de sistemas lineales, y se demuestra que este último puede superar al
+método de Gauss-Jordan cuando se necesitan solo unas pocas iteraciones para la
+convergencia.  Finalmente, el Capítulo~\ref{ch:2017-lu-block-jacobi} comparó el
+resolutor Gauss-Huard con el algoritmo estándar de factorización LU, y mostró
+que, si la versión tradicional ``perezosa'' (\textit{lazy}) del algoritmo de
+resolución triangular se reemplaza con una variante ``voraz'' (\textit{eager}),
+la factorización LU puede mejorar el rendimiento de la alternativa basada en la
+factorización Gauss-Huard.
+
+Las contribuciones de este bloque constituyen solo una pequeña parte de los
+desarrollos recientes en técnicas de precondicionado. Algunos de estos
+desarrollos incluyen nuevos métodos altamente paralelos para resolver sistemas
+triangulares~\cite{triangular-solve, isai, triangular-iterative}, y la
+generación paralela de precondicionadores ILU con umbral~\cite{ilut, ilut-gpu}.
+Como extensión directa de los precondionadores de Jacobi por bloques presentados
+aquí, la investigación futura puede explorar la efectividad de otros
+precondicionadores basados en métodos de relajación. Una dirección de
+investigación ortogonal podría incluir el escalado de los precondicionadores de
+Jacobi por bloques en sistemas de memoria distribuidos. Al contrario que en el
+producto matriz-vector disperso, la estructura regular del precondicionador por
+bloques de Jacobi permite obtener un algoritmo distribuido de manera
+relativamente directa, puesto que cada bloque se puede alojar en el espacio de
+memoria que almacena el segmento correspondiente de los vectores de entrada y
+salida, y además se puede tratar en el procesador correspondiente que tiene
+acceso a ese espacio de memoria.
+
+Todos los algoritmos presentados en este bloque están asimismo relacionados con
+el campo más amplio de las rutinas ``por lotes'' (\textit{batch}), que aplican
+la misma operación a una secuencia enorme de problemas pequeños e
+independientes. Si bien existe una propuesta reciente para estandarizar una
+interfaz para BLAS por lotes~\cite{batched-blas}, en estos momentos todavía no
+está claro si este esfuerzo resultará en una adopción general de la propuesta,
+puesto que hay problemas significativos con el diseño de la interfaz.  Dado que
+arquitecturas distintas requieren formatos de almacenamiento específicos (por
+ejemplo, uno de los parámetros del lote es compartido, otro se almacena como una
+secuencia contigua en memoria, o un tercero se distribuye sobre la memoria),
+cubrir todas las posibles opciones conlleva un crecimiento exponencial en el
+número de funciones en la interfaz, con un volumen inmanejable en el número de
+parámetros.  Otro problema surge de la sincronización implícita entre dos
+llamadas a rutinas de procesamiento por lotes. Aunque no existen dependencias
+entre los distintos problemas que conforman un lote, el lote entero todavía
+funciona de manera síncrona, puesto que cada rutina por lotes equivale,
+básicamente, a un bucle que recorre todas las instancias del problema.  Este
+inconveniente puede resolverse parcialmente mediante la implementación de las
+rutinas como un conjunto de trabajos enviados a un sistema de planificación de
+trabajos, pero confiar en que tal sistema exista siempre puede no ser una buena
+opción.  Por ejemplo, este es el caso del precondicionador de Jacobi por bloques
+presentado en este trabajo, en el que el lote de problemas se distribuye en la
+GPU (donde no es común disponer de gestor de planificación), y existe un
+sobrecoste debido a la necesidad de preprocesar y posprocesar los datos del
+problema como parte el mismo núcleo GPU. En último extremo, la solución práctica
+puede requerir abandonar la idea de rutinas por bloques, y en su lugar construir
+bibliotecas que proporcionan una funcionalidad similar a la del BLAS para varios
+niveles de la jerarquía hardware. En esencia, con esta aproximación, la tarea de
+construir el bucle externo paralelo se dejaría en manos del usuario, eliminando
+la necesidad de una compleja y larga lista de parámetros, reduciendo enormente
+las posibles variantes en la interfaz, y eliminando la imposición de
+sincronizaciones implícitas sobre problemas no relacionados.  Aunque este tipo
+de bibliotecas todavía son poco comunes, recientemente NVIDIA ha mostrado su
+posición favorable a esta línea, con su biblioteca CUTLASS~\cite{cutlass}, que
+proporciona implementaciones del producto general de matrices (GEMM) para varios
+niveles de la jerarquía hardware de la GPU. 
+
+\noindent\textbf{Precisión adaptativa.}
+Como resultado de algunas tendencias actuales en computación de altas
+prestaciones (CAP) y el soporte nativo en circuitería a la aritmética de
+precisión reducida, el Bloque~\ref{pt:adaptive} evaluó las ventajas de
+introducir técnicas de precisión reducida en precondicionadores.  En concreto,
+el Capítulo~\ref{ch:2017-adaptive-block-jacobi} analizó los aspectos teóricos y
+el efecto sobre la velocidad de convergencia de los métodos iterativos de Krylov
+cuando se emplea un esquema basado en precisión reducida en un precondicionador
+de Jacobi por bloques. El éxito de esta aproximación se basa en varias
+cuestiones: 1) dado que la operación de aplicación del precondicionador está
+limitada por el acceso a la memoria, es posible mejorar el rendimiento
+reduciendo la precisión de los datos almacenados en memoria, pero manteniendo la
+precisión de las operaciones aritméticas; 2) un precondicionador es una
+aproximación de la matriz original del sistema, así que la precisión del
+almacenamiento no tiene por qué ser superior a la precisión de la aproximación;
+3) la precisión del almacenamiento no puede reducirse a ciegas, sino que tiene
+que ajustarese cuidadosamente según las propiedades numéricas del problema. Los
+experimentos prácticos muestran que la combinación de estas técnicas consigue
+reducir el volumen de almacenamiento total mientras que preserva la calidad de
+precondicionador y, según muestra un modelo de consumo de energía teórico, puede
+reducir el consumo del resolutor de Krylov global.  Aunque un análisis teórico
+por sí solo no garantiza la viabilidad del esquema, un esfuerzo reciente de
+investigación ha demostrado la efectividad de los precondicionadores de Jacobi
+por bloques con precisión adaptativa en la práctica~\cite{adaptive-jacobi-gpu},
+y ha producido una primera implementación para GPUs de este precondicionador,
+que ya se ha integrado con la biblioteca Ginkgo~\cite{ginkgo}.
+
+Los precondicionadores de Jacobi por bloques con precisión adaptativa
+representan una idea pionera, y es posible técnicas similares se puedan aplicar
+en el caso de otros precondicionadores.  También es posible mejorar el esquema
+de precondicionado de Jacobi por bloques adaptativo en sí mismo, mediante el uso
+de formatos de almacenamiento no convencionales, alternativos a los formatos
+estándar de IEEE~\cite{adaptive-jacobi-gpu}.  Explotar el hardware de precisión
+reducida, como los cores tensores presentes en las últimas generaciones de
+procesadores de NVIDIA, es otra línea de investigación abierta.  Sin embargo,
+primero debe evitarse la naturaleza limitada por la memoria de la aplicación de
+los precondicionadores (muy probablemente, a través del uso de métodos de Krylov
+por bloues, o simplemente resolviendo varios sistemas de ecuaciones, con la
+misma matriz de coeficientes, de manera simultánea) antes de poder aprovechar
+las tecnología ofrecida por este tipo de hardware.  En la visión en conjunto de
+los métodos iterativos, el precondicionado de Jacobi por bloques adaptativo es
+solo una de las líneas de investigación sobre métodos de precisión reducida para
+la resolución de sistemas lineales. Además del conocido método de refinamiento
+iterativo con precisión mixta~\cite{higham-ir}, otros ejemplos incluyen las
+versiones adaptativas de los métodos de relajación de Jacobi y
+PageRank~\cite{jacobi,jacobi-modular,pagerank} y el desarrollo de un formato de
+almacenamiento de precisión segmentada, que posibilite un acceso eficiente en
+diferente precisión a un conjunto de valores en coma flotane almacenados sobre
+un vector~\cite{jacobi-modular,pagerank,anzt-ir}. También es interesante
+mencionar que, de manera ortogonal al desarrollo de formatos de almacenamiento
+no convencionales, se están explorando las ventajas de desarrollar los cálculos
+también en esos formatos alternativos.  Si bien esta aproximación raramente
+producirá una mejora del rendimiento si se efectúa sobre hardware convencional,
+sí tiene la capacidad potencial de influir en el diseño de hardware futuro a
+través de la demostración de su efectividad a través de simulación~\cite{floatx,
+flexfloat}.
+
+\noindent\textbf{Software científico.}
+Como nota final, la parte final de este trabajo se centra en el papel del
+software científico en CAP.  Dejando al margen la cuestión de si la ``ingeniería
+de software científico'' debería considerarse como un campo académico, es
+innegable que el software altamente eficiente es uno de los pilares más
+importantes de la ciencia contemporánea, basada en simulaciones por computador,
+análisis de datos, y aprendizaje automático. Así, no resulta soprendente que se
+hayan dedicado esfuerzos significativos, incluyendo esta tesis doctoral, al
+desarrollo de nuevos algoritmos y su implementación eficiente sobre las últimas
+tecnologías hardware.  Paradójicamente, aunque el software resultante es la
+contribución más valiosa de estos esfuerzos y la eficiencia de los
+investigadores es el recurso más preciado, la reputación de un científico
+todavía se mide en número de publicaciones o su índice Hirsch.  Puesto que la
+mayor parte de revistas y conferencias no tiene políticas establecidas sobre la
+garantía del sotware, el software científico producido hoy en día se desarrolla,
+en gran medida, como un prototipo de ``publicar-y-tirar'', con el único
+propósito de soportar la publicación de un artículo científico, en lugar de
+ayudar a la comunidad científica. Bajo estas premisas, habitualmente estos
+programas presentan una baja calidad, están pobremente documentado, y carecen de
+una comunidad que esté dispuesta a mantenerlos. Además, usar estos programas
+como base para el análisis del rendimiento en un artículo científico es
+altamente cuestionable, puesto que no implementan los casos extremos, ni tienen
+en cuenta el equilibrio entre las ganancias observadas en el rendimiento y sus
+costes de desarrollo, mantenimiento e integración en proyectos más grandes.  La
+cuestión de la reproducibilidad también  se ignora en muchos casos. Para evitar
+estos problemas, la mayor parte del código presentado en esta tesis
+(específicamente, los algoritmos para el producto matriz-vector disperso basados
+en CSR y COO, y el precondicionador de Jacobi por bloques con inversión
+explícita y precisión adaptativa) se han integrado en la biblioteca
+Ginkgo~\cite{ginkgo}, con el propósito de asegurar en el futuro un esfuerzo
+continuo de desarrollo y mantenimiento por parte de la comunidad.  Como nota
+positiva, a medida que el hardware y los programas se han vuelto más complejos,
+y los recursos humanos más escasos, en los últimos años hemos sido testigos de
+esfuerzos por parte de la comunidad científica para incrementar la calidad del
+software académico~\cite{toms,xsdk,bssw,patch-contrib}.  Confiamos en que esta
+tendencia perdurará, y eventualmente pueda llevar a un cambio de las métricas
+que definen el éxito de un investigador en una dirección que sea beneficiosa
+para el desarrollo de software científico de calidad y la comunidad que trabaja
+en CAP.

@@ -1,0 +1,81 @@
+Con el final de la ley de escalado de Dennard a mitad de la pasada década, y el
+fin de la ley de Moore en el horizonte, los vendedores de sistemas hardware, los
+grandes centros de datos y la comunidad que trabaja en computación de altas
+prestaciones están fijando su atención en nuevas tecnologías no convencionales,
+con la esperanza de mantener el crecimiento exponencial de la capacidad
+computacional. Entre las diferentes opciones hardware disponibles, la nueva
+generación de procesadores gráficos (o GPUs, del término en inglés
+\textit{Graphics Processing Units}), diseñados para ejecutar de manera eficiente
+una gran variedad de aplicaciones además del procesamiento gráfico, está
+consiguiendo una amplia aceptación.  Hoy en día, estos procesadores se emplean
+en la mayor parte de los supercomputadores más potentes, para resolver problemas
+enormemente complejos relacionados con simulaciones de fenómenos físicos,
+predicción climática, análisis de datos, análisis de redes sociales y
+aprendizaje máquina, entre otros. El potencial de las GPUs para tratar estos
+problemas solo puede aprovecharse mediante el desarrollo de programas
+eficientes, específicamente optimizados para este tipo de arquitecturas. Por
+fortuna, muchos de los algoritmos que aparecen en estas aplicaciones se
+construyen a partir de un conjunto reducido de bloques básicos. Un ejemplo de
+bloque básico, comúnmente usado, es la solución de sistemas lineales dispersos
+de gran dimensión, un reto que se afronta en esta tesis.
+
+Tras una breve revisión del estado del arte en métodos para la resolución de
+sistemas lineales, esta tesis doctoral presta especial atención a la familia de
+métodos iterativos de Krylov.  Sin embargo, en lugar de intentar derivar nuevos
+métodos, en este trabajo se introducen mejoras en los componentes que se usan
+ampliamente en los métodos ya existentes, y que suponen una parte importante de
+su coste de ejecución total. Los componentes están diseñados para una única GPU,
+pero escalarlos a un sistema con múltiples aceleradores gráficos puede
+conseguirse generalizando las mismas ideas, o descomponiendo el problema en
+múltiples partes independientes que puedan aprovechar las implementaciones
+descritas en esta tesis.
+
+A menudo, la parte computacionalmente más costosa de los métodos de Krylov es el
+producto matriz-vector. En esta tesis se sugieren dos mejoras para esta
+operación: una para el formato matrix-vector CSR (\textit{compressed sparse
+row}), y otra para el formato alternativo COO (coordinado), que no ha logrado
+una aceptación tan amplia como el CSR en álgebra lineal numérica.  La nueva
+implementación del formato CSR para GPUs está diseñada para ser especialmente
+eficiente con matrices con un patrón de dispersidad iregular y, si bien sufre
+una reducción de rendimiento en un factor 3x comparada con la implementación de
+las bibliotecas estándar para patrones regulares, también es cierto que ofrece
+una aceleración de 100x para los patrones irregulares.  Además, la merma en las
+prestaciones puede eliminarse mediante una heurística simple que selecciona la
+mejor implementación en función del patrón de dispersidad de la matriz. Este
+algoritmo consigue, como mínimo un 80\% y como media un 22\% mejor rendimiento
+medio que el nuevo algoritmo basado en CSR en una evaluación con una variedad de
+matrices de gran tamaño, que surgen en aplicaciones reales, ofreciendo una muy
+buena opción por defecto para bibliotecas de propósito general.
+
+El segundo componente que se aborda en esta tesis doctoral es el
+precondicionado.  Nuestro trabajo explora la clase relativamente simple de
+precondicionadores de Jacobi por bloques, y muestra que estos pueden mejorar la
+robustez y reducir el tiempo de ejecución de los métodos de Krylov para un
+determinado tipo de matrices.  En este trabajo se evalúan algunas realizaciones
+del precondicionador, y se identifica una, basada en la eliminación de
+Gauss-Jordan, como aquella que ofrece mejores prestaciones en la mayor parte de
+escenarios. La variante basada en la factorización LU, en cambio, puede ser una
+buena opción para problemas donde el método de Krylov converge en pocas
+iteraciones.
+
+En esta tesis doctoral se analizan los precondicionadores de Jacobi por bloques
+elaborando un estudio en detalle de los efectos que tiene sobre este tipo de
+precondicionadores el almacenamiento de información en precisión reducida.  El
+precondicionador de Jacobi por bloques resultante, con precisión adaptativa,
+asigna de manera dinámica la precisión a utilizar en el almacenamiento de
+bloques individuales en tiempo de ejecución, teniendo en cuenta las propiedades
+numéricas de los bloques. Una implementación en un lenguaje de alto nivel,
+complementada por un análisis teórico del error, muestra que este tipo de
+precondicionador reduce el volumen total de datos transferidos, en tanto que
+mantiene la calidad de los precondicionadores convencionales con precisión
+plena.
+
+A modo de reconocimiento de que los nuevos algoritmos o las implementaciones
+optimizadas solo son útiles para la comunidad científica si están disponibles
+como código abierto en producción, la parte final de esta tesis presenta un
+posible diseño de biblioteca de álgebra lineal dispersa, que resuelve el
+problema de la explosión de componentes de manera efectiva para la resolución
+iterativa de sistemas lineales dispersos. Estas ideas representan la columna
+vertebral de la biblioteca de código abierto Ginkgo, que también incluye las
+implementaciones eficientes de algoritmos para el producto matriz-vector y los
+precondicionadores introducidos en esta tesis.
